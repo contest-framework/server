@@ -1,0 +1,8 @@
+{
+  "name": "for-development-only",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "prettier": "2.2.1"
+  }
+}
