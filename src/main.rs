@@ -131,9 +131,9 @@ fn run_command(text: String, configuration: &config::Configuration) -> Result<bo
                 let (msg, desc) = err.messages();
                 println!("{}", msg);
                 println!("{}", desc);
-                return Ok(false);
+                Ok(false)
             }
-            _ => return Err(err),
+            _ => Err(err),
         },
         Ok(command) => match run::run(&command) {
             run::Outcome::TestPass() => {
