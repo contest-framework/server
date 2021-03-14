@@ -1,8 +1,6 @@
-<img src="documentation/300.png" width="150" height="124" align="right">
+# <img src="documentation/300.png" width="50" height="41" valign="bottom"> Tertestrial Server
 
-# Tertestrial Server
-
-![example workflow](https://github.com/tertestrial/server/actions/workflows/rust.yml/badge.svg)
+![CI badge](https://github.com/tertestrial/server/actions/workflows/rust.yml/badge.svg)
 
 This is the source code for the Tertestrial server.
 
