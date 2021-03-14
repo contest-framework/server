@@ -1,6 +1,6 @@
 # Tertestrial Server
 
-<img src="../documentation/icon/icon-color-300.png" width="150" height="124">
+<img src="documentation/300.png" width="150" height="124">
 
 This is the Rust implementation of a Tertestrial server.
 
