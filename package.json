@@ -1,6 +1,5 @@
 {
-  "name": "for-development-only",
-  "version": "0.0.0",
+  "description": "Provides Node-based development tools",
   "private": true,
   "devDependencies": {
     "prettier": "2.2.1"
