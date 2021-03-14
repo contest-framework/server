@@ -1,4 +1,4 @@
-# Configuring the Tertestrial server
+# Tertestrial Server Configuration
 
 Run `tertestrial setup` in the root directory of your codebase to generate
 Tertestrial's configuration file (`.testconfig.json`). This file tells the

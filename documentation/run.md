@@ -1,4 +1,4 @@
-# Run the Tertestrial server
+# Running the Tertestrial server
 
 Start Tertestrial by running `tertestrial` in a terminal.
 

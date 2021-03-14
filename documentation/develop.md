@@ -1,4 +1,4 @@
-# Tertestrial Server Development Guide
+# Tertestrial Server Development
 
 - you need [Rust 2018 stable](https://rustup.rs)
 - run tests: <code type="make/command">make test</code>

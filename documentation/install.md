@@ -1,4 +1,4 @@
-# Installing Tertestrial Server
+# Tertestrial Server Installation
 
 ### Installing the binary
 
