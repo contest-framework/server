@@ -1,0 +1,7 @@
+{
+  "description": "Provides Node-based development tools",
+  "private": true,
+  "devDependencies": {
+    "prettier": "2.2.1"
+  }
+}
