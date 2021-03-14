@@ -1,0 +1,98 @@
+{
+  "actions": [
+    {
+      "desc": "run all tests",
+      "trigger": {
+        "command": "testAll"
+      },
+      "run": "make test"
+    },
+
+    {
+      "desc": "test RS file",
+      "trigger": {
+        "command": "testFile",
+        "file": "**/*.rs"
+      },
+      "vars": [
+        {
+          "name": "file_without_ext",
+          "source": "file",
+          "filter": "\\b(\\w+)\\.rs$"
+        }
+      ],
+      "run": "cargo test {{file_without_ext}}"
+    },
+
+    {
+      "desc": "individual RS unit test",
+      "trigger": {
+        "command": "testFunction",
+        "file": "**/*.rs"
+      },
+      "vars": [
+        {
+          "name": "test_name",
+          "source": "currentOrAboveLineContent",
+          "filter": "\\bfn (\\w+)\\("
+        }
+      ],
+      "run": "cargo test {{test_name}}"
+    },
+
+    {
+      "desc": "TS unit test file",
+      "trigger": {
+        "command": "testFile",
+        "file": "**/*.test.ts"
+      },
+      "run": "echo mocha {{file}}"
+    },
+
+    {
+      "desc": "TS source file",
+      "trigger": {
+        "command": "testFile",
+        "file": "**/*.ts"
+      },
+      "vars": [
+        {
+          "name": "file_without_ext",
+          "source": "file",
+          "filter": "^(.+)\\.ts$"
+        }
+      ],
+      "run": "echo mocha {{file_without_ext}}.test.ts"
+    },
+
+    {
+      "desc": "individual TS unit test",
+      "trigger": {
+        "command": "testFunction",
+        "file": "**/*.test.ts"
+      },
+      "run": "echo mocha {{file}}:{{line}}"
+    }
+  ],
+  "options": {
+    "beforeRun": {
+      "clearScreen": true,
+      "newlines": 0
+    },
+    "afterRun": {
+      "newlines": 1,
+      "indicatorLines": 2,
+      "indicatorBackground": true
+    },
+    "colors": {
+      "indicatorLine": {
+        "pass": "\\033[1;32m",
+        "fail": "\\033[1;31m"
+      },
+      "indicatorBackground": {
+        "pass": "\\033[0;32m",
+        "fail": "\\033[0;31m"
+      }
+    }
+  }
+}
