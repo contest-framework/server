@@ -89,7 +89,7 @@ Usage: tertestial [command]
 
 Without command, Tertestrial starts normally.
 
-You can provide the following commands:
+You can provide one of the following commands:
 - debug: prints the commands received from the client without running them
 - help: display this help screen
 - run: executes the given command as if it was received by the client
