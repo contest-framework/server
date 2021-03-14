@@ -1,6 +1,6 @@
-# Tertestrial Server
+<img src="documentation/300.png" width="150" height="124" align="right">
 
-<img src="documentation/300.png" width="150" height="124">
+# Tertestrial Server
 
 This is the source code for the Tertestrial server.
 
