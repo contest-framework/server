@@ -2,6 +2,7 @@ import * as tr from "text-runner"
 import * as childProcess from "child_process"
 import * as os from "os"
 import * as util from "util"
+import * as path from "path"
 const asyncExec = util.promisify(childProcess.exec)
 
 export async function tertestrialCommand(action: tr.actions.Args) {
@@ -20,7 +21,9 @@ Known commands: ${existing.join(" | ")}`
 }
 
 async function getExistingCommands(): Promise<string[]> {
-  const { stdout, stderr } = await asyncExec("tertestrial help")
+  const { stdout, stderr } = await asyncExec(
+    path.join(__dirname, "..", "target", "debug", "tertestrial") + " help"
+  )
   return (stdout.trim() + stderr.trim())
     .split(os.EOL)
     .map(line => line.match(/^- (\w+):/))
