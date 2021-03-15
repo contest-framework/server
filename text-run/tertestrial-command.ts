@@ -23,7 +23,7 @@ async function getExistingCommands(): Promise<string[]> {
   const { stdout, stderr } = await asyncExec("tertestrial help")
   return (stdout.trim() + stderr.trim())
     .split(os.EOL)
-    .map(line => line.match(/^- (\w+):/))
-    .filter(match => match != null)
-    .map(match => match[1])
+    .map((line) => line.match(/^- (\w+):/))
+    .filter((match) => match != null)
+    .map((match) => match[1])
 }

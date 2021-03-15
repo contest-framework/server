@@ -22,5 +22,5 @@ setup:  # prepares this codebase for development
 test:  # runs all automated tests
 	cargo clippy
 	cargo test
-	${CURDIR}/node_modules/.bin/prettier -l .
 	${CURDIR}/node_modules/.bin/text-run
+	${CURDIR}/node_modules/.bin/prettier -l .
