@@ -16,10 +16,10 @@ install:  # compiles and installs the binary on this computer
 	cargo install --path .
 
 setup:  # prepares this codebase for development
-	cargo check
 	yarn install
 
 test:  # runs all automated tests
+	cargo build
 	cargo clippy
 	cargo test
 	${CURDIR}/node_modules/.bin/text-run
