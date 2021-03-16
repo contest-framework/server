@@ -116,6 +116,7 @@ fn run_with_decoration(text: String, config: &config::Configuration) -> Result<(
                     .unwrap();
                 let text: String = std::iter::repeat("█").take(width.0 as usize).collect();
                 writeln!(&mut stdout, "{}", text).unwrap();
+                let _ = stdout.reset(); // we really don't care about being unable to reset colors here
             }
         }
     }
