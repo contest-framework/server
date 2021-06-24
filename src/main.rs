@@ -19,7 +19,7 @@ mod trigger;
 
 fn main() {
     let panic_result = std::panic::catch_unwind(|| {
-        if let Err(tert_error) = main_with_err() {
+        if let Err(tert_error) = main_with_result() {
             let (msg, guidance) = tert_error.messages();
             println!("\nError: {}\n\n{}", msg, guidance);
         }
@@ -30,7 +30,7 @@ fn main() {
     }
 }
 
-fn main_with_err() -> Result<(), TertError> {
+fn main_with_result() -> Result<(), TertError> {
     match args::parse(std::env::args())? {
         args::Command::Normal => listen(false),
         args::Command::Debug => listen(true),
