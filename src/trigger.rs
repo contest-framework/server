@@ -27,12 +27,11 @@ impl Trigger {
         }
         if self.file.is_some() && from_client.file.is_some() {
             let self_file = &self.file.as_ref().unwrap();
-            let pattern = glob::Pattern::new(&self_file).map_err(|e| {
-                TertError::ConfigInvalidGlobPattern {
+            let pattern =
+                glob::Pattern::new(self_file).map_err(|e| TertError::ConfigInvalidGlobPattern {
                     pattern: self_file.to_string(),
                     err: e.to_string(),
-                }
-            })?;
+                })?;
             return Ok(pattern.matches(from_client.file.as_ref().unwrap()));
         }
         Ok(false)
@@ -56,7 +55,7 @@ impl std::fmt::Display for Trigger {
 }
 
 pub fn from_string(line: &str) -> Result<Trigger, TertError> {
-    match serde_json::from_str(&line) {
+    match serde_json::from_str(line) {
         Ok(trigger) => Ok(trigger),
         Err(err) => Err(TertError::InvalidTrigger {
             line: line.to_string(),

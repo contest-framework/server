@@ -208,7 +208,7 @@ impl Configuration {
         }
         for action in &self.actions {
             if action.trigger.matches_client_trigger(&trigger)? {
-                let command = self.format_run(&action, &trigger)?;
+                let command = self.format_run(action, &trigger)?;
                 self.last_command.set(Some(command.clone()));
                 return Ok(command);
             }
@@ -230,7 +230,7 @@ impl Configuration {
         }
         if action.vars.is_some() {
             for var in action.vars.as_ref().unwrap() {
-                values.insert(&var.name, calculate_var(&var, &values)?);
+                values.insert(&var.name, calculate_var(var, &values)?);
             }
         }
         let mut replaced = action.run.clone();
@@ -335,7 +335,7 @@ mod tests {
                 options: None,
             };
             let config = Configuration::backfill_defaults(file_config);
-            assert_eq!(config.options.before_run.clear_screen, false);
+            assert!(!config.options.before_run.clear_screen);
             assert_eq!(config.options.before_run.newlines, 0);
             assert_eq!(config.options.after_run.indicator_lines, 3);
             assert_eq!(config.options.after_run.newlines, 0);
@@ -354,7 +354,7 @@ mod tests {
                 }),
             };
             let config = Configuration::backfill_defaults(file_config);
-            assert_eq!(config.options.before_run.clear_screen, true);
+            assert!(config.options.before_run.clear_screen);
             assert_eq!(config.options.before_run.newlines, 0);
             assert_eq!(config.options.after_run.indicator_lines, 3);
             assert_eq!(config.options.after_run.newlines, 0);

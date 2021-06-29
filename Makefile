@@ -20,7 +20,7 @@ setup:  # prepares this codebase for development
 
 test:  # runs all automated tests
 	cargo build
-	cargo clippy
+	cargo clippy --all-targets --all-features -- -D warnings
 	cargo test
 	${CURDIR}/node_modules/.bin/text-run
 	${CURDIR}/node_modules/.bin/prettier -l .

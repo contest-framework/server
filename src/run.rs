@@ -8,7 +8,7 @@ pub enum Outcome {
 
 pub fn run(command: &str) -> Outcome {
     println!("executing: {}", command);
-    let argv = shellwords::split(&command).unwrap();
+    let argv = shellwords::split(command).unwrap();
     let (cmd, args) = argv.split_at(1);
     match std::process::Command::new(&cmd[0]).args(args).status() {
         Err(_) => Outcome::NotFound(command.to_string()),
