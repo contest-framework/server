@@ -3,11 +3,6 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 #[macro_use]
 extern crate prettytable;
 
-use errors::TertError;
-use std::io::Write;
-use termcolor::WriteColor;
-use terminal_size::terminal_size;
-
 mod args;
 mod channel;
 mod config;
@@ -16,6 +11,13 @@ mod errors;
 mod fifo;
 mod run;
 mod trigger;
+
+use args::Command;
+use errors::TertError;
+use run::Outcome;
+use std::io::Write;
+use termcolor::WriteColor;
+use terminal_size::terminal_size;
 
 fn main() {
     let panic_result = std::panic::catch_unwind(|| {
@@ -32,19 +34,19 @@ fn main() {
 
 fn main_with_result() -> Result<(), TertError> {
     match args::parse(std::env::args())? {
-        args::Command::Normal => listen(false),
-        args::Command::Debug => listen(true),
-        args::Command::Help => {
+        Command::Normal => listen(false),
+        Command::Debug => listen(true),
+        Command::Help => {
             println!("{}", errors::help());
             Ok(())
         }
-        args::Command::Run(cmd) => {
+        Command::Run(cmd) => {
             println!("running cmd: {}", cmd);
             let config = config::from_file()?;
             run_with_decoration(cmd, &config)
         }
-        args::Command::Setup => config::create(),
-        args::Command::Version => {
+        Command::Setup => config::create(),
+        Command::Version => {
             println!("Tertestrial {}", VERSION);
             Ok(())
         }
@@ -139,15 +141,15 @@ fn run_command(text: String, configuration: &config::Configuration) -> Result<bo
             _ => Err(err),
         },
         Ok(command) => match run::run(&command) {
-            run::Outcome::TestPass() => {
+            Outcome::TestPass() => {
                 println!("SUCCESS!");
                 Ok(true)
             }
-            run::Outcome::TestFail() => {
+            Outcome::TestFail() => {
                 println!("FAILED!");
                 Ok(false)
             }
-            run::Outcome::NotFound(command) => Err(TertError::RunCommandNotFound { command }),
+            Outcome::NotFound(command) => Err(TertError::RunCommandNotFound { command }),
         },
     }
 }
