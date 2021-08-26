@@ -17,13 +17,11 @@ install:  # compiles and installs the binary on this computer
 
 setup:  # prepares this codebase for development
 	yarn install
-	cargo install cargo-udeps --locked
 
 test:  # runs all automated tests
 	cargo build
 	cargo clippy --all-targets --all-features -- -D warnings
 	cargo test
 	cargo fmt -- --check
-	cargo +nightly udeps
 	${CURDIR}/node_modules/.bin/text-run
 	${CURDIR}/node_modules/.bin/prettier -l .
