@@ -2,6 +2,7 @@
   "incremental": true,
   "indentWidth": 2,
   "typescript": {
+    "semiColons": "asi"
   },
   "json": {
   },
