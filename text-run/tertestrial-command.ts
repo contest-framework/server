@@ -3,10 +3,7 @@ import * as os from "os";
 import * as path from "path";
 import * as tr from "text-runner";
 import * as util from "util";
-const asyncExec = util.promisify(
-  childProcess
-    .exec,
-);
+const asyncExec = util.promisify(childProcess.exec);
 
 export async function tertestrialCommand(
   action: tr.actions.Args,
