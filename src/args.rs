@@ -1,83 +1,99 @@
 //! command-line arguments
 
 use super::errors::UserError;
+use clap::{crate_authors, crate_description, crate_name, crate_version, App, Arg, SubCommand};
 
 #[derive(Debug, PartialEq)]
 pub enum Command {
     Normal,      // normal operation
     Debug,       // print the received commands from the pipe
-    Help,        // print the help screen
     Run(String), // run the given command manually
     Setup,       // create a config file
-    Version,     // show the version
 }
 
-pub fn parse<I>(mut argv: I) -> Result<Command, UserError>
+pub fn parse<I>(argv: I) -> Result<Command, UserError>
 where
-    I: Iterator<Item = String>,
+    I: IntoIterator<Item = String>,
 {
-    argv.next(); // skip argv[0]
-    let mut mode = Command::Normal;
-    loop {
-        match argv.next() {
-            None => return Ok(mode),
-            Some(command) => match command.as_str() {
-                "debug" => mode = Command::Debug,
-                "help" => mode = Command::Help,
-                "run" => match argv.next() {
-                    Some(cmd) => mode = Command::Run(cmd),
-                    None => return Err(UserError::ArgsMissingOptionForRunCommand {}),
-                },
-                "setup" => mode = Command::Setup,
-                "version" => mode = Command::Version,
-                _ => return Err(UserError::ArgsUnknownCommand { command }),
-            },
-        }
+    match define_args().get_matches_from(argv).subcommand() {
+        ("debug", _) => Ok(Command::Debug),
+        ("run", Some(run_options)) => Ok(Command::Run(
+            run_options.value_of("command").unwrap().to_string(),
+        )),
+        ("setup", _) => Ok(Command::Setup),
+        ("", _) => Ok(Command::Normal),
+        (unknown, _) => panic!("unimplemented handler for CLI command '{}'", unknown),
     }
+}
+
+fn define_args() -> App<'static, 'static> {
+    App::new(crate_name!())
+        .version(crate_version!())
+        .author(crate_authors!())
+        .about(crate_description!())
+        .subcommand(
+            SubCommand::with_name("debug")
+                .alias("d")
+                .about("print the received commands from the pipe without running them"),
+        )
+        .subcommand(
+            SubCommand::with_name("run")
+                .alias("r")
+                .about("runs the given command manually")
+                .arg(
+                    Arg::with_name("command")
+                        .help("pipe command to run")
+                        .required(true)
+                        .index(1),
+                ),
+        )
+        .subcommand(SubCommand::with_name("setup").about("create a config file"))
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
-    #[test]
-    fn parse_no_args() {
-        let give = vec!["tertestrial".to_string()];
-        let want = Ok(Command::Normal);
-        assert_eq!(parse(give.into_iter()), want);
-    }
+    mod parse {
+        use crate::args::{parse, Command};
 
-    #[test]
-    fn parse_debug() {
-        let give = vec!["tertestrial".to_string(), "debug".to_string()];
-        let want = Ok(Command::Debug);
-        assert_eq!(parse(give.into_iter()), want);
-    }
+        #[test]
+        fn no_args() {
+            let give = vec!["tertestrial".into()];
+            let have = parse(give);
+            assert_eq!(have, Ok(Command::Normal));
+        }
 
-    #[test]
-    fn parse_run_with_arg() {
-        let give = vec![
-            "tertestrial".to_string(),
-            "run".to_string(),
-            "my command".to_string(),
-        ];
-        let want = Ok(Command::Run("my command".to_string()));
-        assert_eq!(parse(give.into_iter()), want);
-    }
+        mod run {
+            use crate::args::{parse, Command};
 
-    #[test]
-    fn parse_run_without_arg() {
-        let give = vec!["tertestrial".to_string(), "run".to_string()];
-        let want = Err(UserError::ArgsMissingOptionForRunCommand {});
-        assert_eq!(parse(give.into_iter()), want);
-    }
+            #[test]
+            fn valid() {
+                let give = vec![
+                    "tertestrial".into(),
+                    "run".into(),
+                    r#"{"command": "testFile", "file": "src/probes/link_broken.rs" }"#.into(),
+                ];
+                let want = Ok(Command::Run(
+                    r#"{"command": "testFile", "file": "src/probes/link_broken.rs" }"#.into(),
+                ));
+                assert_eq!(parse(give), want);
+            }
+        }
 
-    #[test]
-    fn parse_unknown() {
-        let give = vec!["tertestrial".to_string(), "zonk".to_string()];
-        let want = Err(UserError::ArgsUnknownCommand {
-            command: "zonk".to_string(),
-        });
-        assert_eq!(parse(give.into_iter()), want);
+        mod debug {
+            use crate::args::{parse, Command};
+
+            #[test]
+            fn long() {
+                let give = vec!["origins".into(), "debug".into()];
+                assert_eq!(parse(give), Ok(Command::Debug));
+            }
+
+            #[test]
+            fn short() {
+                let give = vec!["origins".into(), "d".into()];
+                assert_eq!(parse(give), Ok(Command::Debug));
+            }
+        }
     }
 }

@@ -1,5 +1,3 @@
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-
 #[macro_use]
 extern crate prettytable;
 
@@ -36,20 +34,12 @@ fn main_with_result() -> Result<(), UserError> {
     match args::parse(std::env::args())? {
         Command::Normal => listen(false),
         Command::Debug => listen(true),
-        Command::Help => {
-            println!("{}", errors::help());
-            Ok(())
-        }
         Command::Run(cmd) => {
             println!("running cmd: {}", cmd);
             let config = config::from_file()?;
             run_with_decoration(cmd, &config)
         }
         Command::Setup => config::create(),
-        Command::Version => {
-            println!("Tertestrial {}", VERSION);
-            Ok(())
-        }
     }
 }
 
