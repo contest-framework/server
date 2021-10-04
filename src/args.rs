@@ -19,7 +19,7 @@ where
     match matches.subcommand() {
         ("debug", _) => Ok(Command::Debug),
         ("run", Some(run_options)) => Ok(Command::Run(
-            run_options.value_of("url").unwrap().to_string(),
+            run_options.value_of("command").unwrap().to_string(),
         )),
         ("setup", _) => Ok(Command::Setup),
         ("", _) => Ok(Command::Normal),
@@ -44,7 +44,8 @@ fn define_args() -> App<'static, 'static> {
                 .arg(
                     Arg::with_name("command")
                         .help("pipe command to run")
-                        .required(true),
+                        .required(true)
+                        .index(1),
                 ),
         )
         .subcommand(SubCommand::with_name("setup").about("create a config file"))
@@ -54,16 +55,14 @@ fn define_args() -> App<'static, 'static> {
 mod tests {
 
     mod parse {
-        // use crate::args::{parse, UserError};
+        use crate::args::{parse, Command};
 
-        // #[test]
-        // fn no_args() {
-        // let give = vec!["origins".into()];
-        // match parse(give) {
-        //     Err(UserError::NoCommandProvided { usage: _ }) => {}
-        //     _ => panic!("unexpected"),
-        // }
-        // }
+        #[test]
+        fn no_args() {
+            let give = vec!["tertestrial".into()];
+            let have = parse(give);
+            assert_eq!(have, Ok(Command::Normal));
+        }
 
         mod run {
             use crate::args::{parse, Command};
@@ -75,12 +74,10 @@ mod tests {
                     "run".into(),
                     r#"{"command": "testFile", "file": "src/probes/link_broken.rs" }"#.into(),
                 ];
-                assert_eq!(
-                    parse(give),
-                    Ok(Command::Run(
-                        "https://github.com/origins-platform/origins-cli".into()
-                    )),
-                );
+                let want = Ok(Command::Run(
+                    r#"{"command": "testFile", "file": "src/probes/link_broken.rs" }"#.into(),
+                ));
+                assert_eq!(parse(give), want);
             }
         }
 
