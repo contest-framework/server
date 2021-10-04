@@ -1,8 +1,7 @@
 # Tertestrial Server Configuration
 
-Run
-<code type="tertestrial-command">tertestrial setup</code> in the root directory
-of your codebase to generate Tertestrial's configuration file
+Run <code type="tertestrial-command">tertestrial setup</code> in the root
+directory of your codebase to generate Tertestrial's configuration file
 (<code type="repo/existing-file">.testconfig.json</code>). This file tells the
 Tertestrial server which actions it should perform when it receives messages
 from a Tertestrial client. Actions look like this:
