@@ -1,6 +1,6 @@
 //! command-line arguments
 
-use super::errors::TertError;
+use super::errors::UserError;
 
 #[derive(Debug, PartialEq)]
 pub enum Command {
@@ -12,7 +12,7 @@ pub enum Command {
     Version,     // show the version
 }
 
-pub fn parse<I>(mut argv: I) -> Result<Command, TertError>
+pub fn parse<I>(mut argv: I) -> Result<Command, UserError>
 where
     I: Iterator<Item = String>,
 {
@@ -26,11 +26,11 @@ where
                 "help" => mode = Command::Help,
                 "run" => match argv.next() {
                     Some(cmd) => mode = Command::Run(cmd),
-                    None => return Err(TertError::ArgsMissingOptionForRunCommand {}),
+                    None => return Err(UserError::ArgsMissingOptionForRunCommand {}),
                 },
                 "setup" => mode = Command::Setup,
                 "version" => mode = Command::Version,
-                _ => return Err(TertError::ArgsUnknownCommand { command }),
+                _ => return Err(UserError::ArgsUnknownCommand { command }),
             },
         }
     }
@@ -68,14 +68,14 @@ mod tests {
     #[test]
     fn parse_run_without_arg() {
         let give = vec!["tertestrial".to_string(), "run".to_string()];
-        let want = Err(TertError::ArgsMissingOptionForRunCommand {});
+        let want = Err(UserError::ArgsMissingOptionForRunCommand {});
         assert_eq!(parse(give.into_iter()), want);
     }
 
     #[test]
     fn parse_unknown() {
         let give = vec!["tertestrial".to_string(), "zonk".to_string()];
-        let want = Err(TertError::ArgsUnknownCommand {
+        let want = Err(UserError::ArgsUnknownCommand {
             command: "zonk".to_string(),
         });
         assert_eq!(parse(give.into_iter()), want);

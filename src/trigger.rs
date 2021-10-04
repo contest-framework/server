@@ -1,6 +1,6 @@
 //! commands sent over the FIFO
 
-use super::errors::TertError;
+use super::errors::UserError;
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug, PartialEq)]
@@ -11,7 +11,7 @@ pub struct Trigger {
 }
 
 impl Trigger {
-    pub fn matches_client_trigger(&self, from_client: &Trigger) -> Result<bool, TertError> {
+    pub fn matches_client_trigger(&self, from_client: &Trigger) -> Result<bool, UserError> {
         if self.command != from_client.command {
             return Ok(false);
         }
@@ -28,7 +28,7 @@ impl Trigger {
         if self.file.is_some() && from_client.file.is_some() {
             let self_file = &self.file.as_ref().unwrap();
             let pattern =
-                glob::Pattern::new(self_file).map_err(|e| TertError::ConfigInvalidGlobPattern {
+                glob::Pattern::new(self_file).map_err(|e| UserError::ConfigInvalidGlobPattern {
                     pattern: self_file.to_string(),
                     err: e.to_string(),
                 })?;
@@ -54,10 +54,10 @@ impl std::fmt::Display for Trigger {
     }
 }
 
-pub fn from_string(line: &str) -> Result<Trigger, TertError> {
+pub fn from_string(line: &str) -> Result<Trigger, UserError> {
     match serde_json::from_str(line) {
         Ok(trigger) => Ok(trigger),
-        Err(err) => Err(TertError::InvalidTrigger {
+        Err(err) => Err(UserError::InvalidTrigger {
             line: line.to_string(),
             err: err.to_string(),
         }),
@@ -122,7 +122,7 @@ mod tests {
     fn from_string_invalid_json() {
         let line = "{\"filename}";
         let have = from_string(line);
-        let want = TertError::InvalidTrigger {
+        let want = UserError::InvalidTrigger {
             line: line.to_string(),
             err: "EOF while parsing a string at line 1 column 11".to_string(),
         };

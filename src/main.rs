@@ -13,7 +13,7 @@ mod run;
 mod trigger;
 
 use args::Command;
-use errors::TertError;
+use errors::UserError;
 use run::Outcome;
 use std::io::Write;
 use termcolor::WriteColor;
@@ -32,7 +32,7 @@ fn main() {
     }
 }
 
-fn main_with_result() -> Result<(), TertError> {
+fn main_with_result() -> Result<(), UserError> {
     match args::parse(std::env::args())? {
         Command::Normal => listen(false),
         Command::Debug => listen(true),
@@ -53,7 +53,7 @@ fn main_with_result() -> Result<(), TertError> {
     }
 }
 
-fn listen(debug: bool) -> Result<(), TertError> {
+fn listen(debug: bool) -> Result<(), UserError> {
     let config = config::from_file()?;
     if debug {
         println!("using this configuration:");
@@ -64,7 +64,7 @@ fn listen(debug: bool) -> Result<(), TertError> {
     let pipe = fifo::in_dir(&std::env::current_dir().unwrap());
     match pipe.create() {
         fifo::CreateOutcome::AlreadyExists(path) => {
-            return Err(TertError::FifoAlreadyExists { path })
+            return Err(UserError::FifoAlreadyExists { path })
         }
         fifo::CreateOutcome::OtherError(err) => panic!("{}", err),
         fifo::CreateOutcome::Ok() => {}
@@ -81,7 +81,7 @@ fn listen(debug: bool) -> Result<(), TertError> {
                 false => run_with_decoration(line, &config)?,
             },
             channel::Signal::CannotReadPipe(err) => {
-                return Err(TertError::FifoCannotRead {
+                return Err(UserError::FifoCannotRead {
                     err: err.to_string(),
                 })
             }
@@ -94,7 +94,7 @@ fn listen(debug: bool) -> Result<(), TertError> {
     Ok(())
 }
 
-fn run_with_decoration(text: String, config: &config::Configuration) -> Result<(), TertError> {
+fn run_with_decoration(text: String, config: &config::Configuration) -> Result<(), UserError> {
     for _ in 0..config.options.before_run.newlines {
         println!();
     }
@@ -127,11 +127,11 @@ fn run_with_decoration(text: String, config: &config::Configuration) -> Result<(
     Ok(())
 }
 
-fn run_command(text: String, configuration: &config::Configuration) -> Result<bool, TertError> {
+fn run_command(text: String, configuration: &config::Configuration) -> Result<bool, UserError> {
     let trigger = trigger::from_string(&text)?;
     match configuration.get_command(trigger) {
         Err(err) => match err {
-            TertError::NoCommandToRepeat {} => {
+            UserError::NoCommandToRepeat {} => {
                 // repeat non-existing command --> don't stop, just print an error message and keep going
                 let (msg, desc) = err.messages();
                 println!("{}", msg);
@@ -149,7 +149,7 @@ fn run_command(text: String, configuration: &config::Configuration) -> Result<bo
                 println!("FAILED!");
                 Ok(false)
             }
-            Outcome::NotFound(command) => Err(TertError::RunCommandNotFound { command }),
+            Outcome::NotFound(command) => Err(UserError::RunCommandNotFound { command }),
         },
     }
 }
