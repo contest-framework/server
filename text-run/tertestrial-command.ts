@@ -28,7 +28,8 @@ async function getExistingCommands(): Promise<string[]> {
   let inSubcommandsSection = false
   const result = []
   const firstWordRE = /^\s*(\w+)/
-  for (const line in output.split(os.EOL)) {
+  const lines = output.split(os.EOL)
+  for (const line of lines) {
     if (line.startsWith("SUBCOMMANDS:")) {
       inSubcommandsSection = true
       continue
@@ -38,6 +39,5 @@ async function getExistingCommands(): Promise<string[]> {
       result.push(match[1])
     }
   }
-  console.log(result)
   return result
 }
