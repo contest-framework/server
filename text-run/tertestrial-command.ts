@@ -5,9 +5,7 @@ import * as tr from "text-runner";
 import * as util from "util";
 const asyncExec = util.promisify(childProcess.exec);
 
-export async function tertestrialCommand(
-  action: tr.actions.Args,
-) {
+export async function tertestrialCommand(action: tr.actions.Args) {
   const documented = action.region.text().trim().replace(/^tertestrial /, "");
   action.name(`Valid Tertestrial command: ${documented}`);
   const existing = await getExistingCommands();
