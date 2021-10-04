@@ -1,7 +1,7 @@
 //! manages and reads the FIFO pipe
 
 use super::channel;
-use super::errors::TertError;
+use super::errors::UserError;
 use std::io::prelude::*;
 
 /// A FIFO pipe
@@ -31,9 +31,9 @@ impl Pipe {
         }
     }
 
-    pub fn delete(&self) -> Result<(), TertError> {
+    pub fn delete(&self) -> Result<(), UserError> {
         std::fs::remove_file(&self.filepath)
-            .map_err(|e| TertError::FifoCannotDelete { err: e.to_string() })
+            .map_err(|e| UserError::FifoCannotDelete { err: e.to_string() })
     }
 
     pub fn open(&self) -> std::io::BufReader<std::fs::File> {

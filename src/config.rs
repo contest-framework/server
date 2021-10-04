@@ -1,6 +1,6 @@
 //! program configuration loaded from the config file
 
-use super::errors::TertError;
+use super::errors::UserError;
 use super::trigger::Trigger;
 use prettytable::Table;
 use regex::Regex;
@@ -108,22 +108,22 @@ pub struct Configuration {
     pub last_command: Cell<Option<String>>,
 }
 
-pub fn from_file() -> Result<Configuration, TertError> {
+pub fn from_file() -> Result<Configuration, UserError> {
     let file = match std::fs::File::open(".testconfig.json") {
         Ok(config) => config,
         Err(e) => match e.kind() {
-            std::io::ErrorKind::NotFound => return Err(TertError::ConfigFileNotFound {}),
-            _ => return Err(TertError::ConfigFileNotReadable { err: e.to_string() }),
+            std::io::ErrorKind::NotFound => return Err(UserError::ConfigFileNotFound {}),
+            _ => return Err(UserError::ConfigFileNotReadable { err: e.to_string() }),
         },
     };
     let file_config: FileConfiguration =
-        serde_json::from_reader(file).map_err(|err| TertError::ConfigFileInvalidContent {
+        serde_json::from_reader(file).map_err(|err| UserError::ConfigFileInvalidContent {
             err: err.to_string(),
         })?;
     Ok(Configuration::backfill_defaults(file_config))
 }
 
-pub fn create() -> Result<(), TertError> {
+pub fn create() -> Result<(), UserError> {
     std::fs::write(
         ".testconfig.json",
         r#"{
@@ -151,7 +151,7 @@ pub fn create() -> Result<(), TertError> {
   ]
 }"#,
     )
-    .map_err(|e| TertError::CannotCreateConfigFile { err: e.to_string() })
+    .map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
 }
 
 impl Configuration {
@@ -195,14 +195,14 @@ impl Configuration {
         }
     }
 
-    pub fn get_command(&self, trigger: Trigger) -> Result<String, TertError> {
+    pub fn get_command(&self, trigger: Trigger) -> Result<String, UserError> {
         if trigger.command == "repeatTest" {
             // HACK: taking the value out of the cell and putting a clone back into it
             //       because I don't understand how to implement Copy for the embedded String yet.
             let last_command = self.last_command.take();
             self.last_command.set(last_command.clone());
             match last_command {
-                None => return Err(TertError::NoCommandToRepeat {}),
+                None => return Err(UserError::NoCommandToRepeat {}),
                 Some(command) => return Ok(command),
             }
         }
@@ -213,13 +213,13 @@ impl Configuration {
                 return Ok(command);
             }
         }
-        Err(TertError::UnknownTrigger {
+        Err(UserError::UnknownTrigger {
             line: trigger.to_string(),
         })
     }
 
     /// replaces all placeholders in the given run string
-    fn format_run(&self, action: &Action, trigger: &Trigger) -> Result<String, TertError> {
+    fn format_run(&self, action: &Action, trigger: &Trigger) -> Result<String, UserError> {
         let mut values: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
         values.insert("command", trigger.command.clone());
         if trigger.file.is_some() {
@@ -261,7 +261,7 @@ impl std::fmt::Display for Configuration {
 fn calculate_var(
     var: &Var,
     values: &std::collections::HashMap<&str, String>,
-) -> Result<String, TertError> {
+) -> Result<String, UserError> {
     match var.source {
         VarSource::File => filter(values.get("file").unwrap(), &var.filter),
         VarSource::Line => filter(values.get("line").unwrap(), &var.filter),
@@ -281,7 +281,7 @@ fn calculate_var(
                 }
                 let captures = captures.unwrap();
                 if captures.len() > 2 {
-                    return Err(TertError::TriggerTooManyCaptures {
+                    return Err(UserError::TriggerTooManyCaptures {
                         count: captures.len(),
                         regex: var.filter.to_string(),
                         line: line_text,
@@ -289,7 +289,7 @@ fn calculate_var(
                 }
                 return Ok(captures.get(1).unwrap().as_str().to_string());
             }
-            Err(TertError::TriggerRegexNotFound {
+            Err(UserError::TriggerRegexNotFound {
                 regex: var.filter.to_string(),
                 filename: file_name.to_string(),
             })
@@ -297,11 +297,11 @@ fn calculate_var(
     }
 }
 
-fn filter(text: &str, filter: &str) -> Result<String, TertError> {
+fn filter(text: &str, filter: &str) -> Result<String, UserError> {
     let re = regex::Regex::new(filter).unwrap();
     let captures = re.captures(text).unwrap();
     if captures.len() != 2 {
-        return Err(TertError::TriggerTooManyCaptures {
+        return Err(UserError::TriggerTooManyCaptures {
             count: captures.len(),
             regex: filter.to_string(),
             line: text.to_string(),
