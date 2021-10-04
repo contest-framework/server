@@ -42,44 +42,24 @@ Known commands: ${
   }
 }
 
-async function getExistingCommands(): Promise<
-  string[]
-> {
-  const {
-    stdout,
-    stderr,
-  } = await asyncExec(
-    path.join(
-      __dirname,
-      "..",
-      "target",
-      "debug",
-      "tertestrial",
-    )
-      + " help",
+async function getExistingCommands(): Promise<string[]> {
+  const { stdout, stderr } = await asyncExec(
+    path.join(__dirname, "..", "target", "debug", "tertestrial") + " help",
   );
-  return (stdout
-    .trim()
-    + stderr
-      .trim())
-    .split(
-      os.EOL,
-    )
-    .map(
-      line =>
-        line.match(
-          /^- (\w+):/,
-        ),
-    )
-    .filter(
-      match =>
-        match
-          != null,
-    )
-    .map(
-      match =>
-        match[
-          1
-        ],
-    );
+  const output = stdout.trim() + stderr.trim();
+  let inSubcommandsSection = false;
+  const result = [];
+  const firstWordRE = /^\s*(\w+)/;
+  const lines = output.split(os.EOL);
+  for (const line of lines) {
+    if (line.startsWith("SUBCOMMANDS:")) {
+      inSubcommandsSection = true;
+      continue;
+    }
+    if (inSubcommandsSection) {
+      const matches = line.match(firstWordRE);
+      result.push(matches[1]);
+    }
+  }
+  return result;
 }

@@ -3,10 +3,6 @@
 /// The possible errors that the user can cause and needs to be notified about.
 #[derive(Debug, PartialEq)]
 pub enum UserError {
-    ArgsMissingOptionForRunCommand {},
-    ArgsUnknownCommand {
-        command: String,
-    },
     CannotCreateConfigFile {
         err: String,
     },
@@ -56,8 +52,6 @@ impl UserError {
     /// Provides human-readable messages for TertErrors.
     pub fn messages(&self) -> (String, String) {
         match self {
-            UserError::ArgsMissingOptionForRunCommand{} => ("missing option for \"run\" command".to_string(), "The \"run\" command requires the command to run".to_string()),
-            UserError::ArgsUnknownCommand { command }  => (format!("unknown argument: {}", command), help()),
             UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {}", err), "".to_string()),
             UserError::ConfigFileInvalidContent{err} => {
                 (format!("Cannot parse configuration file: {}", err), "".to_string())
@@ -81,20 +75,4 @@ impl UserError {
             "Please make sure that this trigger is listed in your configuration file".to_string()),
         }
     }
-}
-
-pub fn help() -> String {
-    "\
-Usage: tertestial [command]
-
-Without command, Tertestrial starts normally.
-
-You can provide one of the following commands:
-- debug: prints the commands received from the client without running them
-- help: display this help screen
-- run: executes the given command as if it was received by the client
-- setup: create an example configuration file
-- version: show the version of the installed Tertestrial server
-"
-    .to_string()
 }
