@@ -18,7 +18,9 @@ install:  # compiles and installs the binary on this computer
 
 setup:  # prepares this codebase for development
 	yarn install
+	echo
 	echo "Please make sure you have dprint installed."
+	echo "https://dprint.dev/install"
 
 test:  # runs all automated tests
 	cargo build
