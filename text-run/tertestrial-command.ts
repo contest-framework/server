@@ -15,30 +15,11 @@ export async function tertestrialCommand(
     .region
     .text()
     .trim()
-    .replace(
-      /^tertestrial /,
-      "",
-    );
-  action
-    .name(
-      `Valid Tertestrial command: ${documented}`,
-    );
+    .replace(/^tertestrial /, "");
+  action.name(`Valid Tertestrial command: ${documented}`);
   const existing = await getExistingCommands();
-  if (
-    !existing
-      .includes(
-        documented,
-      )
-  ) {
-    throw new Error(
-      `Tertestrial has no command "${documented}"\n\
-Known commands: ${
-        existing
-          .join(
-            " | ",
-          )
-      }`,
-    );
+  if (!existing.includes(documented)) {
+    throw new Error(`Tertestrial has no command "${documented}"\n\Known commands: ${existing.join(" | ")}`);
   }
 }
 
