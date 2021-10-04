@@ -1,5 +1,6 @@
 {
   "incremental": true,
+  "indentWidth": 2,
   "typescript": {
   },
   "json": {
@@ -7,7 +8,9 @@
   "markdown": {
     "textWrap": "always"
   },
-  "includes": ["**/*.{ts,json,md}"],
+  "includes": [
+    "**/*.{ts,json,md}"
+  ],
   "excludes": [
     "node_modules",
     "target"

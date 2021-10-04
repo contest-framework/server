@@ -8,7 +8,7 @@ docs:  # shows the RustDoc in a browser
 	cargo doc --open
 
 fix:  # auto-corrects all formatting issues
-	${CURDIR}/node_modules/.bin/prettier --write .
+	dprint fmt
 
 help:   # shows all available Make commands
 	cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v '.SILENT' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
