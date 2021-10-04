@@ -1,5 +1,3 @@
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-
 #[macro_use]
 extern crate prettytable;
 

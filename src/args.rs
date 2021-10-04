@@ -11,7 +11,7 @@ pub enum Command {
     Setup,       // create a config file
 }
 
-pub fn parse<I>(mut argv: I) -> Result<Command, UserError>
+pub fn parse<I>(argv: I) -> Result<Command, UserError>
 where
     I: IntoIterator<Item = String>,
 {
