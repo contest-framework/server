@@ -35,8 +35,8 @@ async function getExistingCommands(): Promise<string[]> {
       continue
     }
     if (inSubcommandsSection) {
-      const match = line.match(firstWordRE)
-      result.push(match[1])
+      const matches = line.match(firstWordRE)
+      result.push(matches[1])
     }
   }
   return result
