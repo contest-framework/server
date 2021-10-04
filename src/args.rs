@@ -15,8 +15,7 @@ pub fn parse<I>(argv: I) -> Result<Command, UserError>
 where
     I: IntoIterator<Item = String>,
 {
-    let matches = define_args().get_matches_from(argv);
-    match matches.subcommand() {
+    match define_args().get_matches_from(argv).subcommand() {
         ("debug", _) => Ok(Command::Debug),
         ("run", Some(run_options)) => Ok(Command::Run(
             run_options.value_of("command").unwrap().to_string(),

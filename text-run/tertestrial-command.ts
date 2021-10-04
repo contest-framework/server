@@ -24,9 +24,20 @@ async function getExistingCommands(): Promise<string[]> {
   const { stdout, stderr } = await asyncExec(
     path.join(__dirname, "..", "target", "debug", "tertestrial") + " help"
   )
-  return (stdout.trim() + stderr.trim())
-    .split(os.EOL)
-    .map(line => line.match(/^- (\w+):/))
-    .filter(match => match != null)
-    .map(match => match[1])
+  const output = stdout.trim() + stderr.trim()
+  let inSubcommandsSection = false
+  const result = []
+  const firstWordRE = /^\s*(\w+)/
+  for (const line in output.split(os.EOL)) {
+    if (line.startsWith("SUBCOMMANDS:")) {
+      inSubcommandsSection = true
+      continue
+    }
+    if (inSubcommandsSection) {
+      const match = line.match(firstWordRE)
+      result.push(match[1])
+    }
+  }
+  console.log(result)
+  return result
 }
