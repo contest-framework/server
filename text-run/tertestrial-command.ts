@@ -11,11 +11,7 @@ const asyncExec = util.promisify(
 export async function tertestrialCommand(
   action: tr.actions.Args,
 ) {
-  const documented = action
-    .region
-    .text()
-    .trim()
-    .replace(/^tertestrial /, "");
+  const documented = action.region.text().trim().replace(/^tertestrial /, "");
   action.name(`Valid Tertestrial command: ${documented}`);
   const existing = await getExistingCommands();
   if (!existing.includes(documented)) {
@@ -24,13 +20,11 @@ export async function tertestrialCommand(
 }
 
 async function getExistingCommands(): Promise<string[]> {
-  const { stdout, stderr } = await asyncExec(
-    path.join(__dirname, "..", "target", "debug", "tertestrial") + " help",
-  );
+  const { stdout, stderr } = await asyncExec(path.join(__dirname, "..", "target", "debug", "tertestrial") + " help");
   const output = stdout.trim() + stderr.trim();
   let inSubcommandsSection = false;
   const result = [];
-  const firstWordRE = /^\s*(\w+)/;
+  const firstWordRE = /^\s*(\w+)/; // extracts the first word in the given string
   const lines = output.split(os.EOL);
   for (const line of lines) {
     if (line.startsWith("SUBCOMMANDS:")) {
