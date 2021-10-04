@@ -1,3 +1,4 @@
+.DEFAULT_GOAL := help
 .SILENT:
 
 build:  # performs a test build
