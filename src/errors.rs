@@ -52,27 +52,27 @@ impl UserError {
     /// Provides human-readable messages for TertErrors.
     pub fn messages(&self) -> (String, String) {
         match self {
-            UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {}", err), "".to_string()),
+            UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {}", err), "".into()),
             UserError::ConfigFileInvalidContent{err} => {
-                (format!("Cannot parse configuration file: {}", err), "".to_string())
+                (format!("Cannot parse configuration file: {}", err), "".into())
             }
-            UserError::ConfigFileNotFound{} => ("Configuration file not found".to_string(), "Tertestrial requires a configuration file named \".testconfig.json\" in the current directory. Please run \"tertestrial setup \" to create one.".to_string()),
-            UserError::ConfigFileNotReadable{err} => (format!("Cannot open configuration file: {}", err), "".to_string()),
-            UserError::ConfigInvalidGlobPattern{pattern, err} => (format!("Invalid glob pattern: {}", pattern), err.to_string()),
-            UserError::FifoAlreadyExists{path} => (format!("A fifo pipe \"{}\" already exists.", path), "This could mean a Tertestrial instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Tertestrial again.".to_string()),
-            UserError::FifoCannotDelete{err} => (format!("Cannot delete pipe: {}", err), "".to_string()),
-            UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {}", err), "This is an internal error".to_string()),
+            UserError::ConfigFileNotFound{} => ("Configuration file not found".into(), "Tertestrial requires a configuration file named \".testconfig.json\" in the current directory. Please run \"tertestrial setup \" to create one.".into()),
+            UserError::ConfigFileNotReadable{err} => (format!("Cannot open configuration file: {}", err), "".into()),
+            UserError::ConfigInvalidGlobPattern{pattern, err} => (format!("Invalid glob pattern: {}", pattern), err.into()),
+            UserError::FifoAlreadyExists{path} => (format!("A fifo pipe \"{}\" already exists.", path), "This could mean a Tertestrial instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Tertestrial again.".into()),
+            UserError::FifoCannotDelete{err} => (format!("Cannot delete pipe: {}", err), "".into()),
+            UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {}", err), "This is an internal error".into()),
             UserError::InvalidTrigger{line, err} => (format!("cannot parse command received from client: {}", line),
                 format!( "This is a problem with your Tertestrial client.\n\nError message from JSON parser: {}", err)),
-            UserError::NoCommandToRepeat{} => ("No command to repeat found".to_string(), "You must submit a test command first before you can repeat it.".to_string()),
+            UserError::NoCommandToRepeat{} => ("No command to repeat found".into(), "You must submit a test command first before you can repeat it.".into()),
             UserError::RunCommandNotFound{command} => (format!("test command to run not found: {}", command),
-                        "Please verify that the command is in the path or fix your config file.".to_string()),
+                        "Please verify that the command is in the path or fix your config file.".into()),
             UserError::TriggerTooManyCaptures{count, regex, line} => (format!("found {} captures using regex \"{}\" on line: {}", count, regex, line),
-                    "filters in the Tertestrial configuration file can only contain one capture group".to_string()),
+                    "filters in the Tertestrial configuration file can only contain one capture group".into()),
             UserError::TriggerRegexNotFound{regex, filename} => (format!("Did not find pattern {} in file {}", regex, filename),
-                "Please check that the file .testconfig.json is correct".to_string()),
+                "Please check that the file .testconfig.json is correct".into()),
             UserError::UnknownTrigger{line} => (format!("cannot determine command for trigger: {}", line),
-            "Please make sure that this trigger is listed in your configuration file".to_string()),
+            "Please make sure that this trigger is listed in your configuration file".into()),
         }
     }
 }

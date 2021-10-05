@@ -382,7 +382,7 @@ mod tests {
                 last_command: Cell::new(None),
             };
             let give = Trigger {
-                command: "testAll".to_string(),
+                command: "testAll".into(),
                 file: None,
                 line: None,
             };
@@ -394,8 +394,8 @@ mod tests {
         fn exact_match() {
             let action1 = Action {
                 trigger: Trigger {
-                    command: "testFunction".to_string(),
-                    file: Some("filename1".to_string()),
+                    command: "testFunction".into(),
+                    file: Some("filename1".into()),
                     line: Some("*".into()),
                 },
                 run: String::from("action1 command"),
@@ -403,8 +403,8 @@ mod tests {
             };
             let action2 = Action {
                 trigger: Trigger {
-                    command: "testFunction".to_string(),
-                    file: Some("filename2".to_string()),
+                    command: "testFunction".into(),
+                    file: Some("filename2".into()),
                     line: Some("*".into()),
                 },
                 run: String::from("action2 command"),
@@ -412,8 +412,8 @@ mod tests {
             };
             let action3 = Action {
                 trigger: Trigger {
-                    command: "testFunction".to_string(),
-                    file: Some("filename3".to_string()),
+                    command: "testFunction".into(),
+                    file: Some("filename3".into()),
                     line: Some("*".into()),
                 },
                 run: String::from("action3 command"),
@@ -434,8 +434,8 @@ mod tests {
                 last_command: Cell::new(None),
             };
             let give = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename2".to_string()),
+                command: "testFunction".into(),
+                file: Some("filename2".into()),
                 line: Some("2".into()),
             };
             let have = config.get_command(give);
@@ -446,8 +446,8 @@ mod tests {
         fn no_match() {
             let action1 = Action {
                 trigger: Trigger {
-                    command: "testFile".to_string(),
-                    file: Some("filename".to_string()),
+                    command: "testFile".into(),
+                    file: Some("filename".into()),
                     line: None,
                 },
                 run: String::from("action1 command"),
@@ -468,8 +468,8 @@ mod tests {
                 last_command: Cell::new(None),
             };
             let give = Trigger {
-                command: "testFile".to_string(),
-                file: Some("other filename".to_string()),
+                command: "testFile".into(),
+                file: Some("other filename".into()),
                 line: None,
             };
             let have = config.get_command(give);
