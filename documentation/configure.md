@@ -23,8 +23,8 @@ Below is an example configuration file for JavaScript developers who use
     },
     {
       "trigger": {
-        "filename": ".js$",
-        "line": "d+"
+        "filename": "**/*.js",
+        "line": "\\d+"
       },
       "command": "mocha {{filename}}:{{line}}"
     }

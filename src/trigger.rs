@@ -138,55 +138,6 @@ mod tests {
         }
     }
 
-    mod eq {
-        use super::super::*;
-
-        #[test]
-        fn matching() {
-            let trigger1 = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(12),
-            };
-            let trigger2 = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(12),
-            };
-            assert!(trigger1 == trigger2);
-        }
-
-        #[test]
-        fn mismatching_filename() {
-            let trigger1 = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename1".to_string()),
-                line: Some(12),
-            };
-            let trigger2 = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename2".to_string()),
-                line: Some(12),
-            };
-            assert!(trigger1 != trigger2);
-        }
-
-        #[test]
-        fn mismatching_line() {
-            let trigger1 = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(12),
-            };
-            let trigger2 = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(11),
-            };
-            assert!(trigger1 != trigger2);
-        }
-    }
-
     mod matches_client_trigger {
         use super::super::*;
 
