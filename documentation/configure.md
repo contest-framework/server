@@ -24,7 +24,7 @@ Below is an example configuration file for JavaScript developers who use
     {
       "trigger": {
         "filename": "**/*.js",
-        "line": "\\d+"
+        "line": "*"
       },
       "command": "mocha {{filename}}:{{line}}"
     }
