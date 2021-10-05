@@ -7,7 +7,7 @@ use serde::Deserialize;
 pub struct Trigger {
     pub command: String,
     pub file: Option<String>,
-    pub line: Option<u32>,
+    pub line: Option<String>,
 }
 
 impl Trigger {
@@ -15,26 +15,39 @@ impl Trigger {
         if self.command != from_client.command {
             return Ok(false);
         }
-        if self.line.is_none() && from_client.line.is_some() {
-            // client sent line but config doesn't contain it --> still a match
-            return Ok(true);
-        }
-        if self.line != from_client.line {
+        if self.line.is_some() && from_client.line.is_none() {
+            // config expects a line but client didn't send one --> no match
             return Ok(false);
         }
-        if self.file.is_none() && from_client.file.is_none() {
-            return Ok(true);
+        if self.line.is_some() && from_client.line.is_some() {
+            let self_line = &self.line.as_ref().unwrap();
+            // TODO: pre-compute this pattern
+            let pattern =
+                glob::Pattern::new(self_line).map_err(|e| UserError::ConfigInvalidGlobPattern {
+                    pattern: self_line.to_string(),
+                    err: e.to_string(),
+                })?;
+            if !pattern.matches(from_client.line.as_ref().unwrap()) {
+                return Ok(false);
+            }
+        }
+        if self.file.is_some() && from_client.file.is_none() {
+            // config expects a file but client didn't send one --> no match
+            return Ok(false);
         }
         if self.file.is_some() && from_client.file.is_some() {
             let self_file = &self.file.as_ref().unwrap();
+            // TODO: pre-compute this pattern
             let pattern =
                 glob::Pattern::new(self_file).map_err(|e| UserError::ConfigInvalidGlobPattern {
                     pattern: self_file.to_string(),
                     err: e.to_string(),
                 })?;
-            return Ok(pattern.matches(from_client.file.as_ref().unwrap()));
+            if !pattern.matches(from_client.file.as_ref().unwrap()) {
+                return Ok(false);
+            }
         }
-        Ok(false)
+        Ok(true)
     }
 }
 
@@ -80,7 +93,7 @@ mod tests {
             let give = r#"{ "command": "testAll" }"#;
             let have = from_string(give).unwrap();
             let want = Trigger {
-                command: "testAll".to_string(),
+                command: "testAll".into(),
                 file: None,
                 line: None,
             };
@@ -92,8 +105,8 @@ mod tests {
             let give = r#"{ "command": "testFile", "file": "foo.rs" }"#;
             let have = from_string(give).unwrap();
             let want = Trigger {
-                command: "testFile".to_string(),
-                file: Some("foo.rs".to_string()),
+                command: "testFile".into(),
+                file: Some("foo.rs".into()),
                 line: None,
             };
             assert_eq!(have, want);
@@ -101,12 +114,12 @@ mod tests {
 
         #[test]
         fn filename_line() {
-            let give = r#"{ "command": "testFunction", "file": "foo.rs", "line": 12 }"#;
+            let give = r#"{ "command": "testFunction", "file": "foo.rs", "line": "12" }"#;
             let have = from_string(give).unwrap();
             let want = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("foo.rs".to_string()),
-                line: Some(12),
+                command: "testFunction".into(),
+                file: Some("foo.rs".into()),
+                line: Some("12".into()),
             };
             assert_eq!(have, want);
         }
@@ -116,7 +129,7 @@ mod tests {
             let give = r#"{ "command": "testFile", "file": "foo.rs", "other": "12" }"#;
             let have = from_string(give).unwrap();
             let want = Trigger {
-                command: "testFile".to_string(),
+                command: "testFile".into(),
                 file: Some(String::from("foo.rs")),
                 line: None,
             };
@@ -128,8 +141,8 @@ mod tests {
             let give = "{\"filename}";
             let have = from_string(give);
             let want = UserError::InvalidTrigger {
-                line: give.to_string(),
-                err: "EOF while parsing a string at line 1 column 11".to_string(),
+                line: give.into(),
+                err: "EOF while parsing a string at line 1 column 11".into(),
             };
             match have {
                 Ok(_) => panic!("this shouldn't work"),
@@ -144,20 +157,20 @@ mod tests {
         #[test]
         fn matching() {
             let config = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("**/*.rs".to_string()),
-                line: Some(12),
+                command: "testFunction".into(),
+                file: Some("**/*.rs".into()),
+                line: Some("*".into()),
             };
             let give = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("foo.rs".to_string()),
-                line: Some(12),
+                command: "testFunction".into(),
+                file: Some("foo.rs".into()),
+                line: Some("12".into()),
             };
             assert!(config.matches_client_trigger(&give).unwrap());
             let give = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("foo/bar.rs".to_string()),
-                line: Some(12),
+                command: "testFunction".into(),
+                file: Some("subdir1/subdir2/bar.rs".into()),
+                line: Some("12".into()),
             };
             assert!(config.matches_client_trigger(&give).unwrap());
         }
@@ -165,14 +178,14 @@ mod tests {
         #[test]
         fn mismatching_command() {
             let config = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(12),
+                command: "testFunction".into(),
+                file: Some("filename".into()),
+                line: None,
             };
             let give = Trigger {
-                command: "testFile".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(12),
+                command: "testFile".into(),
+                file: Some("filename".into()),
+                line: None,
             };
             assert!(!config.matches_client_trigger(&give).unwrap());
         }
@@ -180,14 +193,14 @@ mod tests {
         #[test]
         fn mismatching_file() {
             let config = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(12),
+                command: "testFunction".into(),
+                file: Some("filename".into()),
+                line: None,
             };
             let give = Trigger {
-                command: "testFile".to_string(),
-                file: Some("filename2".to_string()),
-                line: Some(12),
+                command: "testFile".into(),
+                file: Some("otherfilename".into()),
+                line: None,
             };
             assert!(!config.matches_client_trigger(&give).unwrap());
         }
@@ -195,14 +208,44 @@ mod tests {
         #[test]
         fn mismatching_line() {
             let config = Trigger {
-                command: "testFunction".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(12),
+                command: "testFunction".into(),
+                file: Some("filename".into()),
+                line: Some("*-*".into()),
             };
             let give = Trigger {
-                command: "testFile".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(11),
+                command: "testFile".into(),
+                file: Some("filename".into()),
+                line: Some("12".into()),
+            };
+            assert!(!config.matches_client_trigger(&give).unwrap());
+        }
+
+        #[test]
+        fn missing_line() {
+            let config = Trigger {
+                command: "testFunction".into(),
+                file: Some("filename".into()),
+                line: Some("12".into()),
+            };
+            let give = Trigger {
+                command: "testFile".into(),
+                file: Some("filename".into()),
+                line: None,
+            };
+            assert!(!config.matches_client_trigger(&give).unwrap());
+        }
+
+        #[test]
+        fn extra_line() {
+            let config = Trigger {
+                command: "testFunction".into(),
+                file: Some("filename".into()),
+                line: None,
+            };
+            let give = Trigger {
+                command: "testFile".into(),
+                file: Some("filename".into()),
+                line: Some("12".into()),
             };
             assert!(!config.matches_client_trigger(&give).unwrap());
         }
