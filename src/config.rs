@@ -226,7 +226,7 @@ impl Configuration {
             values.insert("file", trigger.file.as_ref().unwrap().clone());
         }
         if trigger.line.is_some() {
-            values.insert("line", trigger.line.unwrap().to_string());
+            values.insert("line", trigger.line.as_ref().unwrap().to_string());
         }
         if action.vars.is_some() {
             for var in action.vars.as_ref().unwrap() {
@@ -395,8 +395,8 @@ mod tests {
             let action1 = Action {
                 trigger: Trigger {
                     command: "testFunction".to_string(),
-                    file: Some("filename".to_string()),
-                    line: Some(1),
+                    file: Some("filename1".to_string()),
+                    line: Some("*".into()),
                 },
                 run: String::from("action1 command"),
                 vars: Some(vec![]),
@@ -404,8 +404,8 @@ mod tests {
             let action2 = Action {
                 trigger: Trigger {
                     command: "testFunction".to_string(),
-                    file: Some("filename".to_string()),
-                    line: Some(2),
+                    file: Some("filename2".to_string()),
+                    line: Some("*".into()),
                 },
                 run: String::from("action2 command"),
                 vars: Some(vec![]),
@@ -413,8 +413,8 @@ mod tests {
             let action3 = Action {
                 trigger: Trigger {
                     command: "testFunction".to_string(),
-                    file: Some("filename".to_string()),
-                    line: Some(3),
+                    file: Some("filename3".to_string()),
+                    line: Some("*".into()),
                 },
                 run: String::from("action3 command"),
                 vars: Some(vec![]),
@@ -435,8 +435,8 @@ mod tests {
             };
             let give = Trigger {
                 command: "testFunction".to_string(),
-                file: Some("filename".to_string()),
-                line: Some(2),
+                file: Some("filename2".to_string()),
+                line: Some("2".into()),
             };
             let have = config.get_command(give);
             assert_eq!(have, Ok(String::from("action2 command")));
