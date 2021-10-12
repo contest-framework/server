@@ -9,7 +9,6 @@ can install it in a number of ways:
   `cargo install --git https://github.com/tertestrial/server.git`
 - from source: clone this codebase and run
   <code type="make/command" dir="..">make install</code>
-- coming soon: download the binary for your platform from the releases page
 
 ### Ignoring the FIFO pipe
 

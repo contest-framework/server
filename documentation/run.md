@@ -1,6 +1,7 @@
 # Running the Tertestrial server
 
-Start Tertestrial by running `tertestrial` in a terminal.
+Start Tertestrial by running `tertestrial` in a terminal. Configure your IDE and
+start sending Tertestrial commands.
 
 If you run tertestrial in the background via `tertestrial &`, you can see all
 Tertestrial output and your terminal remains interactive: you can keep running
