@@ -1,9 +1,8 @@
 //! command-line arguments
 
+use super::Command;
 use crate::Result;
 use clap::{crate_description, crate_name, crate_version, App, Arg, SubCommand};
-
-use super::Command;
 
 pub fn parse<I>(argv: I) -> Result<Command>
 where
