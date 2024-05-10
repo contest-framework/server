@@ -1,5 +1,6 @@
 Feature: run Tertestrial with configuration that defines commands
 
+  @this
   Scenario: configuration defines commands
     Given file ".testconfig.json" with content
       """
@@ -17,7 +18,7 @@ Feature: run Tertestrial with configuration that defines commands
       }
       """
     And I start Tertestrial
-    Then it prints:
+    Then it prints
       """
       Tertestrial is online, Ctrl-C to exit
       """
