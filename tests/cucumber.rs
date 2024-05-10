@@ -10,10 +10,10 @@ use tokio::process::{Child, ChildStdin, ChildStdout, Command};
 // Accepts both sync/async and fallible/infallible functions.
 #[world(init = Self::new)]
 pub struct CukeWorld {
-  workspace: TempDir,
   cmd: Option<Child>,
   stdin: Option<BufWriter<ChildStdin>>,
   stdout: Option<BufReader<ChildStdout>>,
+  workspace: TempDir,
 }
 
 impl CukeWorld {
@@ -58,6 +58,19 @@ async fn tertestrial_running(world: &mut CukeWorld) {
   world.stdout = Some(stdout_writer);
 }
 
+#[when("a client sends the command")]
+async fn client_sends_command(world: &mut CukeWorld, step: &Step) {
+  let command = step.docstring.as_ref().unwrap().trim();
+  let fifo = world.fifo.write();
+}
+
+#[then("it exits")]
+async fn it_exits(world: &mut CukeWorld) {
+  let cmd = world.cmd.as_mut().unwrap();
+  let o = cmd.wait().await.unwrap();
+  assert_eq!(o.code().unwrap(), 0);
+}
+
 #[then("it prints")]
 async fn it_prints(world: &mut CukeWorld, step: &Step) {
   let want = step.docstring.as_ref().unwrap().trim();
@@ -69,13 +82,6 @@ async fn it_prints(world: &mut CukeWorld, step: &Step) {
     output.trim().clone_into(&mut have);
   }
   assert_eq!(&have, want);
-}
-
-#[then("it exits")]
-async fn it_exits(world: &mut CukeWorld) {
-  let cmd = world.cmd.as_mut().unwrap();
-  let o = cmd.wait().await.unwrap();
-  assert_eq!(o.code().unwrap(), 0);
 }
 
 #[tokio::main(flavor = "current_thread")]
