@@ -7,7 +7,7 @@ build:  # performs a test build
 docs:  # shows the RustDoc in a browser
 	cargo doc --open
 
-fix:  # auto-corrects all formatting issues
+fix: tools/rta@${RUN_THAT_APP_VERSION}  # auto-corrects all formatting issues
 	tools/rta dprint fmt
 
 help:   # shows all available Make commands
@@ -22,12 +22,12 @@ setup:  # prepares this codebase for development
 	echo "Please make sure you have dprint installed."
 	echo "https://dprint.dev/install"
 
-test:  # runs all automated tests
+test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
 	cargo clippy --all-targets --all-features -- -D warnings
 	cargo test
 	cargo fmt -- --check
-	dprint check
+	tools/rta dprint check
 # ${CURDIR}/node_modules/.bin/text-run
 
 unit:  # runs the unit tests
@@ -36,10 +36,10 @@ unit:  # runs the unit tests
 # --- HELPER TARGETS --------------------------------------------------------------------------------------------------------------------------------
 
 tools/rta@${RUN_THAT_APP_VERSION}:
-    @rm -f tools/rta* tools/rta
-    @(cd tools && curl https://raw.githubusercontent.com/kevgo/run-that-app/main/download.sh | sh)
-    @mv tools/rta tools/rta@${RUN_THAT_APP_VERSION}
-    @ln -s rta@${RUN_THAT_APP_VERSION} tools/rta
+	@rm -f tools/rta* tools/rta
+	@(cd tools && curl https://raw.githubusercontent.com/kevgo/run-that-app/main/download.sh | sh)
+	@mv tools/rta tools/rta@${RUN_THAT_APP_VERSION}
+	@ln -s rta@${RUN_THAT_APP_VERSION} tools/rta
 
 .SILENT:
 .DEFAULT_GOAL := help
