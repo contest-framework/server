@@ -2,12 +2,12 @@
 
 use super::errors::UserError;
 use super::trigger::Trigger;
-use core::cell::Cell;
-use core::fmt;
 use prettytable::Table;
 use regex::Regex;
 use serde::Deserialize;
+use std::cell::Cell;
 use std::collections::HashMap;
+use std::fmt;
 use std::fs::{self, File};
 use std::io;
 use std::vec::Vec;
@@ -269,7 +269,7 @@ fn calculate_var(var: &Var, values: &HashMap<&str, String>) -> Result<String, Us
         VarSource::Line => filter(values.get("line").unwrap(), &var.filter),
         VarSource::CurrentOrAboveLineContent => {
             let file_name = values.get("file").unwrap();
-            let file_content = std::fs::read_to_string(file_name).unwrap();
+            let file_content = fs::read_to_string(file_name).unwrap();
             let lines: Vec<&str> = file_content.split('\n').collect();
             let re = Regex::new(&var.filter).unwrap();
             let mut line: u32 = values.get("line").unwrap().parse().unwrap();
