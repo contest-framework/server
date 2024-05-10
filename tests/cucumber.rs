@@ -50,7 +50,7 @@ fn cat_is_fed(world: &mut AnimalWorld) {
 async fn main() {
   AnimalWorld::cucumber()
     .fail_fast()
-    .max_concurrent_scenarios(Some(2))
+    .max_concurrent_scenarios(Some(1))
     .run_and_exit("features/")
     .await;
 }
