@@ -1,7 +1,6 @@
-use std::process::Stdio;
-
 use cucumber::gherkin::Step;
 use cucumber::{given, then, when, World};
+use std::process::Stdio;
 use tempfile::TempDir;
 use tokio::io::{AsyncBufReadExt, BufReader, BufWriter};
 use tokio::process::{Child, ChildStdin, ChildStdout, Command};
@@ -59,6 +58,13 @@ async fn it_prints(world: &mut CukeWorld, step: &Step) {
     output.trim().clone_into(&mut have);
   }
   assert_eq!(&have, want);
+}
+
+#[then("it exits")]
+async fn it_exits(world: &mut CukeWorld) {
+  let cmd = world.cmd.as_mut().unwrap();
+  let o = cmd.wait().await.unwrap();
+  assert_eq!(o.code().unwrap(), 0);
 }
 
 #[tokio::main(flavor = "current_thread")]

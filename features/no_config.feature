@@ -7,3 +7,4 @@ Feature: run Tertestrial without configuration
       """
       Error: Configuration file not found
       """
+    And it exits
