@@ -7,8 +7,10 @@ build:  # performs a test build
 docs:  # shows the RustDoc in a browser
 	cargo doc --open
 
-fix: tools/rta@${RUN_THAT_APP_VERSION}  # auto-corrects all formatting issues
+fix: tools/rta@${RUN_THAT_APP_VERSION}  # auto-corrects all issues
 	tools/rta dprint fmt
+	cargo +nightly fmt
+	cargo +nightly fix --allow-dirty
 
 help:   # shows all available Make commands
 	cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v '.SILENT' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
@@ -17,6 +19,8 @@ install:  # compiles and installs the binary on this computer
 	cargo install --path .
 
 setup:  # prepares this codebase for development
+	rustup toolchain add nightly
+	rustup component add rustfmt --toolchain nightly
 	yarn install
 	echo
 	echo "Please make sure you have dprint installed."
