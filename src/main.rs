@@ -11,7 +11,7 @@ mod run;
 mod trigger;
 
 use args::Command;
-use errors::UserError;
+pub use errors::{Result, UserError};
 use run::Outcome;
 use std::io::Write;
 use std::{env, panic};
@@ -20,8 +20,8 @@ use terminal_size::terminal_size;
 
 fn main() {
     let panic_result = panic::catch_unwind(|| {
-        if let Err(tert_error) = main_with_result() {
-            let (msg, guidance) = tert_error.messages();
+        if let Err(err) = main_with_result() {
+            let (msg, guidance) = err.messages();
             println!("\nError: {}\n\n{}", msg, guidance);
         }
     });
@@ -31,7 +31,7 @@ fn main() {
     }
 }
 
-fn main_with_result() -> Result<(), UserError> {
+fn main_with_result() -> Result<()> {
     match args::parse(env::args())? {
         Command::Normal => listen(false),
         Command::Debug => listen(true),
@@ -44,7 +44,7 @@ fn main_with_result() -> Result<(), UserError> {
     }
 }
 
-fn listen(debug: bool) -> Result<(), UserError> {
+fn listen(debug: bool) -> Result<()> {
     let config = config::from_file()?;
     if debug {
         println!("using this configuration:");
@@ -85,7 +85,7 @@ fn listen(debug: bool) -> Result<(), UserError> {
     Ok(())
 }
 
-fn run_with_decoration(text: String, config: &config::Configuration) -> Result<(), UserError> {
+fn run_with_decoration(text: String, config: &config::Configuration) -> Result<()> {
     for _ in 0..config.options.before_run.newlines {
         println!();
     }
@@ -118,7 +118,7 @@ fn run_with_decoration(text: String, config: &config::Configuration) -> Result<(
     Ok(())
 }
 
-fn run_command(text: String, configuration: &config::Configuration) -> Result<bool, UserError> {
+fn run_command(text: String, configuration: &config::Configuration) -> Result<bool> {
     let trigger = trigger::from_string(&text)?;
     match configuration.get_command(trigger) {
         Err(err) => match err {
