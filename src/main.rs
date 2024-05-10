@@ -3,20 +3,20 @@ extern crate prettytable;
 
 mod channel;
 mod cli;
+mod client;
 mod config;
 mod errors;
-mod fifo;
 mod run;
-mod trigger;
 
 use cli::Command;
+use client::fifo;
+pub use client::Trigger;
 pub use errors::{Result, UserError};
 use run::Outcome;
 use std::io::Write;
 use std::{env, panic};
 use termcolor::WriteColor;
 use terminal_size::terminal_size;
-pub use trigger::Trigger;
 
 fn main() {
     let panic_result = panic::catch_unwind(|| {
@@ -25,7 +25,7 @@ fn main() {
             println!("\nError: {}\n\n{}", msg, guidance);
         }
     });
-    let _ = fifo::in_dir(&env::current_dir().unwrap()).delete();
+    let _ = client::fifo::in_dir(&env::current_dir().unwrap()).delete();
     if panic_result.is_err() {
         panic!("{:?}", panic_result);
     }
@@ -52,14 +52,9 @@ fn listen(debug: bool) -> Result<()> {
     }
     let (sender, receiver) = channel::create(); // cross-thread communication channel
     cli::ctrl_c::handle(sender.clone());
-    let pipe = fifo::in_dir(&env::current_dir().unwrap());
-    match pipe.create() {
-        fifo::CreateOutcome::AlreadyExists(path) => {
-            return Err(UserError::FifoAlreadyExists { path })
-        }
-        fifo::CreateOutcome::OtherError(err) => panic!("{}", err),
-        fifo::CreateOutcome::Ok() => {}
-    }
+    let current_dir = env::current_dir().unwrap();
+    let pipe = client::fifo::in_dir(&current_dir);
+    pipe.create()?;
     fifo::listen(pipe, sender);
     match debug {
         false => println!("Tertestrial is online, Ctrl-C to exit"),
@@ -119,7 +114,7 @@ fn run_with_decoration(text: String, config: &config::Configuration) -> Result<(
 }
 
 fn run_command(text: String, configuration: &config::Configuration) -> Result<bool> {
-    let trigger = trigger::from_string(&text)?;
+    let trigger = client::trigger::from_string(&text)?;
     match configuration.get_command(trigger) {
         Err(err) => match err {
             UserError::NoCommandToRepeat {} => {

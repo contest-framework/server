@@ -1,3 +1,5 @@
+//! everything around CLI input
+
 pub mod args;
 pub mod ctrl_c;
 

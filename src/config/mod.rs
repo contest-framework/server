@@ -1,4 +1,4 @@
-//! program configuration
+//! everything around configuring Tertestrial
 
 mod data;
 pub mod file;
