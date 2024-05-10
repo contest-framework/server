@@ -1,5 +1,5 @@
-.DEFAULT_GOAL := help
-.SILENT:
+# dev tooling and versions
+RUN_THAT_APP_VERSION = 0.6.0
 
 build:  # performs a test build
 	cargo check
@@ -8,7 +8,7 @@ docs:  # shows the RustDoc in a browser
 	cargo doc --open
 
 fix:  # auto-corrects all formatting issues
-	dprint fmt
+	tools/rta dprint fmt
 
 help:   # shows all available Make commands
 	cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v '.SILENT' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
@@ -32,3 +32,14 @@ test:  # runs all automated tests
 
 unit:  # runs the unit tests
 	cargo test
+
+# --- HELPER TARGETS --------------------------------------------------------------------------------------------------------------------------------
+
+tools/rta@${RUN_THAT_APP_VERSION}:
+    @rm -f tools/rta* tools/rta
+    @(cd tools && curl https://raw.githubusercontent.com/kevgo/run-that-app/main/download.sh | sh)
+    @mv tools/rta tools/rta@${RUN_THAT_APP_VERSION}
+    @ln -s rta@${RUN_THAT_APP_VERSION} tools/rta
+
+.SILENT:
+.DEFAULT_GOAL := help
