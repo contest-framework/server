@@ -3,7 +3,7 @@
 use super::errors::UserError;
 use clap::{crate_authors, crate_description, crate_name, crate_version, App, Arg, SubCommand};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum Command {
     Normal,      // normal operation
     Debug,       // print the received commands from the pipe
@@ -18,7 +18,7 @@ where
     match define_args().get_matches_from(argv).subcommand() {
         ("debug", _) => Ok(Command::Debug),
         ("run", Some(run_options)) => Ok(Command::Run(
-            run_options.value_of("command").unwrap().to_string(),
+            run_options.value_of("command").unwrap().to_owned(),
         )),
         ("setup", _) => Ok(Command::Setup),
         ("", _) => Ok(Command::Normal),

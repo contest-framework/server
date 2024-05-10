@@ -2,11 +2,11 @@
 
 use super::errors::UserError;
 use super::trigger::Trigger;
+use core::cell::Cell;
 use core::fmt;
 use prettytable::Table;
 use regex::Regex;
 use serde::Deserialize;
-use std::cell::Cell;
 use std::collections::HashMap;
 use std::fs::{self, File};
 use std::io;
@@ -245,15 +245,14 @@ impl Configuration {
     }
 }
 
+#[allow(clippy::str_to_string)]
+#[allow(clippy::string_to_string)]
 impl fmt::Display for Configuration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut table = Table::new();
         table.add_row(prettytable::row!["TRIGGER", "RUN"]);
         for action in &self.actions {
-            table.add_row(prettytable::row![
-                &format!("{}", action.trigger),
-                action.run
-            ]);
+            table.add_row(prettytable::row![action.trigger, action.run]);
         }
         table.printstd();
         f.write_str("Options:")?;
