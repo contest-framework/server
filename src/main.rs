@@ -14,24 +14,25 @@ use args::Command;
 use errors::UserError;
 use run::Outcome;
 use std::io::Write;
+use std::{env, panic};
 use termcolor::WriteColor;
 use terminal_size::terminal_size;
 
 fn main() {
-    let panic_result = std::panic::catch_unwind(|| {
+    let panic_result = panic::catch_unwind(|| {
         if let Err(tert_error) = main_with_result() {
             let (msg, guidance) = tert_error.messages();
             println!("\nError: {}\n\n{}", msg, guidance);
         }
     });
-    let _ = fifo::in_dir(&std::env::current_dir().unwrap()).delete();
+    let _ = fifo::in_dir(&env::current_dir().unwrap()).delete();
     if panic_result.is_err() {
         panic!("{:?}", panic_result);
     }
 }
 
 fn main_with_result() -> Result<(), UserError> {
-    match args::parse(std::env::args())? {
+    match args::parse(env::args())? {
         Command::Normal => listen(false),
         Command::Debug => listen(true),
         Command::Run(cmd) => {
@@ -51,7 +52,7 @@ fn listen(debug: bool) -> Result<(), UserError> {
     }
     let (sender, receiver) = channel::create(); // cross-thread communication channel
     ctrl_c::handle(sender.clone());
-    let pipe = fifo::in_dir(&std::env::current_dir().unwrap());
+    let pipe = fifo::in_dir(&env::current_dir().unwrap());
     match pipe.create() {
         fifo::CreateOutcome::AlreadyExists(path) => {
             return Err(UserError::FifoAlreadyExists { path })

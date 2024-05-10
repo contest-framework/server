@@ -2,12 +2,15 @@
 
 use super::channel;
 use super::errors::UserError;
-use std::io::prelude::*;
+use std::fs::{self, File};
+use std::io::{prelude::*, BufReader};
+use std::path::{Path, PathBuf};
+use std::thread;
 
 /// A FIFO pipe
 #[derive(Debug)]
 pub struct Pipe {
-    pub filepath: std::path::PathBuf,
+    pub filepath: PathBuf,
 }
 
 pub enum CreateOutcome {
@@ -32,13 +35,13 @@ impl Pipe {
     }
 
     pub fn delete(&self) -> Result<(), UserError> {
-        std::fs::remove_file(&self.filepath)
+        fs::remove_file(&self.filepath)
             .map_err(|e| UserError::FifoCannotDelete { err: e.to_string() })
     }
 
-    pub fn open(&self) -> std::io::BufReader<std::fs::File> {
-        let file = std::fs::File::open(&self.filepath).unwrap();
-        std::io::BufReader::new(file)
+    pub fn open(&self) -> BufReader<File> {
+        let file = File::open(&self.filepath).unwrap();
+        BufReader::new(file)
     }
 
     /// provides the path of this pipe as a string
@@ -48,14 +51,14 @@ impl Pipe {
 }
 
 /// constructs a fifo pipe in the current directory
-pub fn in_dir(dirpath: &std::path::Path) -> Pipe {
+pub fn in_dir(dirpath: &Path) -> Pipe {
     Pipe {
         filepath: dirpath.join(".tertestrial.tmp"),
     }
 }
 
 pub fn listen(pipe: Pipe, sender: channel::Sender) {
-    std::thread::spawn(move || loop {
+    thread::spawn(move || loop {
         for line in pipe.open().lines() {
             match line {
                 Ok(text) => sender.send(channel::Signal::ReceivedLine(text)).unwrap(),
@@ -75,9 +78,10 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io;
 
     #[test]
-    fn pipe_create_does_not_exist() -> Result<(), std::io::Error> {
+    fn pipe_create_does_not_exist() -> Result<(), io::Error> {
         let temp_path = tempfile::tempdir().unwrap().into_path();
         let pipe = in_dir(&temp_path);
         match pipe.create() {
@@ -85,17 +89,17 @@ mod tests {
             _ => panic!("cannot create pipe"),
         }
         let mut files = vec![];
-        for file in std::fs::read_dir(&temp_path)? {
+        for file in fs::read_dir(&temp_path)? {
             files.push(file?.path());
         }
         let want = vec![pipe.filepath];
         assert_eq!(want, files);
-        std::fs::remove_dir_all(&temp_path)?;
+        fs::remove_dir_all(&temp_path)?;
         Ok(())
     }
 
     #[test]
-    fn pipe_create_exists() -> Result<(), std::io::Error> {
+    fn pipe_create_exists() -> Result<(), io::Error> {
         let temp_path = tempfile::tempdir().unwrap().into_path();
         let pipe = in_dir(&temp_path);
         match pipe.create() {
@@ -107,12 +111,12 @@ mod tests {
             CreateOutcome::Ok() => panic!("should not create second pipe"),
             CreateOutcome::OtherError(err) => panic!("{}", err),
         }
-        std::fs::remove_dir_all(&temp_path)?;
+        fs::remove_dir_all(&temp_path)?;
         Ok(())
     }
 
     #[test]
-    fn pipe_delete() -> Result<(), std::io::Error> {
+    fn pipe_delete() -> Result<(), io::Error> {
         let temp_path = tempfile::tempdir().unwrap().into_path();
         let pipe = in_dir(&temp_path);
         match pipe.create() {
@@ -121,11 +125,11 @@ mod tests {
         }
         pipe.delete().unwrap();
         let mut files = vec![];
-        for file in std::fs::read_dir(&temp_path)? {
+        for file in fs::read_dir(&temp_path)? {
             files.push(file?.path());
         }
         assert_eq!(0, files.len());
-        std::fs::remove_dir_all(&temp_path).unwrap();
+        fs::remove_dir_all(&temp_path).unwrap();
         Ok(())
     }
 }

@@ -51,10 +51,10 @@ impl Trigger {
     }
 }
 
-impl core::fmt::Display for Trigger {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+impl std::fmt::Display for Trigger {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{{")?;
-        let mut parts: std::vec::Vec<String> = std::vec::Vec::new();
+        let mut parts: Vec<String> = Vec::new();
         parts.push(format!("\"command\": \"{}\"", self.command));
         if self.file.is_some() {
             parts.push(format!("\"file\": \"{}\"", self.file.as_ref().unwrap()));
