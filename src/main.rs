@@ -17,6 +17,7 @@ use std::io::Write;
 use std::{env, panic};
 use termcolor::WriteColor;
 use terminal_size::terminal_size;
+pub use trigger::Trigger;
 
 fn main() {
     let panic_result = panic::catch_unwind(|| {
@@ -37,15 +38,15 @@ fn main_with_result() -> Result<()> {
         Command::Debug => listen(true),
         Command::Run(cmd) => {
             println!("running cmd: {}", cmd);
-            let config = config::from_file()?;
+            let config = config::file::read()?;
             run_with_decoration(cmd, &config)
         }
-        Command::Setup => config::create(),
+        Command::Setup => config::file::create(),
     }
 }
 
 fn listen(debug: bool) -> Result<()> {
-    let config = config::from_file()?;
+    let config = config::file::read()?;
     if debug {
         println!("using this configuration:");
         println!("{}", config);
