@@ -3,7 +3,7 @@
 use super::errors::UserError;
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug, PartialEq)]
+#[derive(Deserialize, Debug, Eq, PartialEq)]
 pub struct Trigger {
     pub command: String,
     pub file: Option<String>,
@@ -51,8 +51,8 @@ impl Trigger {
     }
 }
 
-impl std::fmt::Display for Trigger {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for Trigger {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{{")?;
         let mut parts: std::vec::Vec<String> = std::vec::Vec::new();
         parts.push(format!("\"command\": \"{}\"", self.command));
@@ -71,7 +71,7 @@ pub fn from_string(line: &str) -> Result<Trigger, UserError> {
     match serde_json::from_str(line) {
         Ok(trigger) => Ok(trigger),
         Err(err) => Err(UserError::InvalidTrigger {
-            line: line.to_string(),
+            line: line.to_owned(),
             err: err.to_string(),
         }),
     }

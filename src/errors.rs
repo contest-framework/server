@@ -1,7 +1,7 @@
 //! error types used in this app
 
 /// The possible errors that the user can cause and needs to be notified about.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum UserError {
     CannotCreateConfigFile {
         err: String,

@@ -11,7 +11,7 @@ pub fn run(command: &str) -> Outcome {
     let argv = shellwords::split(command).unwrap();
     let (cmd, args) = argv.split_at(1);
     match std::process::Command::new(&cmd[0]).args(args).status() {
-        Err(_) => Outcome::NotFound(command.to_string()),
+        Err(_) => Outcome::NotFound(command.to_owned()),
         Ok(exit_status) => match exit_status.success() {
             true => Outcome::TestPass(),
             false => Outcome::TestFail(),
