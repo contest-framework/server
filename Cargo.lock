@@ -1245,6 +1245,7 @@ dependencies = [
  "clap 2.34.0",
  "ctrlc",
  "cucumber",
+ "futures",
  "glob",
  "nix 0.19.1",
  "prettytable-rs",
