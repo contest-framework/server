@@ -1,6 +1,6 @@
 //! command-line arguments
 
-use super::errors::UserError;
+use crate::Result;
 use clap::{crate_description, crate_name, crate_version, App, Arg, SubCommand};
 
 #[derive(Debug, Eq, PartialEq)]
@@ -11,7 +11,7 @@ pub enum Command {
     Setup,       // create a config file
 }
 
-pub fn parse<I>(argv: I) -> Result<Command, UserError>
+pub fn parse<I>(argv: I) -> Result<Command>
 where
     I: IntoIterator<Item = String>,
 {

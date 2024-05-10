@@ -2,6 +2,7 @@
 
 use super::errors::UserError;
 use super::trigger::Trigger;
+use crate::Result;
 use prettytable::Table;
 use regex::Regex;
 use serde::Deserialize;
@@ -112,7 +113,7 @@ pub struct Configuration {
     pub last_command: Cell<Option<String>>,
 }
 
-pub fn from_file() -> Result<Configuration, UserError> {
+pub fn from_file() -> Result<Configuration> {
     let file = match File::open(".testconfig.json") {
         Ok(config) => config,
         Err(e) => match e.kind() {
@@ -127,7 +128,7 @@ pub fn from_file() -> Result<Configuration, UserError> {
     Ok(Configuration::backfill_defaults(file_config))
 }
 
-pub fn create() -> Result<(), UserError> {
+pub fn create() -> Result<()> {
     fs::write(
         ".testconfig.json",
         r#"{
@@ -199,7 +200,7 @@ impl Configuration {
         }
     }
 
-    pub fn get_command(&self, trigger: Trigger) -> Result<String, UserError> {
+    pub fn get_command(&self, trigger: Trigger) -> Result<String> {
         if trigger.command == "repeatTest" {
             // HACK: taking the value out of the cell and putting a clone back into it
             //       because I don't understand how to implement Copy for the embedded String yet.
@@ -223,7 +224,7 @@ impl Configuration {
     }
 
     /// replaces all placeholders in the given run string
-    fn format_run(&self, action: &Action, trigger: &Trigger) -> Result<String, UserError> {
+    fn format_run(&self, action: &Action, trigger: &Trigger) -> Result<String> {
         let mut values: HashMap<&str, String> = HashMap::new();
         values.insert("command", trigger.command.clone());
         if trigger.file.is_some() {
@@ -263,7 +264,7 @@ impl Display for Configuration {
     }
 }
 
-fn calculate_var(var: &Var, values: &HashMap<&str, String>) -> Result<String, UserError> {
+fn calculate_var(var: &Var, values: &HashMap<&str, String>) -> Result<String> {
     match var.source {
         VarSource::File => filter(values.get("file").unwrap(), &var.filter),
         VarSource::Line => filter(values.get("line").unwrap(), &var.filter),
@@ -299,7 +300,7 @@ fn calculate_var(var: &Var, values: &HashMap<&str, String>) -> Result<String, Us
     }
 }
 
-fn filter(text: &str, filter: &str) -> Result<String, UserError> {
+fn filter(text: &str, filter: &str) -> Result<String> {
     let re = Regex::new(filter).unwrap();
     let captures = re.captures(text).unwrap();
     if captures.len() != 2 {

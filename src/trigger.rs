@@ -1,6 +1,7 @@
 //! commands sent over the FIFO
 
 use super::errors::UserError;
+use crate::Result;
 use serde::Deserialize;
 use std::fmt::Display;
 
@@ -12,7 +13,7 @@ pub struct Trigger {
 }
 
 impl Trigger {
-    pub fn matches_client_trigger(&self, from_client: &Trigger) -> Result<bool, UserError> {
+    pub fn matches_client_trigger(&self, from_client: &Trigger) -> Result<bool> {
         if self.command != from_client.command {
             return Ok(false);
         }
@@ -68,7 +69,7 @@ impl Display for Trigger {
     }
 }
 
-pub fn from_string(line: &str) -> Result<Trigger, UserError> {
+pub fn from_string(line: &str) -> Result<Trigger> {
     match serde_json::from_str(line) {
         Ok(trigger) => Ok(trigger),
         Err(err) => Err(UserError::InvalidTrigger {

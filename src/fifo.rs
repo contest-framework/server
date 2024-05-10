@@ -2,6 +2,7 @@
 
 use super::channel;
 use super::errors::UserError;
+use crate::Result;
 use std::fs::{self, File};
 use std::io::{prelude::*, BufReader};
 use std::path::{Path, PathBuf};
@@ -34,7 +35,7 @@ impl Pipe {
         }
     }
 
-    pub fn delete(&self) -> Result<(), UserError> {
+    pub fn delete(&self) -> Result<()> {
         fs::remove_file(&self.filepath)
             .map_err(|e| UserError::FifoCannotDelete { err: e.to_string() })
     }
@@ -77,8 +78,8 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use std::io;
+    use crate::fifo::{in_dir, CreateOutcome};
+    use std::{fs, io};
 
     #[test]
     fn pipe_create_does_not_exist() -> Result<(), io::Error> {
