@@ -7,16 +7,15 @@ mod client;
 mod config;
 mod errors;
 mod run;
-mod trigger;
 
 use cli::Command;
+pub use client::Trigger;
 pub use errors::{Result, UserError};
 use run::Outcome;
 use std::io::Write;
 use std::{env, panic};
 use termcolor::WriteColor;
 use terminal_size::terminal_size;
-pub use trigger::Trigger;
 
 fn main() {
     let panic_result = panic::catch_unwind(|| {
@@ -119,7 +118,7 @@ fn run_with_decoration(text: String, config: &config::Configuration) -> Result<(
 }
 
 fn run_command(text: String, configuration: &config::Configuration) -> Result<bool> {
-    let trigger = trigger::from_string(&text)?;
+    let trigger = client::trigger::from_string(&text)?;
     match configuration.get_command(trigger) {
         Err(err) => match err {
             UserError::NoCommandToRepeat {} => {
