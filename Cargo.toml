@@ -1,5 +1,6 @@
 [package]
 name = "tertestrial"
+description = "auto-run tests from within your code editor"
 version = "0.0.2"
 authors = ["Kevin Goslar <kevin.goslar@gmail.com>"]
 edition = "2021"

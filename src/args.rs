@@ -1,7 +1,7 @@
 //! command-line arguments
 
 use super::errors::UserError;
-use clap::{crate_authors, crate_description, crate_name, crate_version, App, Arg, SubCommand};
+use clap::{crate_description, crate_name, crate_version, App, Arg, SubCommand};
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Command {
@@ -29,7 +29,6 @@ where
 fn define_args() -> App<'static, 'static> {
     App::new(crate_name!())
         .version(crate_version!())
-        .author(crate_authors!())
         .about(crate_description!())
         .subcommand(
             SubCommand::with_name("debug")
