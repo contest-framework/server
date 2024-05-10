@@ -8,6 +8,8 @@ pub use create::create;
 pub use read::read;
 use serde::Deserialize;
 
+const PATH: &str = ".testconfig.json";
+
 /// The structure of the configuration file.
 #[derive(Deserialize)]
 pub struct Content {

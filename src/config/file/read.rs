@@ -1,5 +1,5 @@
 use super::super::Configuration;
-use super::Content;
+use super::{Content, PATH};
 use crate::config::data::{AfterRun, BeforeRun, Options};
 use crate::{Result, UserError};
 use std::cell::Cell;
@@ -7,7 +7,7 @@ use std::fs::File;
 use std::io;
 
 pub fn read() -> Result<Configuration> {
-    let file = match File::open(".testconfig.json") {
+    let file = match File::open(PATH) {
         Ok(config) => config,
         Err(e) => match e.kind() {
             io::ErrorKind::NotFound => return Err(UserError::ConfigFileNotFound {}),

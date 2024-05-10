@@ -1,9 +1,12 @@
 use crate::{Result, UserError};
 use std::fs;
 
+use super::PATH;
+
+// creates an example config file on disk
 pub fn create() -> Result<()> {
     fs::write(
-        ".testconfig.json",
+        PATH,
         r#"{
   "actions": [
     {
