@@ -1,4 +1,4 @@
-//! commands sent over the FIFO
+//! commands received from the client (through the FIFO)
 
 use crate::Result;
 use crate::UserError;
