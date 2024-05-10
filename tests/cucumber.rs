@@ -2,7 +2,8 @@ use cucumber::gherkin::Step;
 use cucumber::{given, then, when, World};
 use std::process::Stdio;
 use tempfile::TempDir;
-use tokio::io::{AsyncBufReadExt, BufReader, BufWriter};
+use tokio::fs::File;
+use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter};
 use tokio::process::{Child, ChildStdin, ChildStdout, Command};
 
 #[derive(Debug, World)]
@@ -27,7 +28,17 @@ impl CukeWorld {
   }
 }
 
-#[given("Tertestrial is running")]
+#[given(expr = "file {string} with content")]
+async fn file_with_content(world: &mut CukeWorld, step: &Step, filename: String) {
+  let file_path = world.workspace.as_ref().join(filename);
+  let mut file = File::create(file_path).await.unwrap();
+  let Some(content) = step.docstring.as_ref() else {
+    panic!("no docstring");
+  };
+  file.write_all(content.as_bytes()).await.unwrap();
+}
+
+#[given("I start Tertestrial")]
 async fn tertestrial_running(world: &mut CukeWorld) {
   let cwd = std::env::current_dir().unwrap();
   let tertestrial_path = cwd.join("target").join("debug").join("tertestrial");
@@ -47,7 +58,7 @@ async fn tertestrial_running(world: &mut CukeWorld) {
   world.stdout = Some(stdout_writer);
 }
 
-#[then("it prints:")]
+#[then("it prints")]
 async fn it_prints(world: &mut CukeWorld, step: &Step) {
   let want = step.docstring.as_ref().unwrap().trim();
   let reader = world.stdout.as_mut().unwrap();
