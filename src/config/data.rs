@@ -204,7 +204,9 @@ mod tests {
 
     #[cfg(test)]
     mod get_command {
+        use super::super::super::{Action, Configuration};
         use super::super::*;
+        use std::cell::Cell;
 
         #[test]
         fn test_all() {
@@ -230,124 +232,91 @@ mod tests {
             let have = config.get_command(give);
             assert!(have.is_err());
         }
-        #[cfg(test)]
-        mod get_command {
-            use std::cell::Cell;
 
-            use super::super::super::{
-                Action, AfterRun, BeforeRun, Configuration, Options, Trigger,
+        #[test]
+        fn exact_match() {
+            let action1 = Action {
+                trigger: Trigger {
+                    command: "testFunction".into(),
+                    file: Some("filename1".into()),
+                    line: Some("*".into()),
+                },
+                run: String::from("action1 command"),
+                vars: Some(vec![]),
             };
-
-            #[test]
-            fn test_all() {
-                let config = Configuration {
-                    actions: vec![],
-                    options: Options {
-                        before_run: BeforeRun {
-                            clear_screen: false,
-                            newlines: 0,
-                        },
-                        after_run: AfterRun {
-                            newlines: 0,
-                            indicator_lines: 0,
-                        },
-                    },
-                    last_command: Cell::new(None),
-                };
-                let give = Trigger {
-                    command: "testAll".into(),
-                    file: None,
-                    line: None,
-                };
-                let have = config.get_command(give);
-                assert!(have.is_err());
-            }
-
-            #[test]
-            fn exact_match() {
-                let action1 = Action {
-                    trigger: Trigger {
-                        command: "testFunction".into(),
-                        file: Some("filename1".into()),
-                        line: Some("*".into()),
-                    },
-                    run: String::from("action1 command"),
-                    vars: Some(vec![]),
-                };
-                let action2 = Action {
-                    trigger: Trigger {
-                        command: "testFunction".into(),
-                        file: Some("filename2".into()),
-                        line: Some("*".into()),
-                    },
-                    run: String::from("action2 command"),
-                    vars: Some(vec![]),
-                };
-                let action3 = Action {
-                    trigger: Trigger {
-                        command: "testFunction".into(),
-                        file: Some("filename3".into()),
-                        line: Some("*".into()),
-                    },
-                    run: String::from("action3 command"),
-                    vars: Some(vec![]),
-                };
-                let config = Configuration {
-                    actions: vec![action1, action2, action3],
-                    options: Options {
-                        before_run: BeforeRun {
-                            clear_screen: false,
-                            newlines: 0,
-                        },
-                        after_run: AfterRun {
-                            newlines: 0,
-                            indicator_lines: 0,
-                        },
-                    },
-                    last_command: Cell::new(None),
-                };
-                let give = Trigger {
+            let action2 = Action {
+                trigger: Trigger {
                     command: "testFunction".into(),
                     file: Some("filename2".into()),
-                    line: Some("2".into()),
-                };
-                let have = config.get_command(give);
-                assert_eq!(have, Ok(String::from("action2 command")));
-            }
+                    line: Some("*".into()),
+                },
+                run: String::from("action2 command"),
+                vars: Some(vec![]),
+            };
+            let action3 = Action {
+                trigger: Trigger {
+                    command: "testFunction".into(),
+                    file: Some("filename3".into()),
+                    line: Some("*".into()),
+                },
+                run: String::from("action3 command"),
+                vars: Some(vec![]),
+            };
+            let config = Configuration {
+                actions: vec![action1, action2, action3],
+                options: Options {
+                    before_run: BeforeRun {
+                        clear_screen: false,
+                        newlines: 0,
+                    },
+                    after_run: AfterRun {
+                        newlines: 0,
+                        indicator_lines: 0,
+                    },
+                },
+                last_command: Cell::new(None),
+            };
+            let give = Trigger {
+                command: "testFunction".into(),
+                file: Some("filename2".into()),
+                line: Some("2".into()),
+            };
+            let have = config.get_command(give);
+            assert_eq!(have, Ok(String::from("action2 command")));
+        }
 
-            #[test]
-            fn no_match() {
-                let action1 = Action {
-                    trigger: Trigger {
-                        command: "testFile".into(),
-                        file: Some("filename".into()),
-                        line: None,
-                    },
-                    run: String::from("action1 command"),
-                    vars: Some(vec![]),
-                };
-                let config = Configuration {
-                    actions: vec![action1],
-                    options: Options {
-                        before_run: BeforeRun {
-                            clear_screen: false,
-                            newlines: 0,
-                        },
-                        after_run: AfterRun {
-                            newlines: 0,
-                            indicator_lines: 0,
-                        },
-                    },
-                    last_command: Cell::new(None),
-                };
-                let give = Trigger {
+        #[test]
+        fn no_match() {
+            let action1 = Action {
+                trigger: Trigger {
                     command: "testFile".into(),
-                    file: Some("other filename".into()),
+                    file: Some("filename".into()),
                     line: None,
-                };
-                let have = config.get_command(give);
-                assert!(have.is_err());
-            }
+                },
+                run: String::from("action1 command"),
+                vars: Some(vec![]),
+            };
+            let config = Configuration {
+                actions: vec![action1],
+                options: Options {
+                    before_run: BeforeRun {
+                        clear_screen: false,
+                        newlines: 0,
+                    },
+                    after_run: AfterRun {
+                        newlines: 0,
+                        indicator_lines: 0,
+                    },
+                },
+                last_command: Cell::new(None),
+            };
+            let give = Trigger {
+                command: "testFile".into(),
+                file: Some("other filename".into()),
+                line: None,
+            };
+            let have = config.get_command(give);
+            assert!(have.is_err());
         }
     }
 
