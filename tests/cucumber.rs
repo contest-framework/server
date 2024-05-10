@@ -1,4 +1,4 @@
-use cucumber::{given, when, World};
+use cucumber::{given, then, when, World};
 
 #[derive(Debug, World)]
 // Accepts both sync/async and fallible/infallible functions.
@@ -39,6 +39,11 @@ fn hungry_cat(world: &mut AnimalWorld) {
 #[when("I feed the cat")]
 fn feed_cat(world: &mut AnimalWorld) {
     world.cat.feed();
+}
+
+#[then("the cat is not hungry")]
+fn cat_is_fed(world: &mut AnimalWorld) {
+    assert!(!world.cat.hungry);
 }
 
 // This runs before everything else, so you can setup things here.
