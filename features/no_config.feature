@@ -2,7 +2,7 @@ Feature: run Tertestrial without configuration
 
   @this
   Scenario: run
-    When I start Tertestrial
+    Given Tertestrial is running
     Then it prints:
       """
       xxx
