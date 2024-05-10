@@ -2,6 +2,7 @@
 
 use super::errors::UserError;
 use serde::Deserialize;
+use std::fmt::Display;
 
 #[derive(Deserialize, Debug, Eq, PartialEq)]
 pub struct Trigger {
@@ -51,7 +52,7 @@ impl Trigger {
     }
 }
 
-impl std::fmt::Display for Trigger {
+impl Display for Trigger {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{{")?;
         let mut parts: Vec<String> = Vec::new();
