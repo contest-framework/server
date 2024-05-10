@@ -23,6 +23,10 @@ clap = "2.34.0"
 cucumber = "0.21.0"
 futures = "0.3.30"
 
+[[test]]
+name = "cucumber" # this should be the same as the filename of your test target
+harness = false  # allows Cucumber to print output instead of libtest
+
 [profile.dev]
 panic = "unwind"
 
