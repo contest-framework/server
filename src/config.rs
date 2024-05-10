@@ -245,8 +245,7 @@ impl Configuration {
     }
 }
 
-#[allow(clippy::str_to_string)]
-#[allow(clippy::string_to_string)]
+#[allow(clippy::str_to_string, clippy::string_to_string)]
 impl fmt::Display for Configuration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut table = Table::new();
