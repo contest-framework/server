@@ -4,7 +4,6 @@ extern crate prettytable;
 mod channel;
 mod cli;
 mod config;
-mod ctrl_c;
 mod errors;
 mod fifo;
 mod run;
@@ -52,7 +51,7 @@ fn listen(debug: bool) -> Result<()> {
         println!("{}", config);
     }
     let (sender, receiver) = channel::create(); // cross-thread communication channel
-    ctrl_c::handle(sender.clone());
+    cli::ctrl_c::handle(sender.clone());
     let pipe = fifo::in_dir(&env::current_dir().unwrap());
     match pipe.create() {
         fifo::CreateOutcome::AlreadyExists(path) => {
