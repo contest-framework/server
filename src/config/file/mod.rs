@@ -18,15 +18,13 @@ pub struct Content {
     options: Option<FileOptions>,
 }
 
-/// structure of options stored in the config file
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct FileOptions {
     before_run: Option<BeforeRun>,
-    after_run: Option<FileAfterRun>,
+    after_run: Option<AfterRun>,
 }
 
-/// structure of the BeforeRun section in the configuration file
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BeforeRun {
@@ -36,7 +34,7 @@ pub struct BeforeRun {
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct FileAfterRun {
+struct AfterRun {
     pub newlines: Option<u8>,
     pub indicator_lines: Option<u8>,
 }
