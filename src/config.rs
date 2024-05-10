@@ -242,18 +242,18 @@ impl Configuration {
 }
 
 impl std::fmt::Display for Configuration {
-    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut table = Table::new();
         table.add_row(prettytable::row!["TRIGGER", "RUN"]);
         for action in &self.actions {
             table.add_row(prettytable::row![format!("{}", action.trigger), action.run]);
         }
         table.printstd();
-        println!("Options:");
-        println!(
+        f.write_str("Options:")?;
+        f.write_fmt(format_args!(
             "- beforeRun.clearScreen: {}",
             self.options.before_run.clear_screen
-        );
+        ))?;
         Ok(())
     }
 }
