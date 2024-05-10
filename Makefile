@@ -25,9 +25,9 @@ setup:  # prepares this codebase for development
 
 test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
-	cargo clippy --all-targets --all-features -- -D warnings
+	cargo clippy --all-targets --all-features -- --deny=warnings
 	cargo test
-	cargo fmt -- --check
+	cargo +nightly fmt -- --check
 	tools/rta dprint check
 # ${CURDIR}/node_modules/.bin/text-run
 
