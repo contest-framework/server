@@ -7,7 +7,7 @@ use regex::Regex;
 use serde::Deserialize;
 use std::cell::Cell;
 use std::collections::HashMap;
-use std::fmt;
+use std::fmt::{self, Display};
 use std::fs::{self, File};
 use std::io;
 use std::vec::Vec;
@@ -28,7 +28,7 @@ enum VarSource {
     CurrentOrAboveLineContent,
 }
 
-impl fmt::Display for VarSource {
+impl Display for VarSource {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let text = match &self {
             VarSource::File => "file",
@@ -246,7 +246,7 @@ impl Configuration {
 }
 
 #[allow(clippy::str_to_string, clippy::string_to_string)]
-impl fmt::Display for Configuration {
+impl Display for Configuration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut table = Table::new();
         table.add_row(prettytable::row!["TRIGGER", "RUN"]);
