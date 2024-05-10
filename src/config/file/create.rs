@@ -3,11 +3,7 @@ use std::fs;
 
 use super::PATH;
 
-// creates an example config file on disk
-pub fn create() -> Result<()> {
-    fs::write(
-        PATH,
-        r#"{
+const EXAMPLE_CONTENT: &str = r#"{
   "actions": [
     {
       "trigger": { "command": "testAll" },
@@ -30,7 +26,10 @@ pub fn create() -> Result<()> {
       "run": "echo testing file {{file}} at line {{line}}"
     }
   ]
-}"#,
-    )
-    .map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
+}"#;
+
+// creates an example config file on disk
+pub fn create() -> Result<()> {
+    fs::write(PATH, EXAMPLE_CONTENT)
+        .map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
 }
