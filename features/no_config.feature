@@ -2,8 +2,7 @@ Feature: run Tertestrial without configuration
 
   @this
   Scenario: run
-    Given no configuration file
-    When I run "tertestrial"
+    When I start Tertestrial
     Then it prints:
       """
       xxx

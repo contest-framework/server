@@ -1,22 +1,31 @@
 use cucumber::{given, then, when, World};
+use tempfile::TempDir;
 
 #[derive(Debug, World)]
 // Accepts both sync/async and fallible/infallible functions.
 #[world(init = Self::new)]
 pub struct AnimalWorld {
   cat: Cat,
+  workspace: TempDir,
 }
 
 impl AnimalWorld {
   fn new() -> Self {
+    let root = tempfile::tempdir().unwrap();
     Self {
       cat: Cat { hungry: true },
+      workspace: root,
     }
   }
 }
 
-// These `Cat` definitions would normally be inside your project's code,
-// not test code, but we create them here for the show case.
+#[given("Tertestrial is running")]
+fn tertestrial_running(world: &mut AnimalWorld) {
+  world
+}
+
+// -------------------------------------------------------------------------------------------------------------------
+
 #[derive(Debug, Default)]
 struct Cat {
   pub hungry: bool,
@@ -28,13 +37,10 @@ impl Cat {
   }
 }
 
-// Steps are defined with `given`, `when` and `then` attributes.
 #[given("a hungry cat")]
 fn hungry_cat(world: &mut AnimalWorld) {
   world.cat.hungry = true;
 }
-
-// Don't forget to additionally `use cucumber::when;`.
 
 #[when("I feed the cat")]
 fn feed_cat(world: &mut AnimalWorld) {
