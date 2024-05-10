@@ -6,15 +6,15 @@ mod cli;
 mod client;
 mod config;
 mod errors;
-mod run;
+mod subshell;
 
 use cli::Command;
 use client::fifo;
 pub use client::Trigger;
 pub use errors::{Result, UserError};
-use run::Outcome;
 use std::io::Write;
 use std::{env, panic};
+use subshell::Outcome;
 use termcolor::WriteColor;
 use terminal_size::terminal_size;
 
@@ -126,7 +126,7 @@ fn run_command(text: String, configuration: &config::Configuration) -> Result<bo
             }
             _ => Err(err),
         },
-        Ok(command) => match run::run(&command) {
+        Ok(command) => match subshell::run(&command) {
             Outcome::TestPass() => {
                 println!("SUCCESS!");
                 Ok(true)
