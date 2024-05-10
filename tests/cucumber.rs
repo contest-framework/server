@@ -48,18 +48,18 @@ async fn tertestrial_running(world: &mut AnimalWorld) {
   world.cmd = Some(cmd);
   world.stdin = Some(stdin_writer);
   world.stdout = Some(stdout_writer);
-  println!("1111111111111111111 subshell started");
 }
 
 #[then("it prints:")]
 async fn it_prints(world: &mut AnimalWorld, step: &Step) {
+  let want = step.docstring.as_ref().unwrap().trim();
   let reader = world.stdout.as_mut().unwrap();
+  let mut output = String::new();
   let mut have = String::new();
   while have.is_empty() {
-    let read_count = reader.read_line(&mut have).await.unwrap();
-    println!("22222222222222222 read {read_count} bytes: '{have}'");
+    reader.read_line(&mut output).await.unwrap();
+    output.trim().clone_into(&mut have);
   }
-  let want = step.docstring.as_ref().unwrap();
   assert_eq!(&have, want);
 }
 

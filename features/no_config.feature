@@ -5,5 +5,5 @@ Feature: run Tertestrial without configuration
     Given Tertestrial is running
     Then it prints:
       """
-      xxx
+      Error: Configuration file not found
       """
