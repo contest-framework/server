@@ -26,6 +26,7 @@ impl Pipe {
                         path: self.path_str(),
                     }),
                     _ => Err(UserError::FifoCannotCreate {
+                        path: self.filepath.to_string_lossy().to_string(),
                         err: err.to_string(),
                     }),
                 },
