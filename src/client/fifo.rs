@@ -14,22 +14,20 @@ pub struct Pipe {
     pub filepath: PathBuf,
 }
 
-pub enum CreateOutcome {
-    Ok(),
-    AlreadyExists(String), // a pipe already exists at the given path
-    OtherError(String),    // other error creating the pipe
-}
-
 impl Pipe {
     // creates the FIFO on the filesystem
-    pub fn create(&self) -> CreateOutcome {
+    pub fn create(&self) -> Result<()> {
         match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
-            Ok(_) => CreateOutcome::Ok(),
+            Ok(_) => Ok(()),
             Err(err) => match err.as_errno() {
                 None => panic!("cannot determine error code"),
                 Some(err_code) => match err_code {
-                    nix::errno::Errno::EEXIST => CreateOutcome::AlreadyExists(self.path_str()),
-                    _ => CreateOutcome::OtherError(err.to_string()),
+                    nix::errno::Errno::EEXIST => Err(UserError::FifoAlreadyExists {
+                        path: self.path_str(),
+                    }),
+                    _ => Err(UserError::FifoCannotCreate {
+                        err: err.to_string(),
+                    }),
                 },
             },
         }
@@ -78,7 +76,8 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
 
 #[cfg(test)]
 mod tests {
-    use crate::client::fifo::{in_dir, CreateOutcome};
+    use crate::client::fifo::in_dir;
+    use crate::UserError;
     use std::{fs, io};
 
     #[test]
@@ -86,7 +85,7 @@ mod tests {
         let temp_path = tempfile::tempdir().unwrap().into_path();
         let pipe = in_dir(&temp_path);
         match pipe.create() {
-            CreateOutcome::Ok() => {}
+            Ok(_) => {}
             _ => panic!("cannot create pipe"),
         }
         let mut files = vec![];
@@ -104,13 +103,13 @@ mod tests {
         let temp_path = tempfile::tempdir().unwrap().into_path();
         let pipe = in_dir(&temp_path);
         match pipe.create() {
-            CreateOutcome::Ok() => {}
+            Ok(_) => {}
             _ => panic!("cannot create first pipe"),
         }
         match pipe.create() {
-            CreateOutcome::AlreadyExists(_) => {}
-            CreateOutcome::Ok() => panic!("should not create second pipe"),
-            CreateOutcome::OtherError(err) => panic!("{}", err),
+            Err(UserError::FifoAlreadyExists { path: _ }) => {}
+            Ok(_) => panic!("should not create second pipe"),
+            Err(err) => panic!("{}", err.messages().0),
         }
         fs::remove_dir_all(&temp_path)?;
         Ok(())
@@ -121,7 +120,7 @@ mod tests {
         let temp_path = tempfile::tempdir().unwrap().into_path();
         let pipe = in_dir(&temp_path);
         match pipe.create() {
-            CreateOutcome::Ok() => {}
+            Ok(_) => {}
             _ => panic!(),
         }
         pipe.delete().unwrap();

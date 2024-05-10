@@ -20,6 +20,9 @@ pub enum UserError {
     FifoAlreadyExists {
         path: String,
     },
+    FifoCannotCreate {
+        err: String,
+    },
     FifoCannotDelete {
         err: String,
     },
@@ -60,6 +63,7 @@ impl UserError {
             UserError::ConfigFileNotReadable{err} => (format!("Cannot open configuration file: {}", err), "".into()),
             UserError::ConfigInvalidGlobPattern{pattern, err} => (format!("Invalid glob pattern: {}", pattern), err.into()),
             UserError::FifoAlreadyExists{path} => (format!("A fifo pipe \"{}\" already exists.", path), "This could mean a Tertestrial instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Tertestrial again.".into()),
+            UserError::FifoCannotCreate { err } => (format!("Cannot create pipe: {}", err), "".into()),
             UserError::FifoCannotDelete{err} => (format!("Cannot delete pipe: {}", err), "".into()),
             UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {}", err), "This is an internal error".into()),
             UserError::InvalidTrigger{line, err} => (format!("cannot parse command received from client: {}", line),

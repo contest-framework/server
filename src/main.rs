@@ -9,7 +9,7 @@ mod errors;
 mod run;
 
 use cli::Command;
-use client::fifo::CreateOutcome;
+use client::fifo;
 pub use client::Trigger;
 pub use errors::{Result, UserError};
 use run::Outcome;
@@ -52,13 +52,10 @@ fn listen(debug: bool) -> Result<()> {
     }
     let (sender, receiver) = channel::create(); // cross-thread communication channel
     cli::ctrl_c::handle(sender.clone());
-    let pipe = client::fifo::in_dir(&env::current_dir().unwrap());
-    match pipe.create() {
-        CreateOutcome::AlreadyExists(path) => return Err(UserError::FifoAlreadyExists { path }),
-        CreateOutcome::OtherError(err) => panic!("{}", err),
-        CreateOutcome::Ok() => {}
-    }
-    client::fifo::listen(pipe, sender);
+    let current_dir = env::current_dir().unwrap();
+    let pipe = client::fifo::in_dir(&current_dir);
+    pipe.create()?;
+    fifo::listen(pipe, sender);
     match debug {
         false => println!("Tertestrial is online, Ctrl-C to exit"),
         true => println!("Tertestrial is online in debug mode, Ctrl-C to exit"),
