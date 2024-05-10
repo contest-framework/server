@@ -1,6 +1,6 @@
 //! command-line arguments
 
-use super::Result;
+use crate::Result;
 use clap::{crate_description, crate_name, crate_version, App, Arg, SubCommand};
 
 #[derive(Debug, Eq, PartialEq)]
