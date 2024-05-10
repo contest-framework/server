@@ -250,7 +250,10 @@ impl fmt::Display for Configuration {
         let mut table = Table::new();
         table.add_row(prettytable::row!["TRIGGER", "RUN"]);
         for action in &self.actions {
-            table.add_row(prettytable::row![format!("{}", action.trigger), action.run]);
+            table.add_row(prettytable::row![
+                &format!("{}", action.trigger),
+                action.run
+            ]);
         }
         table.printstd();
         f.write_str("Options:")?;
