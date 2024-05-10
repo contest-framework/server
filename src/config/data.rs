@@ -1,17 +1,18 @@
-//! program configuration loaded from the config file
-
-use super::errors::UserError;
-use super::trigger::Trigger;
-use crate::Result;
+use crate::{Result, Trigger, UserError};
 use prettytable::Table;
 use regex::Regex;
 use serde::Deserialize;
 use std::cell::Cell;
 use std::collections::HashMap;
 use std::fmt::{self, Display};
-use std::fs::{self, File};
-use std::io;
+use std::fs;
 use std::vec::Vec;
+
+pub struct Configuration {
+    pub actions: Vec<Action>,
+    pub options: Options,
+    pub last_command: Cell<Option<String>>,
+}
 
 /// Actions are executed when receiving a trigger.
 #[derive(Deserialize)]
@@ -19,6 +20,23 @@ pub struct Action {
     trigger: Trigger,
     run: String,
     vars: Option<Vec<Var>>,
+}
+
+pub struct Options {
+    pub before_run: BeforeRun,
+    pub after_run: AfterRun,
+}
+
+pub struct BeforeRun {
+    pub clear_screen: bool,
+    pub newlines: u8,
+}
+
+#[derive(Deserialize)]
+struct Var {
+    name: String,
+    source: VarSource,
+    filter: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -29,177 +47,7 @@ enum VarSource {
     CurrentOrAboveLineContent,
 }
 
-impl Display for VarSource {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let text = match &self {
-            VarSource::File => "file",
-            VarSource::Line => "line",
-            VarSource::CurrentOrAboveLineContent => "currentOrAboveLineContent",
-        };
-        write!(f, "{}", text)
-    }
-}
-
-#[derive(Deserialize)]
-struct Var {
-    name: String,
-    source: VarSource,
-    filter: String,
-}
-
-pub struct Options {
-    pub before_run: BeforeRun,
-    pub after_run: AfterRun,
-}
-
-/// structure of options stored in the config file
-#[derive(Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct FileOptions {
-    before_run: Option<FileBeforeRun>,
-    after_run: Option<FileAfterRun>,
-}
-
-impl Options {
-    fn defaults() -> Options {
-        Options {
-            before_run: BeforeRun {
-                clear_screen: false,
-                newlines: 0,
-            },
-            after_run: AfterRun {
-                newlines: 0,
-                indicator_lines: 3,
-            },
-        }
-    }
-}
-
-pub struct BeforeRun {
-    pub clear_screen: bool,
-    pub newlines: u8,
-}
-
-/// structure of the BeforeRun section in the configuration file
-#[derive(Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct FileBeforeRun {
-    clear_screen: Option<bool>,
-    newlines: Option<u8>,
-}
-
-pub struct AfterRun {
-    pub newlines: u8,
-    pub indicator_lines: u8,
-}
-
-#[derive(Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct FileAfterRun {
-    pub newlines: Option<u8>,
-    pub indicator_lines: Option<u8>,
-}
-
-/// The structure of the configuration file.
-#[derive(Deserialize)]
-struct FileConfiguration {
-    actions: Vec<Action>,
-    options: Option<FileOptions>,
-}
-
-pub struct Configuration {
-    pub actions: Vec<Action>,
-    pub options: Options,
-    pub last_command: Cell<Option<String>>,
-}
-
-pub fn from_file() -> Result<Configuration> {
-    let file = match File::open(".testconfig.json") {
-        Ok(config) => config,
-        Err(e) => match e.kind() {
-            io::ErrorKind::NotFound => return Err(UserError::ConfigFileNotFound {}),
-            _ => return Err(UserError::ConfigFileNotReadable { err: e.to_string() }),
-        },
-    };
-    let file_config: FileConfiguration =
-        serde_json::from_reader(file).map_err(|err| UserError::ConfigFileInvalidContent {
-            err: err.to_string(),
-        })?;
-    Ok(Configuration::backfill_defaults(file_config))
-}
-
-pub fn create() -> Result<()> {
-    fs::write(
-        ".testconfig.json",
-        r#"{
-  "actions": [
-    {
-      "trigger": { "command": "testAll" },
-      "run": "echo test all files"
-    },
-
-    {
-      "trigger": {
-        "command": "testFile",
-        "file": "\\.rs$"
-      },
-      "run": "echo testing file {{file}}"
-    },
-
-    {
-      "trigger": {
-        "command": "testFunction",
-        "file": "\\.ext$",
-      },
-      "run": "echo testing file {{file}} at line {{line}}"
-    }
-  ]
-}"#,
-    )
-    .map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
-}
-
 impl Configuration {
-    /// backfills missing values in the given FileConfiguration with default values
-    fn backfill_defaults(file: FileConfiguration) -> Configuration {
-        let defaults = Options::defaults();
-        match file.options {
-            None => Configuration {
-                actions: file.actions,
-                options: defaults,
-                last_command: Cell::new(None),
-            },
-            Some(file_options) => Configuration {
-                actions: file.actions,
-                options: Options {
-                    before_run: match file_options.before_run {
-                        None => defaults.before_run,
-                        Some(file_before_run) => BeforeRun {
-                            clear_screen: file_before_run
-                                .clear_screen
-                                .unwrap_or(defaults.before_run.clear_screen),
-                            newlines: file_before_run
-                                .newlines
-                                .unwrap_or(defaults.before_run.newlines),
-                        },
-                    },
-                    after_run: match file_options.after_run {
-                        None => defaults.after_run,
-                        Some(file_after_run) => AfterRun {
-                            indicator_lines: file_after_run
-                                .indicator_lines
-                                .unwrap_or(defaults.after_run.indicator_lines),
-                            newlines: file_after_run
-                                .newlines
-                                .unwrap_or(defaults.after_run.newlines),
-                        },
-                    },
-                },
-                last_command: Cell::new(None),
-            },
-        }
-    }
-
     pub fn get_command(&self, trigger: Trigger) -> Result<String> {
         if trigger.command == "repeatTest" {
             // HACK: taking the value out of the cell and putting a clone back into it
@@ -264,6 +112,37 @@ impl Display for Configuration {
     }
 }
 
+impl Display for VarSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let text = match &self {
+            VarSource::File => "file",
+            VarSource::Line => "line",
+            VarSource::CurrentOrAboveLineContent => "currentOrAboveLineContent",
+        };
+        write!(f, "{}", text)
+    }
+}
+
+impl Options {
+    pub fn defaults() -> Options {
+        Options {
+            before_run: BeforeRun {
+                clear_screen: false,
+                newlines: 0,
+            },
+            after_run: AfterRun {
+                newlines: 0,
+                indicator_lines: 3,
+            },
+        }
+    }
+}
+
+pub struct AfterRun {
+    pub newlines: u8,
+    pub indicator_lines: u8,
+}
+
 fn calculate_var(var: &Var, values: &HashMap<&str, String>) -> Result<String> {
     match var.source {
         VarSource::File => filter(values.get("file").unwrap(), &var.filter),
@@ -320,53 +199,14 @@ fn replace(text: &str, placeholder: &str, replacement: &str) -> String {
         .to_string()
 }
 
-//
-// ----------------------------------------------------------------------------
-//
-
 #[cfg(test)]
 mod tests {
 
     #[cfg(test)]
-    mod backfill_defaults {
-        use super::super::*;
-
-        #[test]
-        fn no_options() {
-            let file_config = FileConfiguration {
-                actions: vec![],
-                options: None,
-            };
-            let config = Configuration::backfill_defaults(file_config);
-            assert!(!config.options.before_run.clear_screen);
-            assert_eq!(config.options.before_run.newlines, 0);
-            assert_eq!(config.options.after_run.indicator_lines, 3);
-            assert_eq!(config.options.after_run.newlines, 0);
-        }
-
-        #[test]
-        fn some_options() {
-            let file_config = FileConfiguration {
-                actions: vec![],
-                options: Some(FileOptions {
-                    before_run: Some(FileBeforeRun {
-                        clear_screen: Some(true),
-                        newlines: None,
-                    }),
-                    after_run: None,
-                }),
-            };
-            let config = Configuration::backfill_defaults(file_config);
-            assert!(config.options.before_run.clear_screen);
-            assert_eq!(config.options.before_run.newlines, 0);
-            assert_eq!(config.options.after_run.indicator_lines, 3);
-            assert_eq!(config.options.after_run.newlines, 0);
-        }
-    }
-
-    #[cfg(test)]
     mod get_command {
+        use super::super::super::{Action, Configuration};
         use super::super::*;
+        use std::cell::Cell;
 
         #[test]
         fn test_all() {
@@ -482,7 +322,7 @@ mod tests {
 
     #[cfg(test)]
     mod replace {
-        use super::super::*;
+        use super::super::replace;
 
         #[test]
         fn tight_placeholder() {
