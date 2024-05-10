@@ -4,6 +4,12 @@ RUN_THAT_APP_VERSION = 0.6.0
 build:  # performs a test build
 	cargo check
 
+cuke:  # runs the end-to-end tests
+	cargo test --test cucumber
+
+cukethis:  # runs only end-to-end tests with a @this tag
+	cargo test --test cucumber -- -t @this
+
 docs:  # shows the RustDoc in a browser
 	cargo doc --open
 

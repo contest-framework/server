@@ -22,6 +22,7 @@ clap = "2.34.0"
 [dev-dependencies]
 cucumber = "0.21.0"
 futures = "0.3.30"
+tokio = { version = "1.37.0", features = ["fs", "io-util", "macros", "process", "rt"] }
 
 [[test]]
 name = "cucumber" # this should be the same as the filename of your test target
