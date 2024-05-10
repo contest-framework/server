@@ -9,6 +9,7 @@ mod errors;
 mod run;
 
 use cli::Command;
+use client::fifo::CreateOutcome;
 pub use client::Trigger;
 pub use errors::{Result, UserError};
 use run::Outcome;
@@ -53,11 +54,9 @@ fn listen(debug: bool) -> Result<()> {
     cli::ctrl_c::handle(sender.clone());
     let pipe = client::fifo::in_dir(&env::current_dir().unwrap());
     match pipe.create() {
-        client::fifo::CreateOutcome::AlreadyExists(path) => {
-            return Err(UserError::FifoAlreadyExists { path })
-        }
-        client::fifo::CreateOutcome::OtherError(err) => panic!("{}", err),
-        client::fifo::CreateOutcome::Ok() => {}
+        CreateOutcome::AlreadyExists(path) => return Err(UserError::FifoAlreadyExists { path }),
+        CreateOutcome::OtherError(err) => panic!("{}", err),
+        CreateOutcome::Ok() => {}
     }
     client::fifo::listen(pipe, sender);
     match debug {
