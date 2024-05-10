@@ -8,6 +8,7 @@ pub use create::create;
 pub use read::read;
 use serde::Deserialize;
 
+/// filename of the Tertestrial config file
 const PATH: &str = ".testconfig.json";
 
 /// The structure of the configuration file.
