@@ -1,7 +1,6 @@
+use super::PATH;
 use crate::{Result, UserError};
 use std::fs;
-
-use super::PATH;
 
 const EXAMPLE_CONTENT: &str = r#"{
   "actions": [
@@ -30,6 +29,6 @@ const EXAMPLE_CONTENT: &str = r#"{
 
 // creates an example config file on disk
 pub fn create() -> Result<()> {
-    fs::write(PATH, EXAMPLE_CONTENT)
-        .map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
+  fs::write(PATH, EXAMPLE_CONTENT)
+    .map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
 }
