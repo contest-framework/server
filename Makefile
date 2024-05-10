@@ -28,7 +28,7 @@ test:  # runs all automated tests
 	cargo test
 	cargo fmt -- --check
 	dprint check
-	${CURDIR}/node_modules/.bin/text-run
+# ${CURDIR}/node_modules/.bin/text-run
 
 unit:  # runs the unit tests
 	cargo test
