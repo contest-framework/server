@@ -68,7 +68,7 @@ mod tests {
     mod backfill_defaults {
         use super::super::super::FileOptions;
         use super::super::backfill_defaults;
-        use crate::config::file::{self, Content, FileBeforeRun};
+        use crate::config::file::{self, BeforeRun, Content};
 
         #[test]
         fn no_options() {
@@ -88,7 +88,7 @@ mod tests {
             let file_config = Content {
                 actions: vec![],
                 options: Some(FileOptions {
-                    before_run: Some(FileBeforeRun {
+                    before_run: Some(BeforeRun {
                         clear_screen: Some(true),
                         newlines: None,
                     }),

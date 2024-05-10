@@ -19,14 +19,14 @@ pub struct Content {
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct FileOptions {
-    before_run: Option<FileBeforeRun>,
+    before_run: Option<BeforeRun>,
     after_run: Option<FileAfterRun>,
 }
 
 /// structure of the BeforeRun section in the configuration file
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct FileBeforeRun {
+pub struct BeforeRun {
     clear_screen: Option<bool>,
     newlines: Option<u8>,
 }
