@@ -1,6 +1,6 @@
 //! capture and handle Ctrl-C
 
-use super::channel;
+use crate::channel;
 
 /// captures Ctrl-C and messages it as a Signal::Exit message via the given sender
 pub fn handle(sender: channel::Sender) {

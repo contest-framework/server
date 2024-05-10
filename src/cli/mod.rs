@@ -1,4 +1,5 @@
 pub mod args;
+pub mod ctrl_c;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Command {
