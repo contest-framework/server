@@ -1,8 +1,8 @@
 //! manages and reads the FIFO pipe
 
-use super::channel;
-use super::errors::UserError;
+use crate::channel;
 use crate::Result;
+use crate::UserError;
 use std::fs::{self, File};
 use std::io::{prelude::*, BufReader};
 use std::path::{Path, PathBuf};
@@ -78,7 +78,7 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
 
 #[cfg(test)]
 mod tests {
-    use crate::fifo::{in_dir, CreateOutcome};
+    use crate::client::fifo::{in_dir, CreateOutcome};
     use std::{fs, io};
 
     #[test]

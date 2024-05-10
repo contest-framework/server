@@ -3,9 +3,9 @@ extern crate prettytable;
 
 mod channel;
 mod cli;
+mod client;
 mod config;
 mod errors;
-mod fifo;
 mod run;
 mod trigger;
 
@@ -25,7 +25,7 @@ fn main() {
             println!("\nError: {}\n\n{}", msg, guidance);
         }
     });
-    let _ = fifo::in_dir(&env::current_dir().unwrap()).delete();
+    let _ = client::fifo::in_dir(&env::current_dir().unwrap()).delete();
     if panic_result.is_err() {
         panic!("{:?}", panic_result);
     }
@@ -52,15 +52,15 @@ fn listen(debug: bool) -> Result<()> {
     }
     let (sender, receiver) = channel::create(); // cross-thread communication channel
     cli::ctrl_c::handle(sender.clone());
-    let pipe = fifo::in_dir(&env::current_dir().unwrap());
+    let pipe = client::fifo::in_dir(&env::current_dir().unwrap());
     match pipe.create() {
-        fifo::CreateOutcome::AlreadyExists(path) => {
+        client::fifo::CreateOutcome::AlreadyExists(path) => {
             return Err(UserError::FifoAlreadyExists { path })
         }
-        fifo::CreateOutcome::OtherError(err) => panic!("{}", err),
-        fifo::CreateOutcome::Ok() => {}
+        client::fifo::CreateOutcome::OtherError(err) => panic!("{}", err),
+        client::fifo::CreateOutcome::Ok() => {}
     }
-    fifo::listen(pipe, sender);
+    client::fifo::listen(pipe, sender);
     match debug {
         false => println!("Tertestrial is online, Ctrl-C to exit"),
         true => println!("Tertestrial is online in debug mode, Ctrl-C to exit"),
