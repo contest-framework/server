@@ -25,6 +25,7 @@ pub enum UserError {
         err: String,
     },
     FifoCannotDelete {
+        path: String,
         err: String,
     },
     FifoCannotRead {
@@ -65,7 +66,7 @@ impl UserError {
             UserError::ConfigInvalidGlobPattern{pattern, err} => (format!("Invalid glob pattern: {}", pattern), err.into()),
             UserError::FifoAlreadyExists{path} => (format!("A fifo pipe \"{}\" already exists.", path), "This could mean a Tertestrial instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Tertestrial again.".into()),
             UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), "".into()),
-            UserError::FifoCannotDelete{err} => (format!("Cannot delete pipe: {}", err), "".into()),
+            UserError::FifoCannotDelete{err, path} => (format!("Cannot delete pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {}", err), "This is an internal error".into()),
             UserError::InvalidTrigger{line, err} => (format!("cannot parse command received from client: {}", line),
                 format!( "This is a problem with your Tertestrial client.\n\nError message from JSON parser: {}", err)),

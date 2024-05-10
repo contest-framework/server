@@ -35,8 +35,10 @@ impl Pipe {
     }
 
     pub fn delete(&self) -> Result<()> {
-        fs::remove_file(&self.filepath)
-            .map_err(|e| UserError::FifoCannotDelete { err: e.to_string() })
+        fs::remove_file(&self.filepath).map_err(|e| UserError::FifoCannotDelete {
+            err: e.to_string(),
+            path: self.filepath.to_string_lossy().to_string(),
+        })
     }
 
     pub fn open(&self) -> BufReader<File> {
