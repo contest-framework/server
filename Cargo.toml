@@ -26,3 +26,19 @@ opt-level = 's'    # Optimize for size
 lto = true         # enable link-time optimization (removes dead code)
 codegen-units = 1  # reduce codegen units to enable additional optimizations
 panic = "unwind"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+pedantic = "warn"
+use_self = "deny"
+
+[lints.clippy]
+derive_partial_eq_without_eq = "deny"
+impl_trait_in_params = "deny"
+module_name_repetitions = "deny"
+redundant_pub_crate = "deny"
+std_instead_of_core = "deny"
+str_to_string = "deny"
+string_to_string = "deny"

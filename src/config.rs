@@ -2,10 +2,14 @@
 
 use super::errors::UserError;
 use super::trigger::Trigger;
+use core::cell::Cell;
+use core::fmt;
 use prettytable::Table;
 use regex::Regex;
 use serde::Deserialize;
-use std::cell::Cell;
+use std::collections::HashMap;
+use std::fs::{self, File};
+use std::io;
 use std::vec::Vec;
 
 /// Actions are executed when receiving a trigger.
@@ -24,8 +28,8 @@ enum VarSource {
     CurrentOrAboveLineContent,
 }
 
-impl std::fmt::Display for VarSource {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl fmt::Display for VarSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let text = match &self {
             VarSource::File => "file",
             VarSource::Line => "line",
@@ -109,10 +113,10 @@ pub struct Configuration {
 }
 
 pub fn from_file() -> Result<Configuration, UserError> {
-    let file = match std::fs::File::open(".testconfig.json") {
+    let file = match File::open(".testconfig.json") {
         Ok(config) => config,
         Err(e) => match e.kind() {
-            std::io::ErrorKind::NotFound => return Err(UserError::ConfigFileNotFound {}),
+            io::ErrorKind::NotFound => return Err(UserError::ConfigFileNotFound {}),
             _ => return Err(UserError::ConfigFileNotReadable { err: e.to_string() }),
         },
     };
@@ -124,7 +128,7 @@ pub fn from_file() -> Result<Configuration, UserError> {
 }
 
 pub fn create() -> Result<(), UserError> {
-    std::fs::write(
+    fs::write(
         ".testconfig.json",
         r#"{
   "actions": [
@@ -220,7 +224,7 @@ impl Configuration {
 
     /// replaces all placeholders in the given run string
     fn format_run(&self, action: &Action, trigger: &Trigger) -> Result<String, UserError> {
-        let mut values: std::collections::HashMap<&str, String> = std::collections::HashMap::new();
+        let mut values: HashMap<&str, String> = HashMap::new();
         values.insert("command", trigger.command.clone());
         if trigger.file.is_some() {
             values.insert("file", trigger.file.as_ref().unwrap().clone());
@@ -241,12 +245,13 @@ impl Configuration {
     }
 }
 
-impl std::fmt::Display for Configuration {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+#[allow(clippy::str_to_string, clippy::string_to_string)]
+impl fmt::Display for Configuration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut table = Table::new();
         table.add_row(prettytable::row!["TRIGGER", "RUN"]);
         for action in &self.actions {
-            table.add_row(prettytable::row![format!("{}", action.trigger), action.run]);
+            table.add_row(prettytable::row![action.trigger, action.run]);
         }
         table.printstd();
         f.write_str("Options:")?;
@@ -258,10 +263,7 @@ impl std::fmt::Display for Configuration {
     }
 }
 
-fn calculate_var(
-    var: &Var,
-    values: &std::collections::HashMap<&str, String>,
-) -> Result<String, UserError> {
+fn calculate_var(var: &Var, values: &HashMap<&str, String>) -> Result<String, UserError> {
     match var.source {
         VarSource::File => filter(values.get("file").unwrap(), &var.filter),
         VarSource::Line => filter(values.get("line").unwrap(), &var.filter),
@@ -283,14 +285,14 @@ fn calculate_var(
                 if captures.len() > 2 {
                     return Err(UserError::TriggerTooManyCaptures {
                         count: captures.len(),
-                        regex: var.filter.to_string(),
+                        regex: var.filter.to_owned(),
                         line: line_text,
                     });
                 }
-                return Ok(captures.get(1).unwrap().as_str().to_string());
+                return Ok(captures.get(1).unwrap().as_str().to_owned());
             }
             Err(UserError::TriggerRegexNotFound {
-                regex: var.filter.to_string(),
+                regex: var.filter.to_owned(),
                 filename: file_name.to_string(),
             })
         }
@@ -298,20 +300,20 @@ fn calculate_var(
 }
 
 fn filter(text: &str, filter: &str) -> Result<String, UserError> {
-    let re = regex::Regex::new(filter).unwrap();
+    let re = Regex::new(filter).unwrap();
     let captures = re.captures(text).unwrap();
     if captures.len() != 2 {
         return Err(UserError::TriggerTooManyCaptures {
             count: captures.len(),
-            regex: filter.to_string(),
-            line: text.to_string(),
+            regex: filter.to_owned(),
+            line: text.to_owned(),
         });
     }
-    return Ok(captures.get(1).unwrap().as_str().to_string());
+    return Ok(captures.get(1).unwrap().as_str().to_owned());
 }
 
 fn replace(text: &str, placeholder: &str, replacement: &str) -> String {
-    regex::Regex::new(&format!("\\{{\\{{\\s*{}\\s*\\}}\\}}", placeholder))
+    Regex::new(&format!("\\{{\\{{\\s*{}\\s*\\}}\\}}", placeholder))
         .unwrap()
         .replace_all(text, regex::NoExpand(replacement))
         .to_string()
