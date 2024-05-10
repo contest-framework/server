@@ -3,60 +3,60 @@
 /// The possible errors that the user can cause and needs to be notified about.
 #[derive(Debug, Eq, PartialEq)]
 pub enum UserError {
-    CannotCreateConfigFile {
-        err: String,
-    },
-    ConfigFileNotFound {},
-    ConfigFileNotReadable {
-        err: String,
-    },
-    ConfigFileInvalidContent {
-        err: String,
-    },
-    ConfigInvalidGlobPattern {
-        pattern: String,
-        err: String,
-    },
-    FifoAlreadyExists {
-        path: String,
-    },
-    FifoCannotCreate {
-        path: String,
-        err: String,
-    },
-    FifoCannotDelete {
-        path: String,
-        err: String,
-    },
-    FifoCannotRead {
-        err: String,
-    },
-    InvalidTrigger {
-        line: String,
-        err: String,
-    },
-    NoCommandToRepeat {},
-    RunCommandNotFound {
-        command: String,
-    },
-    TriggerTooManyCaptures {
-        count: usize,
-        regex: String,
-        line: String,
-    },
-    TriggerRegexNotFound {
-        regex: String,
-        filename: String,
-    },
-    UnknownTrigger {
-        line: String,
-    },
+  CannotCreateConfigFile {
+    err: String,
+  },
+  ConfigFileNotFound {},
+  ConfigFileNotReadable {
+    err: String,
+  },
+  ConfigFileInvalidContent {
+    err: String,
+  },
+  ConfigInvalidGlobPattern {
+    pattern: String,
+    err: String,
+  },
+  FifoAlreadyExists {
+    path: String,
+  },
+  FifoCannotCreate {
+    path: String,
+    err: String,
+  },
+  FifoCannotDelete {
+    path: String,
+    err: String,
+  },
+  FifoCannotRead {
+    err: String,
+  },
+  InvalidTrigger {
+    line: String,
+    err: String,
+  },
+  NoCommandToRepeat {},
+  RunCommandNotFound {
+    command: String,
+  },
+  TriggerTooManyCaptures {
+    count: usize,
+    regex: String,
+    line: String,
+  },
+  TriggerRegexNotFound {
+    regex: String,
+    filename: String,
+  },
+  UnknownTrigger {
+    line: String,
+  },
 }
 
 impl UserError {
-    /// Provides human-readable messages for TertErrors.
-    pub fn messages(&self) -> (String, String) {
-        match self {
+  /// Provides human-readable messages for TertErrors.
+  pub fn messages(&self) -> (String, String) {
+    match self {
             UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {}", err), "".into()),
             UserError::ConfigFileInvalidContent{err} => {
                 (format!("Cannot parse configuration file: {}", err), "".into())
@@ -80,7 +80,7 @@ impl UserError {
             UserError::UnknownTrigger{line} => (format!("cannot determine command for trigger: {}", line),
             "Please make sure that this trigger is listed in your configuration file".into()),
         }
-    }
+  }
 }
 
 /// a Result that always has a `UserError` as the error and therefore doesn't require to specify it at each call point

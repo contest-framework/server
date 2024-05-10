@@ -22,9 +22,6 @@ setup:  # prepares this codebase for development
 	rustup toolchain add nightly
 	rustup component add rustfmt --toolchain nightly
 	yarn install
-	echo
-	echo "Please make sure you have dprint installed."
-	echo "https://dprint.dev/install"
 
 test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
