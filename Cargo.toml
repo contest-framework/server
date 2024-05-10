@@ -26,3 +26,23 @@ opt-level = 's'    # Optimize for size
 lto = true         # enable link-time optimization (removes dead code)
 codegen-units = 1  # reduce codegen units to enable additional optimizations
 panic = "unwind"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+pedantic = "warn"
+cast_possible_truncation = "allow" # we cast lots of values, they are usually small so we don't need to check cast problems
+missing_panics_doc = "allow" # all panics indicate programmer errors and should be fixed
+missing_errors_doc = "allow" # all returned errors are UserError
+too_many_lines = "allow" # TODO: refactor the long functions or add ignore this problem in the code
+use_self = "deny"
+
+[lints.clippy]
+derive_partial_eq_without_eq = "deny"
+impl_trait_in_params = "deny"
+module_name_repetitions = "deny"
+redundant_pub_crate = "deny"
+std_instead_of_core = "deny"
+str_to_string = "deny"
+string_to_string = "deny"
