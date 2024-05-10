@@ -1,5 +1,5 @@
 use super::super::Configuration;
-use super::FileConfiguration;
+use super::Content;
 use crate::config::data::{AfterRun, BeforeRun, Options};
 use crate::{Result, UserError};
 use std::cell::Cell;
@@ -14,7 +14,7 @@ pub fn read() -> Result<Configuration> {
             _ => return Err(UserError::ConfigFileNotReadable { err: e.to_string() }),
         },
     };
-    let file_config: FileConfiguration =
+    let file_config: Content =
         serde_json::from_reader(file).map_err(|err| UserError::ConfigFileInvalidContent {
             err: err.to_string(),
         })?;
@@ -22,7 +22,7 @@ pub fn read() -> Result<Configuration> {
 }
 
 /// backfills missing values in the given FileConfiguration with default values
-fn backfill_defaults(file: FileConfiguration) -> Configuration {
+fn backfill_defaults(file: Content) -> Configuration {
     let defaults = Options::defaults();
     match file.options {
         None => Configuration {
@@ -67,12 +67,12 @@ mod tests {
     #[cfg(test)]
     mod backfill_defaults {
         use super::super::super::FileOptions;
-        use super::super::{backfill_defaults, FileConfiguration};
-        use crate::config::file::FileBeforeRun;
+        use super::super::backfill_defaults;
+        use crate::config::file::{self, Content, FileBeforeRun};
 
         #[test]
         fn no_options() {
-            let file_config = FileConfiguration {
+            let file_config = file::Content {
                 actions: vec![],
                 options: None,
             };
@@ -85,7 +85,7 @@ mod tests {
 
         #[test]
         fn some_options() {
-            let file_config = FileConfiguration {
+            let file_config = Content {
                 actions: vec![],
                 options: Some(FileOptions {
                     before_run: Some(FileBeforeRun {

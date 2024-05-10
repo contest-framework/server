@@ -10,7 +10,7 @@ use serde::Deserialize;
 
 /// The structure of the configuration file.
 #[derive(Deserialize)]
-pub struct FileConfiguration {
+pub struct Content {
     actions: Vec<Action>,
     options: Option<FileOptions>,
 }
