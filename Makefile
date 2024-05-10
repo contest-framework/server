@@ -37,6 +37,7 @@ update: tools/rta@${RUN_THAT_APP_VERSION}  # updates the dependencies
 	cargo install cargo-edit
 	cargo upgrade
 	tools/rta --update
+
 # --- HELPER TARGETS --------------------------------------------------------------------------------------------------------------------------------
 
 tools/rta@${RUN_THAT_APP_VERSION}:

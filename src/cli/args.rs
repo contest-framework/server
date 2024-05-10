@@ -3,13 +3,7 @@
 use crate::Result;
 use clap::{crate_description, crate_name, crate_version, App, Arg, SubCommand};
 
-#[derive(Debug, Eq, PartialEq)]
-pub enum Command {
-    Normal,      // normal operation
-    Debug,       // print the received commands from the pipe
-    Run(String), // run the given command manually
-    Setup,       // create a config file
-}
+use super::Command;
 
 pub fn parse<I>(argv: I) -> Result<Command>
 where
@@ -53,7 +47,7 @@ fn define_args() -> App<'static, 'static> {
 mod tests {
 
     mod parse {
-        use crate::args::{parse, Command};
+        use crate::cli::args::{parse, Command};
 
         #[test]
         fn no_args() {
@@ -63,7 +57,7 @@ mod tests {
         }
 
         mod run {
-            use crate::args::{parse, Command};
+            use crate::cli::args::{parse, Command};
 
             #[test]
             fn valid() {
@@ -80,7 +74,7 @@ mod tests {
         }
 
         mod debug {
-            use crate::args::{parse, Command};
+            use crate::cli::args::{parse, Command};
 
             #[test]
             fn long() {

@@ -1,8 +1,8 @@
 #[macro_use]
 extern crate prettytable;
 
-mod args;
 mod channel;
+mod cli;
 mod config;
 mod ctrl_c;
 mod errors;
@@ -10,7 +10,7 @@ mod fifo;
 mod run;
 mod trigger;
 
-use args::Command;
+use cli::Command;
 pub use errors::{Result, UserError};
 use run::Outcome;
 use std::io::Write;
@@ -33,7 +33,7 @@ fn main() {
 }
 
 fn main_with_result() -> Result<()> {
-    match args::parse(env::args())? {
+    match cli::args::parse(env::args())? {
         Command::Normal => listen(false),
         Command::Debug => listen(true),
         Command::Run(cmd) => {
