@@ -1,4 +1,4 @@
-Feature: run all tests
+Feature: run all tests in a file
 
   Scenario: valid config file
     Given file ".testconfig.json" with content
@@ -7,9 +7,10 @@ Feature: run all tests
         "actions": [
           {
             "trigger": {
-              "command": "testAll"
+              "command": "testFile",
+              "file": "**/*.rs"
             },
-            "run": "echo running all tests"
+            "run": "echo testing file {{file}}"
           }
         ]
       }
@@ -19,9 +20,9 @@ Feature: run all tests
       """
       Tertestrial is online, Ctrl-C to exit
       """
-    When a client sends the command '{ "command": "testAll" }'
+    When a client sends the command '{ "command": "testFile", "file": "foo.rs" }'
     Then it prints
       """
-      executing: echo running all tests
-      running all tests
+      executing: echo testing file foo.rs
+      testing file foo.rs
       """
