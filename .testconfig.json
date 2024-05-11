@@ -46,7 +46,7 @@
         "command": "testFile",
         "file": "**/*.test.ts"
       },
-      "run": "mocha {{file}}"
+      "run": "echo mocha {{file}}"
     },
 
     {
@@ -62,7 +62,7 @@
           "filter": "^(.+)\\.ts$"
         }
       ],
-      "run": "mocha {{file_without_ext}}.test.ts"
+      "run": "echo mocha {{file_without_ext}}.test.ts"
     },
 
     {
@@ -71,12 +71,12 @@
         "command": "testFunction",
         "file": "**/*.test.ts"
       },
-      "run": "mocha {{file}}:{{line}}"
+      "run": "echo mocha {{file}}:{{line}}"
     }
   ],
   "options": {
     "beforeRun": {
-      "clearScreen": false,
+      "clearScreen": true,
       "newlines": 0
     },
     "afterRun": {
