@@ -1,6 +1,6 @@
 Feature: run all tests
 
-  Scenario: valid config file
+  Background:
     Given file ".testconfig.json" with content
       """
       {
@@ -19,6 +19,8 @@ Feature: run all tests
       """
       Tertestrial is online, Ctrl-C to exit
       """
+
+  Scenario: sending a valid command
     When a client sends the command '{ "command": "testAll" }'
     Then it prints
       """
