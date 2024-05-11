@@ -1,6 +1,5 @@
 Feature: run Tertestrial with configuration that defines commands
 
-  @this
   Scenario: configuration defines commands
     Given file ".testconfig.json" with content
       """
@@ -13,12 +12,7 @@ Feature: run Tertestrial with configuration that defines commands
             },
             "run": "echo make test"
           }
-        ],
-        "options": {
-          "beforeRun": {
-            "clearScreen": false
-          }
-        }
+        ]
       }
       """
     And I start Tertestrial
@@ -30,4 +24,8 @@ Feature: run Tertestrial with configuration that defines commands
     Then it prints
       """
       executing: echo make test
+      """
+    And it prints
+      """
+      make test
       """
