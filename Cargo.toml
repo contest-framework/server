@@ -27,7 +27,7 @@ tokio = { version = "1.37.0", features = ["fs", "io-util", "macros", "process", 
 [[test]]
 name = "cucumber" # this should be the same as the filename of your test target
 harness = false  # allows Cucumber to print output instead of libtest
-test = false
+test = false  # does not run this test when running "cargo test", run it explicitly via "cargo test --test cucumber"
 
 [profile.dev]
 panic = "unwind"
