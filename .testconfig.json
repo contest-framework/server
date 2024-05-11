@@ -5,7 +5,7 @@
       "trigger": {
         "command": "testAll"
       },
-      "run": "echo make test"
+      "run": "make test"
     },
 
     {
@@ -21,7 +21,7 @@
           "filter": "\\b(\\w+)\\.rs$"
         }
       ],
-      "run": "echo cargo test {{file_without_ext}}"
+      "run": "cargo test {{file_without_ext}}"
     },
 
     {
@@ -37,7 +37,7 @@
           "filter": "\\bfn (\\w+)\\("
         }
       ],
-      "run": "echo cargo test {{test_name}}"
+      "run": "cargo test {{test_name}}"
     },
 
     {
@@ -46,7 +46,7 @@
         "command": "testFile",
         "file": "**/*.test.ts"
       },
-      "run": "echo mocha {{file}}"
+      "run": "mocha {{file}}"
     },
 
     {
@@ -62,7 +62,7 @@
           "filter": "^(.+)\\.ts$"
         }
       ],
-      "run": "echo mocha {{file_without_ext}}.test.ts"
+      "run": "mocha {{file_without_ext}}.test.ts"
     },
 
     {
@@ -71,7 +71,7 @@
         "command": "testFunction",
         "file": "**/*.test.ts"
       },
-      "run": "echo mocha {{file}}:{{line}}"
+      "run": "mocha {{file}}:{{line}}"
     }
   ],
   "options": {
