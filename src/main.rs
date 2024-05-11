@@ -1,9 +1,6 @@
 use std::{env, panic};
 use tertestrial::cli::{self, Command};
-use tertestrial::client;
-use tertestrial::config;
-use tertestrial::Result;
-use tertestrial::{listen, run_with_decoration};
+use tertestrial::{client, config, listen, run_with_decoration, Result};
 
 fn main() {
   let panic_result = panic::catch_unwind(|| {

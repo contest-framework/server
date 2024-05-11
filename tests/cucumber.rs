@@ -2,6 +2,7 @@ use cucumber::gherkin::Step;
 use cucumber::{given, then, when, World};
 use std::process::Stdio;
 use tempfile::TempDir;
+use tertestrial::client::fifo;
 use tokio::fs::File;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter};
 use tokio::process::{Child, ChildStdin, ChildStdout, Command};
@@ -13,14 +14,14 @@ pub struct CukeWorld {
   cmd: Option<Child>,
   stdin: Option<BufWriter<ChildStdin>>,
   stdout: Option<BufReader<ChildStdout>>,
-  workspace: TempDir,
+  dir: TempDir,
 }
 
 impl CukeWorld {
   fn new() -> Self {
     let root = tempfile::tempdir().unwrap();
     Self {
-      workspace: root,
+      dir: root,
       cmd: None,
       stdin: None,
       stdout: None,
@@ -30,7 +31,7 @@ impl CukeWorld {
 
 #[given(expr = "file {string} with content")]
 async fn file_with_content(world: &mut CukeWorld, step: &Step, filename: String) {
-  let file_path = world.workspace.as_ref().join(filename);
+  let file_path = world.dir.as_ref().join(filename);
   let mut file = File::create(file_path).await.unwrap();
   let Some(content) = step.docstring.as_ref() else {
     panic!("no docstring");
@@ -43,7 +44,7 @@ async fn tertestrial_running(world: &mut CukeWorld) {
   let cwd = std::env::current_dir().unwrap();
   let tertestrial_path = cwd.join("target").join("debug").join("tertestrial");
   let mut cmd = Command::new(tertestrial_path)
-    .current_dir(world.workspace.as_ref())
+    .current_dir(world.dir.as_ref())
     .stdin(Stdio::piped())
     .stdout(Stdio::piped())
     .kill_on_drop(true)
@@ -61,7 +62,10 @@ async fn tertestrial_running(world: &mut CukeWorld) {
 #[when("a client sends the command")]
 async fn client_sends_command(world: &mut CukeWorld, step: &Step) {
   let command = step.docstring.as_ref().unwrap().trim();
-  let fifo = world.fifo.write();
+  let fifo_path = world.dir.as_ref().join(fifo::FILE_NAME);
+  let fifo = File::create(&fifo_path).await.unwrap();
+  let mut writer = BufWriter::with_capacity(command.len() + 10, fifo);
+  writer.write_all(command.as_bytes()).await.unwrap();
 }
 
 #[then("it exits")]

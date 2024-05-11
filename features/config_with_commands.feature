@@ -7,14 +7,18 @@ Feature: run Tertestrial with configuration that defines commands
       {
         "actions": [
           {
-            "desc": "unit test",
+            "desc": "run all tests",
             "trigger": {
-              "command": "testFunction",
-              "file": "**/*.test.ts"
+              "command": "testAll"
             },
-            "run": "echo testing {{file}}:{{line}}"
+            "run": "echo make test"
           }
-        ]
+        ],
+        "options": {
+          "beforeRun": {
+            "clearScreen": false
+          }
+        }
       }
       """
     And I start Tertestrial
@@ -25,6 +29,10 @@ Feature: run Tertestrial with configuration that defines commands
     When a client sends the command
       """
       {
-        oeu
+        "command": "testAll"
       }
+      """
+    Then it prints
+      """
+      XXX
       """

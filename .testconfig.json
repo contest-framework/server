@@ -5,7 +5,7 @@
       "trigger": {
         "command": "testAll"
       },
-      "run": "make test"
+      "run": "echo make test"
     },
 
     {
@@ -21,7 +21,7 @@
           "filter": "\\b(\\w+)\\.rs$"
         }
       ],
-      "run": "cargo test {{file_without_ext}}"
+      "run": "echo cargo test {{file_without_ext}}"
     },
 
     {
@@ -37,7 +37,7 @@
           "filter": "\\bfn (\\w+)\\("
         }
       ],
-      "run": "cargo test {{test_name}}"
+      "run": "echo cargo test {{test_name}}"
     },
 
     {
@@ -76,7 +76,7 @@
   ],
   "options": {
     "beforeRun": {
-      "clearScreen": true,
+      "clearScreen": false,
       "newlines": 0
     },
     "afterRun": {
