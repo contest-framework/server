@@ -6,7 +6,7 @@ Feature: define custom variables
       {
         "actions": [
           {
-            "desc": "individual RS unit test",
+            "desc": "tests the function that the cursor is in right now",
             "trigger": {
               "command": "testFunction",
               "file": "**/*.rs"
@@ -25,6 +25,8 @@ Feature: define custom variables
       """
     And file "foo.rs" with content
       """
+      //! This is the source code file that the user has currently opened.
+
       pub fn my_func() {
         println!("This is a very simple function.");
       }
@@ -36,7 +38,7 @@ Feature: define custom variables
       """
 
   Scenario: sending a matching file and location
-    When a client sends the command '{ "command": "testFunction", "file": "foo.rs", "line": "2" }'
+    When a client sends the command '{ "command": "testFunction", "file": "foo.rs", "line": "5" }'
     Then it prints
       """
       executing: echo cargo test my_func
