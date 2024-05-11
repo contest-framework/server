@@ -96,7 +96,7 @@ async fn it_prints(world: &mut CukeWorld, step: &Step) {
 async fn main() {
   CukeWorld::cucumber()
     .fail_fast()
-    .max_concurrent_scenarios(Some(1))
+    // .max_concurrent_scenarios(Some(2))
     .run_and_exit("features/")
     .await;
 }
