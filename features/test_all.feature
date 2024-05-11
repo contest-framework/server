@@ -24,8 +24,5 @@ Feature: run Tertestrial with configuration that defines commands
     Then it prints
       """
       executing: echo make test
-      """
-    And it prints
-      """
       make test
       """

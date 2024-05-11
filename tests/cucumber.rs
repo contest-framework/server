@@ -18,9 +18,8 @@ pub struct CukeWorld {
 
 impl CukeWorld {
   fn new() -> Self {
-    let root = tempfile::tempdir().unwrap();
     Self {
-      dir: root,
+      dir: tempfile::tempdir().unwrap(),
       cmd: None,
       stdin: None,
       stdout: None,
@@ -81,15 +80,17 @@ async fn it_exits(world: &mut CukeWorld) {
 
 #[then("it prints")]
 async fn it_prints(world: &mut CukeWorld, step: &Step) {
-  let want = step.docstring.as_ref().unwrap().trim();
+  let want_text = step.docstring.as_ref().unwrap().trim();
   let reader = world.stdout.as_mut().unwrap();
-  let mut output = String::new();
-  let mut have = String::new();
-  while have.is_empty() {
-    reader.read_line(&mut output).await.unwrap();
-    output.trim().clone_into(&mut have);
+  for want_line in want_text.lines() {
+    let mut output = String::new();
+    let mut have = String::with_capacity(want_line.len());
+    while have.is_empty() {
+      reader.read_line(&mut output).await.unwrap();
+      output.trim().clone_into(&mut have);
+    }
+    assert_eq!(&have, want_line);
   }
-  assert_eq!(&have, want);
 }
 
 #[tokio::main(flavor = "current_thread")]
