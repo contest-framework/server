@@ -3,13 +3,11 @@ use cucumber::{given, then, when, World};
 use std::process::Stdio;
 use tempfile::TempDir;
 use tertestrial::client::fifo;
-use tokio::fs::OpenOptions;
-use tokio::fs::{self, File};
+use tokio::fs::{self, File, OpenOptions};
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter};
 use tokio::process::{Child, ChildStdin, ChildStdout, Command};
 
 #[derive(Debug, World)]
-// Accepts both sync/async and fallible/infallible functions.
 #[world(init = Self::new)]
 pub struct CukeWorld {
   cmd: Option<Child>,
@@ -60,26 +58,18 @@ async fn tertestrial_running(world: &mut CukeWorld) {
   world.stdout = Some(stdout_writer);
 }
 
-#[when("a client sends the command")]
-async fn client_sends_command(world: &mut CukeWorld, step: &Step) {
-  let command = step.docstring.as_ref().unwrap().trim();
+#[when(expr = "a client sends the command {string}")]
+async fn client_sends_command(world: &mut CukeWorld, command: String) {
   let fifo_path = world.dir.as_ref().join(fifo::FILE_NAME);
   if fs::metadata(&fifo_path).await.is_err() {
     panic!("FIFO not found")
   }
-  println!("11111111111111");
-  let mut file = OpenOptions::new()
+  let mut fifo = OpenOptions::new()
     .write(true)
     .open(&fifo_path)
     .await
     .unwrap();
-  // let mut fifo = File::create(&fifo_path).await.unwrap();
-  println!("22222222222222");
-  file.write_all(command.as_bytes()).await.unwrap();
-  // fifo.write_all(command.as_bytes());
-  println!("33333333333333");
-  // let mut writer = BufWriter::with_capacity(command.len() + 10, fifo);
-  // writer.write_all(command.as_bytes()).await.unwrap();
+  fifo.write_all(command.as_bytes()).await.unwrap();
 }
 
 #[then("it exits")]

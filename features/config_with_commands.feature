@@ -26,13 +26,8 @@ Feature: run Tertestrial with configuration that defines commands
       """
       Tertestrial is online, Ctrl-C to exit
       """
-    When a client sends the command
-      """
-      {
-        "command": "testAll"
-      }
-      """
+    When a client sends the command '{ "command": "testAll" }'
     Then it prints
       """
-      XXX
+      executing: echo make test
       """
