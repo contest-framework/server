@@ -58,7 +58,7 @@ pub async fn verify_prints(world: &mut TertestrialWorld, output: &str) {
     let mut have = String::with_capacity(want.len());
     loop {
       subprocess.stdout.read_line(&mut output).await.unwrap();
-      output.trim().clone_into(&mut have);
+      output.trim_end().clone_into(&mut have);
     }
     assert_eq!(&have, want);
   }
