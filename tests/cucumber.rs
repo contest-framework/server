@@ -37,7 +37,7 @@ async fn file_with_content(world: &mut CukeWorld, step: &Step, filename: String)
   file.write_all(content.as_bytes()).await.unwrap();
 }
 
-#[given("I start Tertestrial")]
+#[when("I start Tertestrial")]
 async fn tertestrial_running(world: &mut CukeWorld) {
   let cwd = std::env::current_dir().unwrap();
   let tertestrial_path = cwd.join("target").join("debug").join("tertestrial");
