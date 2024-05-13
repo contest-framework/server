@@ -41,12 +41,11 @@ Feature: define a custom variable with a regex match of the file content
       cargo test my_func
       """
 
-  # TODO: also print the line number here, since this is important in this context
   Scenario: receiving a matching file and mismatching location
-    When receiving the command '{ "command": "testFunction", "file": "foo.rs", "line": "0" }'
+    When receiving the command '{ "command": "testFunction", "file": "foo.rs", "line": "1" }'
     Then it prints
       """
-      Error: Did not find pattern \bfn (\w+)\( in file foo.rs
+      Error: Did not find pattern \bfn (\w+)\( in file foo.rs at line 1
       """
 
 # TODO: fix the panic documented by this test
