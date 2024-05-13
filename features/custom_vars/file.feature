@@ -1,10 +1,15 @@
 Feature: define custom variables
 
-  # In this example, unit tests for source files have names
-  # following the pattern "{{file}}_test.ts".
-  # When the client looks at a source file, and sends "test this file",
-  # Tertestrial should test the corresponding test file.
-  # This can be done with a custom variable that extracts the
+  # This example describes situations where each source code file
+  # (in this example TypeScript) has a corresponding unit test file.
+  # The filename of the test files is the filename of the source code file
+  # with "_test" appended.
+  #
+  # When the developer looks at a source file, and sends "test this file",
+  # Tertestrial should test the corresponding test file
+  # determined by the naming convention mentioned above.
+  #
+  # This is done with a custom variable that extracts the
   # filename of the source file without extension.
 
   Background:
@@ -36,10 +41,10 @@ Feature: define custom variables
       Tertestrial is online, Ctrl-C to exit
       """
 
-  Scenario: sending a matching file and location
-    When a client sends the command '{ "command": "testFile", "file": "foo.ts", "line": "23" }'
+  Scenario: sending a matching file
+    When a client sends the command '{ "command": "testFile", "file": "my_file.ts" }'
     Then it prints
       """
-      executing: echo testing foo.test.ts
-      testing foo.test.ts
+      executing: echo testing my_file.test.ts
+      testing my_file.test.ts
       """

@@ -1,5 +1,8 @@
 Feature: define custom variables
 
+  # In this example, unit tests can be filtered by the name of the function under test.
+  # When the client
+
   Background:
     Given file ".testconfig.json" with content
       """
