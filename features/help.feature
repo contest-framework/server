@@ -1,6 +1,5 @@
 Feature: display help
 
-  @this
   Scenario Outline:
     When I run "tertestrial <OPTION>"
     Then it exits with this output
