@@ -24,14 +24,14 @@ async fn start_tertestrial(world: &mut TertestrialWorld, command: String) {
   logic::start_tertestrial(world, args).await;
 }
 
-#[then("it exits")]
-async fn it_exits(world: &mut TertestrialWorld) {
-  logic::wait_for_exit(world).await;
-}
-
 #[then("it prints")]
 async fn it_prints(world: &mut TertestrialWorld, step: &Step) {
-  logic::verify_prints(world, step.docstring.as_ref().unwrap().trim()).await;
+  logic::verify_prints_lines(world, step.docstring.as_ref().unwrap().trim()).await;
+}
+
+#[then("it exits with this output")]
+async fn it_exits_with_output(world: &mut TertestrialWorld, step: &Step) {
+  logic::verify_prints_text(world, step.docstring.as_ref().unwrap().trim()).await;
 }
 
 #[when(expr = "receiving the command {string}")]
@@ -42,7 +42,7 @@ async fn client_sends_command(world: &mut TertestrialWorld, command: String) {
 #[given(expr = "Tertestrial is running")]
 async fn tertestrial_is_running(world: &mut TertestrialWorld) {
   logic::start_tertestrial(world, &vec![]).await;
-  logic::verify_prints(world, "Tertestrial is online, Ctrl-C to exit").await;
+  logic::verify_prints_lines(world, "Tertestrial is online, Ctrl-C to exit").await;
 }
 
 #[tokio::main(flavor = "current_thread")]
