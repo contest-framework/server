@@ -15,11 +15,7 @@ Feature: test only a specific function
         ]
       }
       """
-    When I start Tertestrial
-    Then it prints
-      """
-      Tertestrial is online, Ctrl-C to exit
-      """
+    And Tertestrial is running
 
   Scenario: sending a matching file and location
     When a client sends the command '{ "command": "testFunction", "file": "foo.ts", "line": "23" }'

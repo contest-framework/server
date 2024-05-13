@@ -16,11 +16,7 @@ Feature: client sends unknown fields in the command
           ]
         }
         """
-      When I start Tertestrial
-      Then it prints
-        """
-        Tertestrial is online, Ctrl-C to exit
-        """
+      And Tertestrial is running
 
     Scenario: send a valid command with additional wrong fields
       When a client sends the command '{ "command": "testAll", "foo": 1, "bar": 2 }'

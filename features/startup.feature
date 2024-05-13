@@ -1,5 +1,6 @@
 Feature: Starting Tertestrial
 
+  @this
   Scenario:
     Given file ".testconfig.json" with content
       """

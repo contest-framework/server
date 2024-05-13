@@ -15,11 +15,7 @@ Feature: run all tests in a file
         ]
       }
       """
-    When I start Tertestrial
-    Then it prints
-      """
-      Tertestrial is online, Ctrl-C to exit
-      """
+    And Tertestrial is running
 
   Scenario: sending a matching file
     When a client sends the command '{ "command": "testFile", "file": "foo.rs" }'
