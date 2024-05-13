@@ -4,7 +4,7 @@ use tokio::process::ChildStdout;
 
 #[derive(Debug, World)]
 #[world(init = Self::new)]
-pub struct CukeWorld {
+pub struct TertestrialWorld {
   /// the subprocess executing Tertestrial
   pub subprocess: Option<RunningProcess>,
   /// the directory containing the source code that Tertestrial should check
@@ -17,7 +17,7 @@ pub struct RunningProcess {
   pub stdout: tokio::io::BufReader<ChildStdout>,
 }
 
-impl CukeWorld {
+impl TertestrialWorld {
   fn new() -> Self {
     Self {
       dir: tempfile::tempdir().unwrap(),

@@ -1,4 +1,4 @@
-use crate::world::{CukeWorld, RunningProcess};
+use crate::world::{RunningProcess, TertestrialWorld};
 use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use tertestrial::client::fifo;
@@ -30,7 +30,7 @@ pub async fn send_command(command: String, workspace: &Path) {
   fifo.write_all(command.as_bytes()).await.unwrap();
 }
 
-pub async fn start_tertestrial(world: &mut CukeWorld) {
+pub async fn start_tertestrial(world: &mut TertestrialWorld) {
   let cwd = std::env::current_dir().unwrap();
   let tertestrial_path = cwd.join("target").join("debug").join("tertestrial");
   let mut cmd = Command::new(tertestrial_path)
@@ -48,7 +48,7 @@ pub async fn start_tertestrial(world: &mut CukeWorld) {
   });
 }
 
-pub async fn verify_prints(world: &mut CukeWorld, output: &str) {
+pub async fn verify_prints(world: &mut TertestrialWorld, output: &str) {
   let subprocess = world.subprocess.as_mut().unwrap();
   for want in output.lines() {
     let mut output = String::new();
@@ -61,7 +61,7 @@ pub async fn verify_prints(world: &mut CukeWorld, output: &str) {
   }
 }
 
-pub async fn wait_for_exit(world: &mut CukeWorld) {
+pub async fn wait_for_exit(world: &mut TertestrialWorld) {
   let subprocess = world.subprocess.as_mut().unwrap();
   let exit_status = subprocess.cmd.wait().await.unwrap();
   assert_eq!(exit_status.code().unwrap(), 0);
