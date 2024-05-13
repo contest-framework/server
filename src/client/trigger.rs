@@ -5,6 +5,7 @@ use serde::Deserialize;
 use std::fmt::Display;
 
 #[derive(Deserialize, Debug, Eq, PartialEq)]
+#[serde(deny_unknown_fields)]
 pub struct Trigger {
   pub command: String,
   pub file: Option<String>,
@@ -128,13 +129,8 @@ mod tests {
     #[test]
     fn filename_extra_fields() {
       let give = r#"{ "command": "testFile", "file": "foo.rs", "other": "12" }"#;
-      let have = from_string(give).unwrap();
-      let want = Trigger {
-        command: "testFile".into(),
-        file: Some(String::from("foo.rs")),
-        line: None,
-      };
-      assert_eq!(have, want);
+      let have = from_string(give);
+      assert!(have.is_err());
     }
 
     #[test]
