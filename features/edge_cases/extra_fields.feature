@@ -22,10 +22,10 @@ Feature: client sends unknown fields in the command
       Tertestrial is online, Ctrl-C to exit
         """
 
-    Scenario: sending a valid command
+    Scenario: send a valid command with additional wrong fields
       When a client sends the command '{ "command": "testAll", "foo": 1, "bar": 2 }'
       Then it prints
         """
-      executing: echo running all tests
-      running all tests
+        executing: echo running all tests
+        running all tests
         """
