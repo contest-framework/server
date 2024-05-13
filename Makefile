@@ -33,6 +33,7 @@ test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
 	cargo clippy --all-targets --all-features -- --deny=warnings
 	cargo test
+	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
 	tools/rta dprint check
 # ${CURDIR}/node_modules/.bin/text-run
