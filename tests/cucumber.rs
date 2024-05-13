@@ -5,7 +5,7 @@ use tempfile::TempDir;
 use tertestrial::client::fifo;
 use tokio::fs::{self, File, OpenOptions};
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-use tokio::process::{Child, ChildStdout, Command};
+use tokio::process::{ChildStdout, Command};
 
 #[derive(Debug, World)]
 #[world(init = Self::new)]
@@ -18,8 +18,8 @@ pub struct CukeWorld {
 
 #[derive(Debug)]
 struct RunningProcess {
-  cmd: Child,
-  stdout: BufReader<ChildStdout>,
+  cmd: tokio::process::Child,
+  stdout: tokio::io::BufReader<ChildStdout>,
 }
 
 impl CukeWorld {
