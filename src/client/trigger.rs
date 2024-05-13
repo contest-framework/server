@@ -5,6 +5,7 @@ use serde::Deserialize;
 use std::fmt::Display;
 
 #[derive(Deserialize, Debug, Eq, PartialEq)]
+#[serde(deny_unknown_fields)]
 pub struct Trigger {
   pub command: String,
   pub file: Option<String>,

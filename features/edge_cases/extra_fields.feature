@@ -1,10 +1,5 @@
 Feature: client sends unknown fields in the command
 
-  # TODO: wouldn't it be better to print at least a warning here?
-  # Given that Tertestrial is doing a form of pattern matching on the received fields,
-  # having extra fields should be an error.
-  # Missing fields are already treated as an error.
-
   Background:
     Given file ".testconfig.json" with content
       """
@@ -21,10 +16,11 @@ Feature: client sends unknown fields in the command
       """
     And Tertestrial is running
 
+  @this
   Scenario: send a valid command with additional wrong fields
     When receiving the command '{ "command": "testAll", "foo": 1, "bar": 2 }'
     Then it prints
       """
-        executing: echo running all tests
-        running all tests
+        Error: cannot parse command received from client: { "command": "testAll", "foo": 1, "bar": 2 }
+        unknown field `foo`, expected one of `command`, `file`, `line` at line 1 column 29
       """
