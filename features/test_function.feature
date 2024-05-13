@@ -29,7 +29,6 @@ Feature: test only a specific function
       testing file foo.ts:23
       """
 
-  @this
   Scenario: sending a matching file and no location
     When a client sends the command '{ "command": "testFunction", "file": "foo.ts" }'
     Then it prints
@@ -42,5 +41,5 @@ Feature: test only a specific function
     When a client sends the command '{ "command": "testFunction", "file": "foo.go", "line": "23" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: {"command": "testFunction", "file": "foo.go" }
+      Error: cannot determine command for trigger: {"command": "testFunction", "file": "foo.go", "line": "23" }
       """
