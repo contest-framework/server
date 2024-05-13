@@ -152,7 +152,10 @@ fn calculate_var(var: &Var, values: &HashMap<&str, String>) -> Result<String> {
       let file_content = fs::read_to_string(file_name).unwrap();
       let lines: Vec<&str> = file_content.split('\n').collect();
       let re = Regex::new(&var.filter).unwrap();
-      let original_line: u32 = values.get("line").unwrap().parse().unwrap();
+      let Some(original_line) = values.get("line") else {
+        return Err(UserError::MissingLineFieldInCurrentOrAboveLineContent);
+      };
+      let original_line = original_line.parse().unwrap();
       let mut line = original_line;
       while line > 0 {
         line -= 1;
