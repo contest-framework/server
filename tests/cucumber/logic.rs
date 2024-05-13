@@ -70,7 +70,6 @@ pub async fn verify_prints_text(world: &mut TertestrialWorld, want: &str) {
   subprocess.stdout.read_to_end(&mut have).await.unwrap();
   let have = String::from_utf8(have).unwrap();
   pretty::assert_eq!(have.trim(), want.trim());
-  wait_for_exit(world).await;
 }
 
 pub async fn wait_for_exit(world: &mut TertestrialWorld) {

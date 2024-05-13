@@ -29,9 +29,16 @@ async fn it_prints(world: &mut TertestrialWorld, step: &Step) {
   logic::verify_prints_lines(world, step.docstring.as_ref().unwrap().trim()).await;
 }
 
+#[then("it exits with no output")]
+async fn it_exits_with_no_output(world: &mut TertestrialWorld) {
+  logic::verify_prints_text(world, "").await;
+  logic::wait_for_exit(world).await;
+}
+
 #[then("it exits with this output")]
 async fn it_exits_with_output(world: &mut TertestrialWorld, step: &Step) {
   logic::verify_prints_text(world, step.docstring.as_ref().unwrap().trim()).await;
+  logic::wait_for_exit(world).await;
 }
 
 #[when(expr = "receiving the command {string}")]
