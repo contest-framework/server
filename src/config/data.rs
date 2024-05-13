@@ -152,7 +152,8 @@ fn calculate_var(var: &Var, values: &HashMap<&str, String>) -> Result<String> {
       let file_content = fs::read_to_string(file_name).unwrap();
       let lines: Vec<&str> = file_content.split('\n').collect();
       let re = Regex::new(&var.filter).unwrap();
-      let mut line: u32 = values.get("line").unwrap().parse().unwrap();
+      let original_line: u32 = values.get("line").unwrap().parse().unwrap();
+      let mut line = original_line;
       while line > 0 {
         line -= 1;
         let line_text: String = lines.get(line as usize).unwrap().to_string();
@@ -174,6 +175,7 @@ fn calculate_var(var: &Var, values: &HashMap<&str, String>) -> Result<String> {
       Err(UserError::TriggerRegexNotFound {
         regex: var.filter.to_owned(),
         filename: file_name.to_string(),
+        line: original_line,
       })
     }
   }

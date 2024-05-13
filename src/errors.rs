@@ -47,6 +47,7 @@ pub enum UserError {
   TriggerRegexNotFound {
     regex: String,
     filename: String,
+    line: u32,
   },
   UnknownTrigger {
     line: String,
@@ -75,7 +76,7 @@ impl UserError {
                         "Please verify that the command is in the path or fix your config file.".into()),
             UserError::TriggerTooManyCaptures{count, regex, line} => (format!("found {} captures using regex \"{}\" on line: {}", count, regex, line),
                     "filters in the Tertestrial configuration file can only contain one capture group".into()),
-            UserError::TriggerRegexNotFound{regex, filename} => (format!("Did not find pattern {} in file {}", regex, filename),
+            UserError::TriggerRegexNotFound{regex, filename, line } => (format!("Did not find pattern {} in file {} at line {}", regex, filename, line),
                 "Please check that the file .testconfig.json is correct".into()),
             UserError::UnknownTrigger{line} => (format!("cannot determine command for trigger: {}", line),
             "Please make sure that this trigger is listed in your configuration file".into()),
