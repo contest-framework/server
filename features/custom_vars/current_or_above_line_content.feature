@@ -54,3 +54,11 @@ Feature: define custom variables
       """
       Error: Did not find pattern \bfn (\w+)\( in file foo.rs
       """
+
+# TODO: fix the panic documented by this test
+# Scenario: sending a matching file and no location
+#   When a client sends the command '{ "command": "testFunction", "file": "foo.rs" }'
+#   Then it prints
+#     """
+#     Error: Did not find pattern \bfn (\w+)\( in file foo.rs
+#     """
