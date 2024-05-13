@@ -15,7 +15,7 @@ Feature: Starting Tertestrial
         ]
       }
       """
-    When I start Tertestrial
+    When I run "tertestrial"
     Then it prints
       """
       Tertestrial is online, Ctrl-C to exit
