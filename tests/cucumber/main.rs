@@ -29,6 +29,13 @@ async fn it_prints(world: &mut TertestrialWorld, step: &Step) {
   logic::verify_prints_lines(world, step.docstring.as_ref().unwrap().trim()).await;
 }
 
+#[then(expr = "it creates file {string} with content")]
+async fn it_creates_file_with_content(world: &mut TertestrialWorld, step: &Step, filename: String) {
+  let filepath = world.dir.as_ref().join(filename);
+  let content = step.docstring.as_ref().unwrap();
+  logic::verify_created_file(&filepath, content).await;
+}
+
 #[then("it exits with no output")]
 async fn it_exits_with_no_output(world: &mut TertestrialWorld) {
   logic::verify_prints_text(world, "").await;
