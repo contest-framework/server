@@ -1,6 +1,9 @@
 Feature: client sends unknown fields in the command
 
-  # TODO: wouldn't it be better to print at least a warning here? Unused fields are in indicator of something not working correctly.
+  # TODO: wouldn't it be better to print at least a warning here?
+  # Given that Tertestrial is doing a form of pattern matching on the received fields,
+  # having extra fields should be an error.
+  # Missing fields are already treated as an error.
 
   Background:
     Given file ".testconfig.json" with content
