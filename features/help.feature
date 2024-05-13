@@ -3,7 +3,7 @@ Feature: display help
   @this
   Scenario: short version
     When I run "tertestrial -h"
-    Then it prints
+    Then it exits with this output
       """
       tertestrial 0.0.2
       auto-run tests from within your code editor
@@ -14,7 +14,7 @@ Feature: display help
 
   Scenario: long version
     When I run "tertestrial --help"
-    Then it prints
+    Then it exits with this output
       """
       tertestrial 0.0.2
       """
