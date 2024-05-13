@@ -1,4 +1,5 @@
 use crate::world::{RunningProcess, TertestrialWorld};
+use std::os::unix::fs::FileTypeExt;
 use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use tertestrial::client::fifo;
@@ -16,7 +17,8 @@ pub fn fifo_path(workspace: &Path) -> PathBuf {
 }
 
 async fn ensure_fifo_exists(fifo_path: &Path) {
-  fs::metadata(&fifo_path).await.expect("FIFO not found");
+  let metadata = fs::metadata(&fifo_path).await.expect("FIFO not found");
+  assert!(metadata.file_type().is_fifo());
 }
 
 pub async fn send_command(command: String, workspace: &Path) {
