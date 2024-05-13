@@ -15,7 +15,7 @@ Feature: test only a specific function
         ]
       }
       """
-    And I start Tertestrial
+    When I start Tertestrial
     Then it prints
       """
       Tertestrial is online, Ctrl-C to exit
