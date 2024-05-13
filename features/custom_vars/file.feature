@@ -42,13 +42,12 @@ Feature: define a custom variable with a part of the filename
     When receiving the command '{ "command": "testFile", "file": "my_file.go" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: {"command": "testFile", "file": "my_file.go" }
+      Error: cannot determine command for trigger: { "command": "testFile", "file": "my_file.go" }
       """
 
-  #TODO: fix the missing space in the output
   Scenario: receiving no file
     When receiving the command '{ "command": "testFile" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: {"command": "testFile" }
+      Error: cannot determine command for trigger: { "command": "testFile" }
       """

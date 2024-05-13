@@ -63,10 +63,10 @@ mod tests {
         let give = vec![
           "tertestrial".into(),
           "run".into(),
-          r#"{"command": "testFile", "file": "src/probes/link_broken.rs" }"#.into(),
+          r#"{ "command": "testFile", "file": "src/probes/link_broken.rs" }"#.into(),
         ];
         let want = Ok(Command::Run(
-          r#"{"command": "testFile", "file": "src/probes/link_broken.rs" }"#.into(),
+          r#"{ "command": "testFile", "file": "src/probes/link_broken.rs" }"#.into(),
         ));
         assert_eq!(parse(give), want);
       }

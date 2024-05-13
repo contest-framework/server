@@ -54,7 +54,7 @@ impl Trigger {
 
 impl Display for Trigger {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    write!(f, "{{")?;
+    write!(f, "{{ ")?;
     let mut parts: Vec<String> = Vec::new();
     parts.push(format!("\"command\": \"{}\"", self.command));
     if self.file.is_some() {
