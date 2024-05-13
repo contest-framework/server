@@ -10,7 +10,7 @@ use tokio::process::{Child, ChildStdout, Command};
 #[derive(Debug, World)]
 #[world(init = Self::new)]
 pub struct CukeWorld {
-  /// Tertestrial running in a subprocess
+  /// the subprocess executing Tertestrial
   subprocess: Option<RunningProcess>,
   /// the directory containing the source code that Tertestrial should check
   dir: TempDir,
