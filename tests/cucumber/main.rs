@@ -44,6 +44,7 @@ async fn tertestrial_is_running(world: &mut TertestrialWorld) {
 async fn main() {
   TertestrialWorld::cucumber()
     .fail_fast()
+    .fail_on_skipped()
     // .max_concurrent_scenarios(Some(2))
     .run_and_exit("features/")
     .await;
