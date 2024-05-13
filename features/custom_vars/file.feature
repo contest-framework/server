@@ -33,11 +33,6 @@ Feature: define a custom variable with a part of the filename
       testing my_file.test.ts
       """
 
-  # TODO: this error message prints internal implementation details that probably
-  # aren't helpful to the end user. Print something better here, like:
-  #
-  # You asked me to test file my_file.go.
-  # However, you didn't specify how to test such files.
   Scenario: receiving a mismatching file
     When receiving the command '{ "command": "testFile", "file": "my_file.go" }'
     Then it prints
