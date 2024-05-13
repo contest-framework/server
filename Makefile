@@ -4,6 +4,12 @@ RUN_THAT_APP_VERSION = 0.6.0
 build:  # performs a test build
 	cargo check
 
+cuke:  # runs the end-to-end tests
+	cargo test --test cucumber
+
+cukethis:  # runs only end-to-end tests with a @this tag
+	cargo test --test cucumber -- -t @this
+
 docs:  # shows the RustDoc in a browser
 	cargo doc --open
 
@@ -27,6 +33,7 @@ test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
 	cargo clippy --all-targets --all-features -- --deny=warnings
 	cargo test
+	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
 	tools/rta dprint check
 # ${CURDIR}/node_modules/.bin/text-run

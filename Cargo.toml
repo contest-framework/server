@@ -19,7 +19,15 @@ terminal_size = "0.1"
 clap = "2.34.0"
 
 [dev-dependencies]
+cucumber = "0.21.0"
+futures = "0.3.30"
 tempfile = "3"
+tokio = { version = "1.37.0", features = ["fs", "io-util", "macros", "process", "rt"] }
+
+[[test]]
+name = "cucumber" # this should be the same as the filename of your test target
+harness = false  # allows Cucumber to print output instead of libtest
+test = false  # does not run this test when running "cargo test", run it explicitly via "cargo test --test cucumber"
 
 [profile.dev]
 panic = "unwind"

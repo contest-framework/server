@@ -7,6 +7,8 @@ use std::io::BufReader;
 use std::path::{Path, PathBuf};
 use std::thread;
 
+pub const FILE_NAME: &str = ".tertestrial.tmp";
+
 /// A FIFO pipe
 #[derive(Debug)]
 pub struct Pipe {
@@ -54,7 +56,7 @@ impl Pipe {
 /// constructs a fifo pipe in the current directory
 pub fn in_dir(dirpath: &Path) -> Pipe {
   Pipe {
-    filepath: dirpath.join(".tertestrial.tmp"),
+    filepath: dirpath.join(FILE_NAME),
   }
 }
 
