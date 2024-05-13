@@ -48,6 +48,7 @@ Feature: define custom variables
       cargo test my_func
       """
 
+  # TODO: also output the line number here, since this is important in this context
   Scenario: sending a matching file and mismatching location
     When a client sends the command '{ "command": "testFunction", "file": "foo.rs", "line": "0" }'
     Then it prints
