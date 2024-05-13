@@ -52,5 +52,5 @@ Feature: define a custom variable with a regex match of the file content
     When receiving the command '{ "command": "testFunction", "file": "foo.rs" }'
     Then it prints
       """
-    Error: missing "line" field
+      Error: missing "line" field
       """
