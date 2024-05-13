@@ -28,3 +28,10 @@ Feature: test only a specific function
       executing: echo testing file foo.ts:23
       testing file foo.ts:23
       """
+
+  Scenario: sending a mismatching file
+    When a client sends the command '{ "command": "testFunction", "file": "foo.go", "line": "23" }'
+    Then it prints
+      """
+      Error: cannot determine command for trigger: {"command": "testFunction", "file": "foo.go" }
+      """
