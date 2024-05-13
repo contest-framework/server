@@ -25,7 +25,7 @@ Feature: define a custom variable with a part of the filename
       """
     And Tertestrial is running
 
-  Scenario: sending a matching file
+  Scenario: receiving a matching file
     When receiving the command '{ "command": "testFile", "file": "my_file.ts" }'
     Then it prints
       """
@@ -38,7 +38,7 @@ Feature: define a custom variable with a part of the filename
   #
   # You asked me to test file my_file.go.
   # However, you didn't specify how to test such files.
-  Scenario: sending a mismatching file
+  Scenario: receiving a mismatching file
     When receiving the command '{ "command": "testFile", "file": "my_file.go" }'
     Then it prints
       """
@@ -46,7 +46,7 @@ Feature: define a custom variable with a part of the filename
       """
 
   #TODO: fix the missing space in the output
-  Scenario: sending no file
+  Scenario: receiving no file
     When receiving the command '{ "command": "testFile" }'
     Then it prints
       """

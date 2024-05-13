@@ -33,7 +33,7 @@ Feature: define a custom variable with a regex match of the file content
       """
     And Tertestrial is running
 
-  Scenario: sending a matching file and location
+  Scenario: receiving a matching file and location
     When receiving the command '{ "command": "testFunction", "file": "foo.rs", "line": "5" }'
     Then it prints
       """
@@ -42,7 +42,7 @@ Feature: define a custom variable with a regex match of the file content
       """
 
   # TODO: also print the line number here, since this is important in this context
-  Scenario: sending a matching file and mismatching location
+  Scenario: receiving a matching file and mismatching location
     When receiving the command '{ "command": "testFunction", "file": "foo.rs", "line": "0" }'
     Then it prints
       """
@@ -50,7 +50,7 @@ Feature: define a custom variable with a regex match of the file content
       """
 
 # TODO: fix the panic documented by this test
-# Scenario: sending a matching file and no location
+# Scenario: receiving a matching file and no location
 #   When receiving the command '{ "command": "testFunction", "file": "foo.rs" }'
 #   Then it prints
 #     """

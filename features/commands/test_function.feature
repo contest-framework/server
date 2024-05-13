@@ -17,7 +17,7 @@ Feature: test only a specific function
       """
     And Tertestrial is running
 
-  Scenario: sending a matching file and location
+  Scenario: receiving a matching file and location
     When receiving the command '{ "command": "testFunction", "file": "foo.ts", "line": "23" }'
     Then it prints
       """
@@ -26,7 +26,7 @@ Feature: test only a specific function
       """
 
   # TODO: fix the wrong behavior documented by this test
-  Scenario: sending a matching file and no location
+  Scenario: receiving a matching file and no location
     When receiving the command '{ "command": "testFunction", "file": "foo.ts" }'
     Then it prints
       """
@@ -34,7 +34,7 @@ Feature: test only a specific function
       testing file foo.ts:{{line}}
       """
 
-  Scenario: sending a mismatching file
+  Scenario: receiving a mismatching file
     When receiving the command '{ "command": "testFunction", "file": "foo.go", "line": "23" }'
     Then it prints
       """

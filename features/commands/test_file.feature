@@ -17,7 +17,7 @@ Feature: run all tests in a file
       """
     And Tertestrial is running
 
-  Scenario: sending a matching file
+  Scenario: receiving a matching file
     When receiving the command '{ "command": "testFile", "file": "foo.rs" }'
     Then it prints
       """
@@ -25,7 +25,7 @@ Feature: run all tests in a file
       testing file foo.rs
       """
 
-  Scenario: sending a file that doesn't match an existing rule
+  Scenario: receiving a file that doesn't match an existing rule
     When receiving the command '{ "command": "testFile", "file": "foo.go" }'
     Then it prints
       """
