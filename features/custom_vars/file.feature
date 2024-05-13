@@ -1,5 +1,12 @@
 Feature: define custom variables
 
+  # In this example, unit tests for source files have names
+  # following the pattern "{{file}}_test.ts".
+  # When the client looks at a source file, and sends "test this file",
+  # Tertestrial should test the corresponding test file.
+  # This can be done with a custom variable that extracts the
+  # filename of the source file without extension.
+
   Background:
     Given file ".testconfig.json" with content
       """
