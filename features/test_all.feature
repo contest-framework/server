@@ -14,7 +14,7 @@ Feature: run all tests
         ]
       }
       """
-    And I start Tertestrial
+    When I start Tertestrial
     Then it prints
       """
       Tertestrial is online, Ctrl-C to exit
