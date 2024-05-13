@@ -69,7 +69,7 @@ pub async fn verify_prints_text(world: &mut TertestrialWorld, want: &str) {
   let mut have = Vec::<u8>::with_capacity(want.len());
   subprocess.stdout.read_to_end(&mut have).await.unwrap();
   let have = String::from_utf8(have).unwrap();
-  assert_eq!(have.trim(), want.trim());
+  pretty::assert_eq!(have.trim(), want.trim());
   wait_for_exit(world).await;
 }
 
