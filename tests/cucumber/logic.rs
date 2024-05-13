@@ -51,6 +51,11 @@ pub async fn start_tertestrial(world: &mut TertestrialWorld, args: &[String]) {
   });
 }
 
+pub async fn verify_created_file(file_path: &Path, want: &str) {
+  let have = fs::read_to_string(file_path).await.unwrap();
+  pretty::assert_eq!(have.trim(), want.trim());
+}
+
 pub async fn verify_prints_lines(world: &mut TertestrialWorld, output: &str) {
   let subprocess = world.subprocess.as_mut().unwrap();
   for want in output.lines() {
@@ -70,7 +75,6 @@ pub async fn verify_prints_text(world: &mut TertestrialWorld, want: &str) {
   subprocess.stdout.read_to_end(&mut have).await.unwrap();
   let have = String::from_utf8(have).unwrap();
   pretty::assert_eq!(have.trim(), want.trim());
-  wait_for_exit(world).await;
 }
 
 pub async fn wait_for_exit(world: &mut TertestrialWorld) {
