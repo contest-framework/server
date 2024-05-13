@@ -18,7 +18,7 @@ async fn file_with_content(world: &mut TertestrialWorld, step: &Step, filename: 
 async fn start_tertestrial(world: &mut TertestrialWorld, command: String) {
   let words = shellwords::split(&command).unwrap();
   let (cmd, args) = words.split_at(1);
-  if cmd[0] != "tertestrial" {
+  if cmd != &["tertestrial"] {
     panic!("can only execute tertestrial");
   }
   logic::start_tertestrial(world, args).await;
