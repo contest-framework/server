@@ -33,11 +33,9 @@ impl CukeWorld {
 
 #[given(expr = "file {string} with content")]
 async fn file_with_content(world: &mut CukeWorld, step: &Step, filename: String) {
+  let Some(content) = step.docstring.as_ref().expect("no docstring");
   let file_path = world.dir.as_ref().join(filename);
   let mut file = File::create(file_path).await.unwrap();
-  let Some(content) = step.docstring.as_ref() else {
-    panic!("no docstring");
-  };
   file.write_all(content.as_bytes()).await.unwrap();
 }
 
