@@ -48,10 +48,9 @@ Feature: define a custom variable with a regex match of the file content
       Error: Did not find pattern \bfn (\w+)\( in file foo.rs at line 1
       """
 
-# TODO: fix the panic documented by this test
-# Scenario: receiving a matching file and no location
-#   When receiving the command '{ "command": "testFunction", "file": "foo.rs" }'
-#   Then it prints
-#     """
-#     Error: Did not find pattern \bfn (\w+)\( in file foo.rs
-#     """
+  Scenario: receiving a matching file and no location
+    When receiving the command '{ "command": "testFunction", "file": "foo.rs" }'
+    Then it prints
+      """
+    Error: missing "line" field
+      """
