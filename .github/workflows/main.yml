@@ -16,9 +16,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # TODO: remove this check, we run dprint as part of the main test
-      - uses: dprint/check@v1.5
-      - name: setup
-        run: make setup
-      - name: test
-        run: make test
+      - run: make setup
+      - run: make test
