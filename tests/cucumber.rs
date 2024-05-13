@@ -4,25 +4,29 @@ use std::process::Stdio;
 use tempfile::TempDir;
 use tertestrial::client::fifo;
 use tokio::fs::{self, File, OpenOptions};
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter};
-use tokio::process::{Child, ChildStdin, ChildStdout, Command};
+use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
+use tokio::process::{Child, ChildStdout, Command};
 
 #[derive(Debug, World)]
 #[world(init = Self::new)]
 pub struct CukeWorld {
-  cmd: Option<Child>,
-  stdin: Option<BufWriter<ChildStdin>>,
-  stdout: Option<BufReader<ChildStdout>>,
+  /// Tertestrial running in a subprocess
+  subprocess: Option<RunningProcess>,
+  /// the directory containing the source code that Tertestrial should check
   dir: TempDir,
+}
+
+#[derive(Debug)]
+struct RunningProcess {
+  cmd: Child,
+  stdout: BufReader<ChildStdout>,
 }
 
 impl CukeWorld {
   fn new() -> Self {
     Self {
       dir: tempfile::tempdir().unwrap(),
-      cmd: None,
-      stdin: None,
-      stdout: None,
+      subprocess: None,
     }
   }
 }
@@ -48,13 +52,12 @@ async fn tertestrial_running(world: &mut CukeWorld) {
     .kill_on_drop(true)
     .spawn()
     .unwrap();
-  let stdin = cmd.stdin.take().expect("Failed to open subshell stdin");
   let stdout = cmd.stdout.take().expect("Failed to open subshell stdout");
-  let stdin_writer = BufWriter::new(stdin);
   let stdout_writer = BufReader::new(stdout);
-  world.cmd = Some(cmd);
-  world.stdin = Some(stdin_writer);
-  world.stdout = Some(stdout_writer);
+  world.subprocess = Some(RunningProcess {
+    cmd,
+    stdout: stdout_writer,
+  });
 }
 
 #[when(expr = "a client sends the command {string}")]
@@ -73,20 +76,20 @@ async fn client_sends_command(world: &mut CukeWorld, command: String) {
 
 #[then("it exits")]
 async fn it_exits(world: &mut CukeWorld) {
-  let cmd = world.cmd.as_mut().unwrap();
-  let o = cmd.wait().await.unwrap();
+  let subprocess = world.subprocess.as_mut().unwrap();
+  let o = subprocess.cmd.wait().await.unwrap();
   assert_eq!(o.code().unwrap(), 0);
 }
 
 #[then("it prints")]
 async fn it_prints(world: &mut CukeWorld, step: &Step) {
   let want_text = step.docstring.as_ref().unwrap().trim();
-  let reader = world.stdout.as_mut().unwrap();
+  let subprocess = world.subprocess.as_mut().unwrap();
   for want_line in want_text.lines() {
     let mut output = String::new();
     let mut have = String::with_capacity(want_line.len());
     while have.is_empty() {
-      reader.read_line(&mut output).await.unwrap();
+      subprocess.stdout.read_line(&mut output).await.unwrap();
       output.trim().clone_into(&mut have);
     }
     assert_eq!(&have, want_line);
