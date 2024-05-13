@@ -32,10 +32,11 @@ pub async fn send_command(command: String, workspace: &Path) {
   fifo.write_all(command.as_bytes()).await.unwrap();
 }
 
-pub async fn start_tertestrial(world: &mut TertestrialWorld) {
+pub async fn start_tertestrial(world: &mut TertestrialWorld, args: &[String]) {
   let cwd = std::env::current_dir().unwrap();
   let tertestrial_path = cwd.join("target").join("debug").join("tertestrial");
   let mut cmd = Command::new(tertestrial_path)
+    .args(args)
     .current_dir(world.dir.as_ref())
     .stdin(Stdio::piped())
     .stdout(Stdio::piped())

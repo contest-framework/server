@@ -14,9 +14,13 @@ async fn file_with_content(world: &mut TertestrialWorld, step: &Step, filename: 
   .await;
 }
 
-#[when("I start Tertestrial")]
-async fn start_tertestrial(world: &mut TertestrialWorld) {
-  logic::start_tertestrial(world).await;
+#[when(expr = "I run {string}")]
+async fn start_tertestrial(world: &mut TertestrialWorld, command: String) {
+  if !command.starts_with("tertestrial") {
+    panic!("can only execute tertestrial");
+  }
+  let args = shellwords::split(&command).unwrap();
+  logic::start_tertestrial(world, &args[1..]).await;
 }
 
 #[then("it exits")]
@@ -36,7 +40,7 @@ async fn client_sends_command(world: &mut TertestrialWorld, command: String) {
 
 #[given(expr = "Tertestrial is running")]
 async fn tertestrial_is_running(world: &mut TertestrialWorld) {
-  logic::start_tertestrial(world).await;
+  logic::start_tertestrial(world, &vec![]).await;
   logic::verify_prints(world, "Tertestrial is online, Ctrl-C to exit").await;
 }
 
