@@ -25,7 +25,7 @@ Feature: define custom variables
       """
     And file "foo.rs" with content
       """
-      //! This is the source code file that the user has currently opened.
+      // This is the source code file that the user has currently opened.
 
       pub fn my_func() {
         println!("This is a very simple function.");
