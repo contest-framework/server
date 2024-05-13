@@ -18,7 +18,7 @@ Feature: test only a specific function
     And Tertestrial is running
 
   Scenario: sending a matching file and location
-    When a client sends the command '{ "command": "testFunction", "file": "foo.ts", "line": "23" }'
+    When receiving the command '{ "command": "testFunction", "file": "foo.ts", "line": "23" }'
     Then it prints
       """
       executing: echo testing file foo.ts:23
@@ -27,7 +27,7 @@ Feature: test only a specific function
 
   # TODO: fix the wrong behavior documented by this test
   Scenario: sending a matching file and no location
-    When a client sends the command '{ "command": "testFunction", "file": "foo.ts" }'
+    When receiving the command '{ "command": "testFunction", "file": "foo.ts" }'
     Then it prints
       """
       executing: echo testing file foo.ts:{{line}}
@@ -35,7 +35,7 @@ Feature: test only a specific function
       """
 
   Scenario: sending a mismatching file
-    When a client sends the command '{ "command": "testFunction", "file": "foo.go", "line": "23" }'
+    When receiving the command '{ "command": "testFunction", "file": "foo.go", "line": "23" }'
     Then it prints
       """
       Error: cannot determine command for trigger: {"command": "testFunction", "file": "foo.go", "line": "23" }

@@ -18,7 +18,7 @@ Feature: run all tests in a file
     And Tertestrial is running
 
   Scenario: sending a matching file
-    When a client sends the command '{ "command": "testFile", "file": "foo.rs" }'
+    When receiving the command '{ "command": "testFile", "file": "foo.rs" }'
     Then it prints
       """
       executing: echo testing file foo.rs
@@ -26,7 +26,7 @@ Feature: run all tests in a file
       """
 
   Scenario: sending a file that doesn't match an existing rule
-    When a client sends the command '{ "command": "testFile", "file": "foo.go" }'
+    When receiving the command '{ "command": "testFile", "file": "foo.go" }'
     Then it prints
       """
       Error: cannot determine command for trigger: {"command": "testFile", "file": "foo.go" }

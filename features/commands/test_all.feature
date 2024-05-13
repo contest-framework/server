@@ -17,7 +17,7 @@ Feature: run all tests
     And Tertestrial is running
 
   Scenario: sending a valid command
-    When a client sends the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "testAll" }'
     Then it prints
       """
       executing: echo running all tests

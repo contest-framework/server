@@ -5,11 +5,6 @@ use cucumber::gherkin::Step;
 use cucumber::{given, then, when, World};
 use world::TertestrialWorld;
 
-#[when(expr = "a client sends the command {string}")]
-async fn client_sends_command(world: &mut TertestrialWorld, command: String) {
-  logic::send_command(command, world.dir.as_ref()).await;
-}
-
 #[given(expr = "file {string} with content")]
 async fn file_with_content(world: &mut TertestrialWorld, step: &Step, filename: String) {
   logic::create_file(
@@ -32,6 +27,11 @@ async fn it_exits(world: &mut TertestrialWorld) {
 #[then("it prints")]
 async fn it_prints(world: &mut TertestrialWorld, step: &Step) {
   logic::verify_prints(world, step.docstring.as_ref().unwrap().trim()).await;
+}
+
+#[when(expr = "receiving the command {string}")]
+async fn client_sends_command(world: &mut TertestrialWorld, command: String) {
+  logic::send_command(command, world.dir.as_ref()).await;
 }
 
 #[given(expr = "Tertestrial is running")]

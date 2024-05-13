@@ -34,7 +34,7 @@ Feature: define a custom variable with a regex match of the file content
     And Tertestrial is running
 
   Scenario: sending a matching file and location
-    When a client sends the command '{ "command": "testFunction", "file": "foo.rs", "line": "5" }'
+    When receiving the command '{ "command": "testFunction", "file": "foo.rs", "line": "5" }'
     Then it prints
       """
       executing: echo cargo test my_func
@@ -43,7 +43,7 @@ Feature: define a custom variable with a regex match of the file content
 
   # TODO: also print the line number here, since this is important in this context
   Scenario: sending a matching file and mismatching location
-    When a client sends the command '{ "command": "testFunction", "file": "foo.rs", "line": "0" }'
+    When receiving the command '{ "command": "testFunction", "file": "foo.rs", "line": "0" }'
     Then it prints
       """
       Error: Did not find pattern \bfn (\w+)\( in file foo.rs
@@ -51,7 +51,7 @@ Feature: define a custom variable with a regex match of the file content
 
 # TODO: fix the panic documented by this test
 # Scenario: sending a matching file and no location
-#   When a client sends the command '{ "command": "testFunction", "file": "foo.rs" }'
+#   When receiving the command '{ "command": "testFunction", "file": "foo.rs" }'
 #   Then it prints
 #     """
 #     Error: Did not find pattern \bfn (\w+)\( in file foo.rs
