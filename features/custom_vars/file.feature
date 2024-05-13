@@ -48,3 +48,23 @@ Feature: define custom variables
       executing: echo testing my_file.test.ts
       testing my_file.test.ts
       """
+
+  # TODO: this error message prints internal implementation details that probably
+  # aren't helpful to the end user. Print something better here, like:
+  #
+  # You asked me to test file my_file.go.
+  # However, you didn't specify how to test such files.
+  Scenario: sending a mismatching file
+    When a client sends the command '{ "command": "testFile", "file": "my_file.go" }'
+    Then it prints
+      """
+      Error: cannot determine command for trigger: {"command": "testFile", "file": "my_file.go" }
+      """
+
+  #TODO: fix the missing space in the output
+  Scenario: sending no file
+    When a client sends the command '{ "command": "testFile" }'
+    Then it prints
+      """
+      Error: cannot determine command for trigger: {"command": "testFile" }
+      """
