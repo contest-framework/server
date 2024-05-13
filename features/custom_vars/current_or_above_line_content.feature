@@ -1,7 +1,4 @@
-Feature: define custom variables
-
-  # In this example, unit tests can be filtered by the name of the function under test.
-  # When the client
+Feature: define a custom variable with a regex match of the file content
 
   Background:
     Given file ".testconfig.json" with content
@@ -44,7 +41,7 @@ Feature: define custom variables
       cargo test my_func
       """
 
-  # TODO: also output the line number here, since this is important in this context
+  # TODO: also print the line number here, since this is important in this context
   Scenario: sending a matching file and mismatching location
     When a client sends the command '{ "command": "testFunction", "file": "foo.rs", "line": "0" }'
     Then it prints
