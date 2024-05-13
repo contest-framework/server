@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use tertestrial::client::fifo;
 use tokio::fs::{self, File, OpenOptions};
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
+use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};
 use tokio::process::Command;
 
 pub async fn create_file(path: &Path, content: impl AsRef<str>) {
@@ -51,7 +51,7 @@ pub async fn start_tertestrial(world: &mut TertestrialWorld, args: &[String]) {
   });
 }
 
-pub async fn verify_prints(world: &mut TertestrialWorld, output: &str) {
+pub async fn verify_prints_lines(world: &mut TertestrialWorld, output: &str) {
   let subprocess = world.subprocess.as_mut().unwrap();
   for want in output.lines() {
     let mut output = String::new();
@@ -62,6 +62,15 @@ pub async fn verify_prints(world: &mut TertestrialWorld, output: &str) {
     }
     assert_eq!(&have, want);
   }
+}
+
+pub async fn verify_prints_text(world: &mut TertestrialWorld, want: &str) {
+  let subprocess = world.subprocess.as_mut().unwrap();
+  let mut have = Vec::<u8>::with_capacity(want.len());
+  subprocess.stdout.read_to_end(&mut have).await.unwrap();
+  let have = String::from_utf8(have).unwrap();
+  assert_eq!(have.trim(), want.trim());
+  wait_for_exit(world).await;
 }
 
 pub async fn wait_for_exit(world: &mut TertestrialWorld) {
