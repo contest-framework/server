@@ -47,3 +47,10 @@ Feature: define custom variables
       executing: echo cargo test my_func
       cargo test my_func
       """
+
+  Scenario: sending a matching file and mismatching location
+    When a client sends the command '{ "command": "testFunction", "file": "foo.rs", "line": "0" }'
+    Then it prints
+      """
+      Error: Did not find pattern \bfn (\w+)\( in file foo.rs
+      """
