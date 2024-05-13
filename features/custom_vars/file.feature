@@ -1,16 +1,4 @@
-Feature: define custom variables
-
-  # This example describes situations where each source code file
-  # (in this example TypeScript) has a corresponding unit test file.
-  # The filename of the test files is the filename of the source code file
-  # with "_test" appended.
-  #
-  # When the developer looks at a source file, and sends "test this file",
-  # Tertestrial should test the corresponding test file
-  # determined by the naming convention mentioned above.
-  #
-  # This is done with a custom variable that extracts the
-  # filename of the source file without extension.
+Feature: define a custom variable with a part of the filename
 
   Background:
     Given file ".testconfig.json" with content
