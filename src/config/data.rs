@@ -1,4 +1,5 @@
 use crate::{Result, Trigger, UserError};
+use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
 use prettytable::Table;
 use regex::Regex;
 use serde::Deserialize;
@@ -92,6 +93,7 @@ impl Configuration {
 impl Display for Configuration {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     let mut table = Table::new();
+    table.set_format(*FORMAT_NO_BORDER_LINE_SEPARATOR);
     table.add_row(prettytable::row!["TRIGGER", "RUN"]);
     for action in &self.actions {
       table.add_row(prettytable::row![action.trigger, action.run]);

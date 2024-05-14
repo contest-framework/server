@@ -18,17 +18,23 @@ Feature: run all tests
     Then it prints
       """
       using this configuration:
+      TRIGGER                  | RUN
+      { "command": "testAll" } | echo running all tests
+      Options:- beforeRun.clearScreen: false
       """
     And it prints
       """
-      Tertestrial is online, Ctrl-C to exit
+      Tertestrial is online in debug mode, Ctrl-C to exit
       """
 
-  @this
   Scenario: receiving a valid command
     When receiving the command '{ "command": "testAll" }'
     Then it prints
       """
-      executing: echo running all tests
-      running all tests
+      received from client: { "command": "testAll" }
+      """
+    When receiving the command '{ "command": "testAll" }'
+    Then it prints
+      """
+      received from client: { "command": "testAll" }
       """
