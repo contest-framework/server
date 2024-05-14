@@ -22,7 +22,8 @@ fn main_with_result() -> Result<()> {
     Command::Run(cmd) => {
       println!("running cmd: {}", cmd);
       let config = config::file::read()?;
-      run_with_decoration(cmd, &config)
+      let mut last_command: Option<String> = None;
+      run_with_decoration(cmd, &config, &mut last_command)
     }
     Command::Setup => config::file::create(),
   }
