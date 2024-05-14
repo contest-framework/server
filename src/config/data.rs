@@ -8,6 +8,8 @@ use std::fmt::{self, Display};
 use std::fs;
 use std::vec::Vec;
 
+use super::Pattern;
+
 pub struct Configuration {
   pub actions: Vec<Action>,
   pub options: Options,
@@ -16,7 +18,7 @@ pub struct Configuration {
 /// Actions are executed when receiving a trigger.
 #[derive(Deserialize)]
 pub struct Action {
-  trigger: Trigger,
+  pattern: Pattern,
   run: String,
   vars: Option<Vec<Var>>,
 }
