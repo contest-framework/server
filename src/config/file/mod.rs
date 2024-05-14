@@ -28,8 +28,8 @@ struct FileOptions {
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BeforeRun {
-  pub clear_screen: Option<bool>,
-  pub newlines: Option<u8>,
+  clear_screen: Option<bool>,
+  newlines: Option<u8>,
 }
 
 #[derive(Deserialize)]
