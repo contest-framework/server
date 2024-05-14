@@ -16,7 +16,6 @@ Feature: repeat the last command
       """
     And Tertestrial is running
 
-  @this
   Scenario: repeating the last command
     When receiving the command '{ "command": "testAll" }'
     Then it prints
