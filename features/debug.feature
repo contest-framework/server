@@ -19,10 +19,10 @@ Feature: run all tests
       """
       using this configuration:
       """
-  # And it prints
-  #   """
-  #   Tertestrial is online, Ctrl-C to exit
-  #   """
+    And it prints
+      """
+      Tertestrial is online, Ctrl-C to exit
+      """
 
   @this
   Scenario: receiving a valid command
