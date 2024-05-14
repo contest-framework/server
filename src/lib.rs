@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate prettytable;
-
 mod channel;
 pub mod cli;
 pub mod client;
