@@ -14,8 +14,17 @@ Feature: run all tests
         ]
       }
       """
-    And I run "tertestrial debug"
+    When I run "tertestrial debug"
+    Then it prints
+      """
+      using this configuration:
+      """
+  # And it prints
+  #   """
+  #   Tertestrial is online, Ctrl-C to exit
+  #   """
 
+  @this
   Scenario: receiving a valid command
     When receiving the command '{ "command": "testAll" }'
     Then it prints
