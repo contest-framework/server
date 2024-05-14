@@ -29,6 +29,7 @@ pub fn listen(debug: bool) -> Result<()> {
   let pipe = client::fifo::in_dir(&current_dir);
   pipe.create()?;
   fifo::listen(pipe, sender);
+  let mut last_command: Option<String> = None;
   match debug {
     false => println!("Tertestrial is online, Ctrl-C to exit"),
     true => println!("Tertestrial is online in debug mode, Ctrl-C to exit"),
@@ -37,7 +38,7 @@ pub fn listen(debug: bool) -> Result<()> {
     match signal {
       channel::Signal::ReceivedLine(line) => match debug {
         true => println!("received from client: {}", line),
-        false => run_with_decoration(line, &config)?,
+        false => run_with_decoration(line, &config, &mut last_command)?,
       },
       channel::Signal::CannotReadPipe(err) => {
         return Err(UserError::FifoCannotRead {
@@ -53,14 +54,18 @@ pub fn listen(debug: bool) -> Result<()> {
   Ok(())
 }
 
-pub fn run_with_decoration(text: String, config: &config::Configuration) -> Result<()> {
+pub fn run_with_decoration(
+  text: String,
+  config: &config::Configuration,
+  last_command: &mut Option<String>,
+) -> Result<()> {
   for _ in 0..config.options.before_run.newlines {
     println!();
   }
   if config.options.before_run.clear_screen {
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
   }
-  let result = run_command(text, config)?;
+  let result = run_command(text, config, last_command)?;
   for _ in 0..config.options.after_run.newlines {
     println!();
   }
@@ -86,9 +91,13 @@ pub fn run_with_decoration(text: String, config: &config::Configuration) -> Resu
   Ok(())
 }
 
-fn run_command(text: String, configuration: &config::Configuration) -> Result<bool> {
+fn run_command(
+  text: String,
+  configuration: &config::Configuration,
+  last_command: &mut Option<String>,
+) -> Result<bool> {
   let trigger = client::trigger::from_string(&text)?;
-  match configuration.get_command(trigger) {
+  match configuration.get_command(trigger, last_command) {
     Err(err) => match err {
       UserError::NoCommandToRepeat {} => {
         // repeat non-existing command --> don't stop, just print an error message and keep going

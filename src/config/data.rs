@@ -2,7 +2,6 @@ use crate::{Result, Trigger, UserError};
 use prettytable::Table;
 use regex::Regex;
 use serde::Deserialize;
-use std::cell::Cell;
 use std::collections::HashMap;
 use std::fmt::{self, Display};
 use std::fs;
@@ -11,7 +10,6 @@ use std::vec::Vec;
 pub struct Configuration {
   pub actions: Vec<Action>,
   pub options: Options,
-  pub last_command: Cell<Option<String>>,
 }
 
 /// Actions are executed when receiving a trigger.
@@ -48,21 +46,17 @@ enum VarSource {
 }
 
 impl Configuration {
-  pub fn get_command(&self, trigger: Trigger) -> Result<String> {
+  pub fn get_command(&self, trigger: Trigger, last_command: &mut Option<String>) -> Result<String> {
     if trigger.command == "repeatTest" {
-      // HACK: taking the value out of the cell and putting a clone back into it
-      //       because I don't understand how to implement Copy for the embedded String yet.
-      let last_command = self.last_command.take();
-      self.last_command.set(last_command.clone());
       match last_command {
+        Some(command) => return Ok(command.to_owned()),
         None => return Err(UserError::NoCommandToRepeat {}),
-        Some(command) => return Ok(command),
       }
     }
     for action in &self.actions {
       if action.trigger.matches_client_trigger(&trigger)? {
         let command = self.format_run(action, &trigger)?;
-        self.last_command.set(Some(command.clone()));
+        last_command.replace(command.clone());
         return Ok(command);
       }
     }
@@ -211,7 +205,6 @@ mod tests {
   mod get_command {
     use super::super::super::{Action, Configuration};
     use super::super::*;
-    use std::cell::Cell;
 
     #[test]
     fn test_all() {
@@ -227,14 +220,14 @@ mod tests {
             indicator_lines: 0,
           },
         },
-        last_command: Cell::new(None),
       };
       let give = Trigger {
         command: "testAll".into(),
         file: None,
         line: None,
       };
-      let have = config.get_command(give);
+      let mut last_command: Option<String> = None;
+      let have = config.get_command(give, &mut last_command);
       assert!(have.is_err());
     }
 
@@ -279,14 +272,14 @@ mod tests {
             indicator_lines: 0,
           },
         },
-        last_command: Cell::new(None),
       };
       let give = Trigger {
         command: "testFunction".into(),
         file: Some("filename2".into()),
         line: Some("2".into()),
       };
-      let have = config.get_command(give);
+      let mut last_command: Option<String> = None;
+      let have = config.get_command(give, &mut last_command);
       assert_eq!(have, Ok(String::from("action2 command")));
     }
 
@@ -313,14 +306,14 @@ mod tests {
             indicator_lines: 0,
           },
         },
-        last_command: Cell::new(None),
       };
       let give = Trigger {
         command: "testFile".into(),
         file: Some("other filename".into()),
         line: None,
       };
-      let have = config.get_command(give);
+      let mut last_command: Option<String> = None;
+      let have = config.get_command(give, &mut last_command);
       assert!(have.is_err());
     }
   }
