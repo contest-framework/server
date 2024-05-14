@@ -2,7 +2,6 @@ use super::super::Configuration;
 use super::{Content, PATH};
 use crate::config::data::{AfterRun, BeforeRun, Options};
 use crate::{Result, UserError};
-use std::cell::Cell;
 use std::fs::File;
 use std::io;
 
@@ -28,7 +27,6 @@ fn backfill_defaults(file: Content) -> Configuration {
     None => Configuration {
       actions: file.actions,
       options: defaults,
-      last_command: Cell::new(None),
     },
     Some(file_options) => Configuration {
       actions: file.actions,
@@ -56,7 +54,6 @@ fn backfill_defaults(file: Content) -> Configuration {
           },
         },
       },
-      last_command: Cell::new(None),
     },
   }
 }
