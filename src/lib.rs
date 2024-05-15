@@ -93,7 +93,7 @@ fn run_command(
   configuration: &config::Configuration,
   last_command: &mut Option<String>,
 ) -> Result<bool> {
-  let trigger = client::trigger::from_string(&text)?;
+  let trigger = client::trigger::parse(&text)?;
   match configuration.get_command(trigger, last_command) {
     Err(err) => match err {
       UserError::NoCommandToRepeat {} => {

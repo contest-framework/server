@@ -60,7 +60,7 @@ mod tests {
       fn mismatch() {
         let config_trigger = config::Pattern::TestAll;
         let client_trigger = client::Trigger::TestFile { file: S("file") };
-        assert!(config_trigger.matches_trigger(&client_trigger));
+        assert!(!config_trigger.matches_trigger(&client_trigger));
       }
     }
 
