@@ -110,21 +110,21 @@ mod tests {
     fn exact_match() {
       let action1 = Action {
         pattern: Pattern::TestFileLine {
-          files: glob::Pattern::new("*.rs").unwrap(),
+          files: glob::Pattern::new("filename1").unwrap(),
         },
         run: String::from("action1 command"),
         vars: vec![],
       };
       let action2 = Action {
         pattern: Pattern::TestFileLine {
-          files: glob::Pattern::new("*.rs").unwrap(),
+          files: glob::Pattern::new("filename2").unwrap(),
         },
         run: String::from("action2 command"),
         vars: vec![],
       };
       let action3 = Action {
         pattern: Pattern::TestFileLine {
-          files: glob::Pattern::new("*.rs").unwrap(),
+          files: glob::Pattern::new("filename3").unwrap(),
         },
         run: String::from("action3 command"),
         vars: vec![],
@@ -143,7 +143,7 @@ mod tests {
         },
       };
       let trigger = Trigger::TestFileLine {
-        file: S("test.rs"),
+        file: S("filename2"),
         line: 2,
       };
       let mut last_command: Option<String> = None;
