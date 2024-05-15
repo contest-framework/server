@@ -35,7 +35,6 @@ impl Configuration {
   /// replaces all placeholders in the given run string
   fn format_run(&self, action: &Action, trigger: &Trigger) -> Result<String> {
     let mut values: HashMap<&str, String> = HashMap::new();
-    values.insert("command", trigger.command.clone());
     if trigger.file.is_some() {
       values.insert("file", trigger.file.as_ref().unwrap().clone());
     }

@@ -1,17 +1,17 @@
 //! error types used in this app
 
 /// The possible errors that the user can cause and needs to be notified about.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum UserError {
   CannotCreateConfigFile {
     err: String,
   },
   ConfigFileNotFound {},
   ConfigFileError {
-    err: std::io::Error,
+    err: String,
   },
   ConfigFileInvalidContent {
-    err: serde_json::Error,
+    err: String,
   },
   ConfigInvalidGlobPattern {
     pattern: String,

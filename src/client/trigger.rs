@@ -24,6 +24,7 @@ impl Display for Trigger {
   }
 }
 
+// TODO: rename to Trigger::parse
 pub fn from_string(line: &str) -> Result<Trigger> {
   match serde_json::from_str(line) {
     Ok(trigger) => Ok(trigger),
@@ -34,17 +35,12 @@ pub fn from_string(line: &str) -> Result<Trigger> {
   }
 }
 
-//
-// ----------------------------------------------------------------------------
-//
-
 #[cfg(test)]
 mod tests {
 
   mod from_string {
-    use crate::UserError;
-
     use super::super::{from_string, Trigger};
+    use crate::UserError;
     use big_s::S;
 
     #[test]
@@ -75,14 +71,14 @@ mod tests {
     }
 
     #[test]
-    fn filename_extra_fields() {
+    fn extra_fields() {
       let give = r#"{ "command": "testFile", "file": "foo.rs", "other": "12" }"#;
       let have = from_string(give);
       assert!(have.is_err());
     }
 
     #[test]
-    fn from_string_invalid_json() {
+    fn invalid_json() {
       let give = "{\"filename}";
       let have = from_string(give);
       let want = UserError::InvalidTrigger {
