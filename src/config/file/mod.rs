@@ -5,7 +5,7 @@ mod data;
 mod read;
 
 pub use create::create;
-use data::JsonContent;
+use data::{FileAfterRun, FileBeforeRun, FileContent};
 pub use read::read;
 
 /// filename of the Tertestrial config file

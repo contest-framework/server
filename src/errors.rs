@@ -35,6 +35,7 @@ pub enum UserError {
     line: String,
     err: String,
   },
+  MissingFilesInTestFile,
   MissingLineFieldInCurrentOrAboveLineContent,
   NoCommandToRepeat {},
   RunCommandNotFound {
@@ -71,6 +72,7 @@ impl UserError {
             UserError::FifoCannotDelete{err, path} => (format!("Cannot delete pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {}", err), "This is an internal error".into()),
             UserError::InvalidTrigger{line, err} => (format!("cannot parse command received from client: {}", line), err.to_owned()),
+            UserError::MissingFilesInTestFile => (format!(r#"missing "files" entry in "testFile" action"#), "".into()),
             UserError::MissingLineFieldInCurrentOrAboveLineContent => ("missing \"line\" field".into(), "".into()),
             UserError::NoCommandToRepeat{} => ("No command to repeat found".into(), "You must submit a test command first before you can repeat it.".into()),
             UserError::RunCommandNotFound{command} => (format!("test command to run not found: {}", command),
