@@ -24,28 +24,30 @@ impl Display for Trigger {
   }
 }
 
-pub fn parse(line: &str) -> Result<Trigger> {
-  match serde_json::from_str(line) {
-    Ok(trigger) => Ok(trigger),
-    Err(err) => Err(UserError::InvalidTrigger {
-      line: line.to_owned(),
-      err: err.to_string(),
-    }),
+impl Trigger {
+  pub fn parse(line: &str) -> Result<Self> {
+    match serde_json::from_str(line) {
+      Ok(trigger) => Ok(trigger),
+      Err(err) => Err(UserError::InvalidTrigger {
+        line: line.to_owned(),
+        err: err.to_string(),
+      }),
+    }
   }
 }
 
 #[cfg(test)]
 mod tests {
 
-  mod from_string {
-    use super::super::{parse, Trigger};
+  mod parse {
+    use super::super::Trigger;
     use crate::UserError;
     use big_s::S;
 
     #[test]
     fn test_all() {
       let give = r#"{ "command": "testAll" }"#;
-      let have = parse(give).unwrap();
+      let have = Trigger::parse(give).unwrap();
       let want = Trigger::TestAll;
       assert_eq!(have, want);
     }
@@ -53,7 +55,7 @@ mod tests {
     #[test]
     fn filename() {
       let give = r#"{ "command": "testFile", "file": "foo.rs" }"#;
-      let have = parse(give).unwrap();
+      let have = Trigger::parse(give).unwrap();
       let want = Trigger::TestFile { file: S("foo.rs") };
       assert_eq!(have, want);
     }
@@ -61,7 +63,7 @@ mod tests {
     #[test]
     fn filename_line() {
       let give = r#"{ "command": "testFunction", "file": "foo.rs", "line": "12" }"#;
-      let have = parse(give).unwrap();
+      let have = Trigger::parse(give).unwrap();
       let want = Trigger::TestFileLine {
         file: S("foo.rs"),
         line: 12,
@@ -72,14 +74,14 @@ mod tests {
     #[test]
     fn extra_fields() {
       let give = r#"{ "command": "testFile", "file": "foo.rs", "other": "12" }"#;
-      let have = parse(give);
+      let have = Trigger::parse(give);
       assert!(have.is_err());
     }
 
     #[test]
     fn invalid_json() {
       let give = "{\"filename}";
-      let have = parse(give);
+      let have = Trigger::parse(give);
       let want = UserError::InvalidTrigger {
         line: give.into(),
         err: "EOF while parsing a string at line 1 column 11".into(),
