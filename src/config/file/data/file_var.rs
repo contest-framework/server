@@ -2,7 +2,7 @@ use crate::config::{Var, VarSource};
 use crate::{Result, UserError};
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug, PartialEq)]
+#[derive(Deserialize, Debug, Eq, PartialEq)]
 pub struct FileVar {
   pub name: String,
   pub source: VarSource,

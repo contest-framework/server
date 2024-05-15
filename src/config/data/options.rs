@@ -1,6 +1,6 @@
 use super::{AfterRun, BeforeRun};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct Options {
   pub before_run: BeforeRun,
   pub after_run: AfterRun,
