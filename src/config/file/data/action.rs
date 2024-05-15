@@ -12,7 +12,7 @@ pub struct FileAction {
 }
 
 impl FileAction {
-  fn to_domain(self) -> Result<Action> {
+  pub fn to_domain(self) -> Result<Action> {
     match self.r#type.to_ascii_lowercase().as_str() {
       "testall" => Ok(Action::TestAll { run: self.run }),
       "testfile" => {
