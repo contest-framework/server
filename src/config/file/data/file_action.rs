@@ -148,7 +148,7 @@ mod tests {
           pattern: Pattern::TestFile {
             files: glob::Pattern::new("**/*.rs").unwrap(),
           },
-          run: S("make test"),
+          run: S("cargo test"),
           vars: vec![Var {
             name: S("my_var"),
             source: VarSource::File,
