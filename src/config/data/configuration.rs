@@ -21,7 +21,7 @@ impl Configuration {
       }
     }
     for action in &self.actions {
-      if action.pattern.matches_trigger(&trigger)? {
+      if action.pattern.matches_trigger(&trigger) {
         let command = self.format_run(action, &trigger)?;
         last_command.replace(command.clone());
         return Ok(command);
