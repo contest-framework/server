@@ -1,5 +1,5 @@
 use super::FileVar;
-use crate::config::{Action, Trigger, Var};
+use crate::config::{Action, Pattern, Var};
 use crate::{Result, UserError};
 use serde::Deserialize;
 
@@ -22,7 +22,7 @@ impl FileAction {
     }
     if &action_type == "testall" {
       return Ok(Action {
-        trigger: Trigger::TestAll,
+        pattern: Pattern::TestAll,
         run: self.run,
         vars,
       });
@@ -37,14 +37,14 @@ impl FileAction {
       })?;
     if &action_type == "testfile" {
       return Ok(Action {
-        trigger: Trigger::TestFile { files: pattern },
+        pattern: Pattern::TestFile { files: pattern },
         run: self.run,
         vars,
       });
     }
     if &action_type == "testFunction" {
       return Ok(Action {
-        trigger: Trigger::TestFileLine { files: pattern },
+        pattern: Pattern::TestFileLine { files: pattern },
         run: self.run,
         vars,
       });
@@ -63,7 +63,7 @@ mod tests {
     mod test_all {
       use super::super::super::FileAction;
       use crate::config::file::data::FileVar;
-      use crate::config::{Action, Trigger, Var, VarSource};
+      use crate::config::{Action, Pattern, Var, VarSource};
       use big_s::S;
 
       #[test]
@@ -77,7 +77,7 @@ mod tests {
         };
         let have = file_action.to_domain().unwrap();
         let want = Action {
-          trigger: Trigger::TestAll,
+          pattern: Pattern::TestAll,
           run: S("make test"),
           vars: vec![],
         };
@@ -99,7 +99,7 @@ mod tests {
         };
         let have = file_action.to_domain().unwrap();
         let want = Action {
-          trigger: Trigger::TestAll,
+          pattern: Pattern::TestAll,
           run: S("make test"),
           vars: vec![Var {
             name: S("my_var"),
@@ -114,7 +114,7 @@ mod tests {
     mod test_file {
       use super::super::super::FileAction;
       use crate::config::file::data::FileVar;
-      use crate::config::{Action, Trigger, Var, VarSource};
+      use crate::config::{Action, Pattern, Var, VarSource};
       use big_s::S;
 
       #[test]
@@ -128,7 +128,7 @@ mod tests {
         };
         let have = file_action.to_domain().unwrap();
         let want = Action {
-          trigger: Trigger::TestFile {
+          pattern: Pattern::TestFile {
             files: glob::Pattern::new("**/*.rs").unwrap(),
           },
           run: S("cargo test"),
@@ -152,7 +152,7 @@ mod tests {
         };
         let have = file_action.to_domain().unwrap();
         let want = Action {
-          trigger: Trigger::TestFile {
+          pattern: Pattern::TestFile {
             files: glob::Pattern::new("**/*.rs").unwrap(),
           },
           run: S("make test"),

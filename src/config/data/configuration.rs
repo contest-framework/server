@@ -21,7 +21,7 @@ impl Configuration {
       }
     }
     for action in &self.actions {
-      if action.trigger.matches_client_trigger(&trigger)? {
+      if action.pattern.matches_trigger(&trigger)? {
         let command = self.format_run(action, &trigger)?;
         last_command.replace(command.clone());
         return Ok(command);
@@ -62,7 +62,7 @@ impl Display for Configuration {
     table.set_format(*FORMAT_NO_BORDER_LINE_SEPARATOR);
     table.add_row(prettytable::row!["TRIGGER", "RUN"]);
     for action in &self.actions {
-      table.add_row(prettytable::row![action.trigger, action.run]);
+      table.add_row(prettytable::row![action.pattern, action.run]);
     }
     table.printstd();
     f.write_str("Options:")?;
@@ -110,7 +110,7 @@ mod tests {
     #[test]
     fn exact_match() {
       let action1 = Action {
-        trigger: Trigger {
+        pattern: Trigger {
           command: "testFunction".into(),
           file: Some("filename1".into()),
           line: Some("*".into()),
@@ -119,7 +119,7 @@ mod tests {
         vars: Some(vec![]),
       };
       let action2 = Action {
-        trigger: Trigger {
+        pattern: Trigger {
           command: "testFunction".into(),
           file: Some("filename2".into()),
           line: Some("*".into()),
@@ -128,7 +128,7 @@ mod tests {
         vars: Some(vec![]),
       };
       let action3 = Action {
-        trigger: Trigger {
+        pattern: Trigger {
           command: "testFunction".into(),
           file: Some("filename3".into()),
           line: Some("*".into()),
@@ -162,7 +162,7 @@ mod tests {
     #[test]
     fn no_match() {
       let action1 = Action {
-        trigger: Trigger {
+        pattern: Trigger {
           command: "testFile".into(),
           file: Some("filename".into()),
           line: None,
