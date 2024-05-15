@@ -48,9 +48,7 @@ impl FileAction {
         vars,
       });
     }
-    Err(UserError::UnknownActionType {
-      action_type: action_type,
-    })
+    Err(UserError::UnknownActionType { action_type })
   }
 }
 
