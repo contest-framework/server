@@ -17,7 +17,10 @@ impl FileConfiguration {
     for json_action in self.actions {
       actions.push(json_action.to_domain()?);
     }
-    Configuration {}
+    Configuration {
+      actions,
+      options: todo!(),
+    }
 
     // let options = self.options.unwrap_or_default();
     // let Some(file_options) = self.options else {
