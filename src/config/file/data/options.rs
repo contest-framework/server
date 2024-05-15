@@ -10,7 +10,7 @@ pub struct FileOptions {
 }
 
 impl FileOptions {
-  fn to_domain(self) -> Options {
+  pub fn to_domain(self) -> Options {
     return Options {
       before_run: self.before_run.unwrap_or_default().to_domain(),
       after_run: self.after_run.unwrap_or_default().to_domain(),
