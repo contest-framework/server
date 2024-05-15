@@ -12,7 +12,7 @@ impl FileAfterRun {
   pub fn into_domain(self) -> AfterRun {
     AfterRun {
       newlines: self.newlines.unwrap_or_default(),
-      indicator_lines: self.newlines.unwrap_or_default(),
+      indicator_lines: self.indicator_lines.unwrap_or_default(),
     }
   }
 }
