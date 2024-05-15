@@ -19,7 +19,7 @@ impl FileConfiguration {
     }
     Ok(Configuration {
       actions,
-      options: self.options.unwrap_or_default().to_domain(),
+      options: self.options.unwrap_or_default().into_domain(),
     })
   }
 }

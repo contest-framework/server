@@ -10,11 +10,11 @@ pub struct FileOptions {
 }
 
 impl FileOptions {
-  pub fn to_domain(self) -> Options {
-    return Options {
+  pub fn into_domain(self) -> Options {
+    Options {
       before_run: self.before_run.unwrap_or_default().to_domain(),
       after_run: self.after_run.unwrap_or_default().to_domain(),
-    };
+    }
   }
 }
 
@@ -32,7 +32,7 @@ mod tests {
         before_run: None,
         after_run: None,
       };
-      let have = file_options.to_domain();
+      let have = file_options.into_domain();
       let want = Options {
         before_run: BeforeRun {
           clear_screen: false,
@@ -58,7 +58,7 @@ mod tests {
           indicator_lines: Some(6),
         }),
       };
-      let have = file_options.to_domain();
+      let have = file_options.into_domain();
       let want = Options {
         before_run: BeforeRun {
           clear_screen: true,
