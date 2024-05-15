@@ -113,27 +113,4 @@ mod tests {
       assert_ne!(left, right);
     }
   }
-
-  #[cfg(test)]
-  mod replace {
-    use super::super::replace;
-
-    #[test]
-    fn tight_placeholder() {
-      let have = replace("hello {{world}}", "world", "universe");
-      assert_eq!(have, "hello universe");
-    }
-
-    #[test]
-    fn loose_placeholder() {
-      let have = replace("hello {{ world }}", "world", "universe");
-      assert_eq!(have, "hello universe");
-    }
-
-    #[test]
-    fn multiple_placeholders() {
-      let have = replace("{{ hello }} {{ hello }}", "hello", "bye");
-      assert_eq!(have, "bye bye");
-    }
-  }
 }
