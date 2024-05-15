@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::client::Trigger;
 
 /// a pattern defined in the config file, describes conditions that match actions
@@ -24,6 +26,16 @@ impl Pattern {
       }
     }
     false
+  }
+}
+
+impl Display for Pattern {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    match self {
+      Pattern::TestAll => f.write_str("TestAll"),
+      Pattern::TestFile { files } => write!(f, "TestFile {files}"),
+      Pattern::TestFileLine { files } => write!(f, "TestFileLine {files}"),
+    }
   }
 }
 

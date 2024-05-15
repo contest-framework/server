@@ -4,6 +4,7 @@ pub mod client;
 pub mod config;
 mod errors;
 mod subshell;
+pub mod template;
 
 use client::fifo;
 pub use errors::{Result, UserError};

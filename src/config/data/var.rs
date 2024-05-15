@@ -13,7 +13,7 @@ pub struct Var {
 }
 
 impl Var {
-  fn calculate_var(&self, values: &HashMap<&str, String>) -> Result<String> {
+  pub fn calculate_var(&self, values: &HashMap<&str, String>) -> Result<String> {
     match self.source {
       VarSource::File => filter(values.get("file").unwrap(), &self.filter),
       VarSource::Line => filter(values.get("line").unwrap(), &self.filter),
@@ -73,13 +73,6 @@ fn filter(text: &str, filter: &Regex) -> Result<String> {
     });
   }
   return Ok(captures.get(1).unwrap().as_str().to_owned());
-}
-
-fn replace(text: &str, placeholder: &str, replacement: &str) -> String {
-  Regex::new(&format!("\\{{\\{{\\s*{}\\s*\\}}\\}}", placeholder))
-    .unwrap()
-    .replace_all(text, regex::NoExpand(replacement))
-    .to_string()
 }
 
 #[cfg(test)]

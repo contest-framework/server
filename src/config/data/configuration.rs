@@ -1,5 +1,6 @@
 use super::{Action, Options};
 use crate::client::Trigger;
+use crate::template;
 use crate::Result;
 use crate::UserError;
 use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
@@ -35,20 +36,19 @@ impl Configuration {
   /// replaces all placeholders in the given run string
   fn format_run(&self, action: &Action, trigger: &Trigger) -> Result<String> {
     let mut values: HashMap<&str, String> = HashMap::new();
-    if trigger.file.is_some() {
-      values.insert("file", trigger.file.as_ref().unwrap().clone());
+    if let Trigger::TestFile { file } = &trigger {
+      values.insert("file", file.to_owned());
     }
-    if trigger.line.is_some() {
-      values.insert("line", trigger.line.as_ref().unwrap().to_string());
+    if let Trigger::TestFileLine { file, line } = &trigger {
+      values.insert("file", file.to_owned());
+      values.insert("line", line.to_string());
     }
-    if action.vars.is_some() {
-      for var in action.vars.as_ref().unwrap() {
-        values.insert(&var.name, calculate_var(var, &values)?);
-      }
+    for var in &action.vars {
+      values.insert(&var.name, var.calculate_var(&values)?);
     }
     let mut replaced = action.run.clone();
     for (placeholder, replacement) in values {
-      replaced = replace(&replaced, placeholder, &replacement);
+      replaced = template::replace(&replaced, placeholder, &replacement);
     }
     Ok(replaced)
   }
