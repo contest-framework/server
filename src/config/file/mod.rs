@@ -5,7 +5,10 @@ mod data;
 mod read;
 
 pub use create::create;
-use data::{FileAfterRun, FileBeforeRun, FileConfiguration};
+use data::FileConfiguration;
+#[cfg(test)]
+use data::{FileAfterRun, FileBeforeRun};
+
 pub use read::read;
 
 /// filename of the Tertestrial config file

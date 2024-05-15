@@ -7,9 +7,13 @@ use std::io;
 pub fn read() -> Result<Configuration> {
   let file = File::open(PATH).map_err(|err| match err.kind() {
     io::ErrorKind::NotFound => UserError::ConfigFileNotFound {},
-    _ => UserError::ConfigFileError { err },
+    _ => UserError::ConfigFileError {
+      err: err.to_string(),
+    },
   })?;
   let file_data: FileConfiguration =
-    serde_json::from_reader(file).map_err(|err| UserError::ConfigFileInvalidContent { err })?;
+    serde_json::from_reader(file).map_err(|err| UserError::ConfigFileInvalidContent {
+      err: err.to_string(),
+    })?;
   file_data.to_domain()
 }

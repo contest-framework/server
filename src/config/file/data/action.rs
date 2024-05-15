@@ -9,7 +9,6 @@ pub struct FileAction {
   files: Option<String>,
   run: String,
   vars: Option<Vec<FileVar>>,
-  desc: Option<String>,
 }
 
 impl FileAction {
@@ -73,7 +72,6 @@ mod tests {
           files: None,
           run: S("make test"),
           vars: None,
-          desc: None,
         };
         let have = file_action.to_domain().unwrap();
         let want = Action {
@@ -95,7 +93,6 @@ mod tests {
             source: VarSource::File,
             filter: S("^fn (.*) \\{"),
           }]),
-          desc: Some(S("tests everything")),
         };
         let have = file_action.to_domain().unwrap();
         let want = Action {
@@ -124,7 +121,6 @@ mod tests {
           files: Some(S("**/*.rs")),
           run: S("cargo test"),
           vars: None,
-          desc: None,
         };
         let have = file_action.to_domain().unwrap();
         let want = Action {
@@ -148,7 +144,6 @@ mod tests {
             source: VarSource::File,
             filter: S("^fn (.*) \\{"),
           }]),
-          desc: Some(S("tests everything")),
         };
         let have = file_action.to_domain().unwrap();
         let want = Action {
