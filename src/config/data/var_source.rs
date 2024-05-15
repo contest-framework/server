@@ -1,6 +1,7 @@
+use serde::Deserialize;
 use std::fmt::{self, Display};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Deserialize, PartialEq)]
 pub enum VarSource {
   File,
   Line,
