@@ -78,7 +78,11 @@ mod tests {
 
   #[cfg(test)]
   mod get_command {
-    use super::super::super::{Action, BeforeRun, Configuration};
+    use big_s::S;
+
+    use crate::config::Pattern;
+
+    use super::super::super::{Action, AfterRun, BeforeRun, Configuration};
     use super::super::*;
 
     #[test]
@@ -96,44 +100,34 @@ mod tests {
           },
         },
       };
-      let give = Trigger {
-        command: "testAll".into(),
-        file: None,
-        line: None,
-      };
+      let trigger = Trigger::TestAll;
       let mut last_command: Option<String> = None;
-      let have = config.get_command(give, &mut last_command);
+      let have = config.get_command(trigger, &mut last_command);
       assert!(have.is_err());
     }
 
     #[test]
     fn exact_match() {
       let action1 = Action {
-        pattern: Trigger {
-          command: "testFunction".into(),
-          file: Some("filename1".into()),
-          line: Some("*".into()),
+        pattern: Pattern::TestFileLine {
+          files: glob::Pattern::new("*.rs").unwrap(),
         },
         run: String::from("action1 command"),
-        vars: Some(vec![]),
+        vars: vec![],
       };
       let action2 = Action {
-        pattern: Trigger {
-          command: "testFunction".into(),
-          file: Some("filename2".into()),
-          line: Some("*".into()),
+        pattern: Pattern::TestFileLine {
+          files: glob::Pattern::new("*.rs").unwrap(),
         },
         run: String::from("action2 command"),
-        vars: Some(vec![]),
+        vars: vec![],
       };
       let action3 = Action {
-        pattern: Trigger {
-          command: "testFunction".into(),
-          file: Some("filename3".into()),
-          line: Some("*".into()),
+        pattern: Pattern::TestFileLine {
+          files: glob::Pattern::new("*.rs").unwrap(),
         },
         run: String::from("action3 command"),
-        vars: Some(vec![]),
+        vars: vec![],
       };
       let config = Configuration {
         actions: vec![action1, action2, action3],
@@ -148,26 +142,23 @@ mod tests {
           },
         },
       };
-      let give = Trigger {
-        command: "testFunction".into(),
-        file: Some("filename2".into()),
-        line: Some("2".into()),
+      let trigger = Trigger::TestFileLine {
+        file: S("test.rs"),
+        line: 2,
       };
       let mut last_command: Option<String> = None;
-      let have = config.get_command(give, &mut last_command);
+      let have = config.get_command(trigger, &mut last_command);
       assert_eq!(have, Ok(String::from("action2 command")));
     }
 
     #[test]
     fn no_match() {
       let action1 = Action {
-        pattern: Trigger {
-          command: "testFile".into(),
-          file: Some("filename".into()),
-          line: None,
+        pattern: Pattern::TestFile {
+          files: glob::Pattern::new("*.rs").unwrap(),
         },
         run: String::from("action1 command"),
-        vars: Some(vec![]),
+        vars: vec![],
       };
       let config = Configuration {
         actions: vec![action1],
@@ -182,10 +173,8 @@ mod tests {
           },
         },
       };
-      let give = Trigger {
-        command: "testFile".into(),
-        file: Some("other filename".into()),
-        line: None,
+      let give = Trigger::TestFile {
+        file: S("other_filename"),
       };
       let mut last_command: Option<String> = None;
       let have = config.get_command(give, &mut last_command);
