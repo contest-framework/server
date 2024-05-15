@@ -12,7 +12,7 @@ pub struct FileAction {
 }
 
 impl FileAction {
-  pub fn to_domain(self) -> Result<Action> {
+  pub fn into_domain(self) -> Result<Action> {
     let action_type = self.r#type.to_ascii_lowercase();
     let file_vars = self.vars.unwrap_or_default();
     let mut vars: Vec<Var> = Vec::with_capacity(file_vars.len());
@@ -73,7 +73,7 @@ mod tests {
           run: S("make test"),
           vars: None,
         };
-        let have = file_action.to_domain().unwrap();
+        let have = file_action.into_domain().unwrap();
         let want = Action {
           pattern: Pattern::TestAll,
           run: S("make test"),
@@ -94,7 +94,7 @@ mod tests {
             filter: S("^fn (.*) \\{"),
           }]),
         };
-        let have = file_action.to_domain().unwrap();
+        let have = file_action.into_domain().unwrap();
         let want = Action {
           pattern: Pattern::TestAll,
           run: S("make test"),
@@ -122,7 +122,7 @@ mod tests {
           run: S("cargo test"),
           vars: None,
         };
-        let have = file_action.to_domain().unwrap();
+        let have = file_action.into_domain().unwrap();
         let want = Action {
           pattern: Pattern::TestFile {
             files: glob::Pattern::new("**/*.rs").unwrap(),
@@ -145,7 +145,7 @@ mod tests {
             filter: S("^fn (.*) \\{"),
           }]),
         };
-        let have = file_action.to_domain().unwrap();
+        let have = file_action.into_domain().unwrap();
         let want = Action {
           pattern: Pattern::TestFile {
             files: glob::Pattern::new("**/*.rs").unwrap(),

@@ -1,7 +1,7 @@
 use crate::config::AfterRun;
 use serde::Deserialize;
 
-#[derive(Default, Deserialize, PartialEq)]
+#[derive(Default, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FileAfterRun {
   pub newlines: Option<u8>,
@@ -9,7 +9,7 @@ pub struct FileAfterRun {
 }
 
 impl FileAfterRun {
-  pub fn to_domain(self) -> AfterRun {
+  pub fn into_domain(self) -> AfterRun {
     AfterRun {
       newlines: self.newlines.unwrap_or_default(),
       indicator_lines: self.newlines.unwrap_or_default(),
@@ -30,7 +30,7 @@ mod tests {
         newlines: None,
         indicator_lines: None,
       };
-      let have = file_after_run.to_domain();
+      let have = file_after_run.into_domain();
       let want = AfterRun {
         newlines: 0,
         indicator_lines: 0,
@@ -44,7 +44,7 @@ mod tests {
         newlines: Some(2),
         indicator_lines: Some(4),
       };
-      let have = file_after_run.to_domain();
+      let have = file_after_run.into_domain();
       let want = AfterRun {
         newlines: 2,
         indicator_lines: 4,

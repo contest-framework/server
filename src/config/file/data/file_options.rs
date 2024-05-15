@@ -12,8 +12,8 @@ pub struct FileOptions {
 impl FileOptions {
   pub fn into_domain(self) -> Options {
     Options {
-      before_run: self.before_run.unwrap_or_default().to_domain(),
-      after_run: self.after_run.unwrap_or_default().to_domain(),
+      before_run: self.before_run.unwrap_or_default().into_domain(),
+      after_run: self.after_run.unwrap_or_default().into_domain(),
     }
   }
 }

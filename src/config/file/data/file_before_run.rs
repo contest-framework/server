@@ -9,7 +9,7 @@ pub struct FileBeforeRun {
 }
 
 impl FileBeforeRun {
-  pub fn to_domain(self) -> BeforeRun {
+  pub fn into_domain(self) -> BeforeRun {
     BeforeRun {
       clear_screen: self.clear_screen.unwrap_or_default(),
       newlines: self.newlines.unwrap_or_default(),
@@ -30,7 +30,7 @@ mod tests {
         newlines: None,
         clear_screen: None,
       };
-      let have = file_after_run.to_domain();
+      let have = file_after_run.into_domain();
       let want = BeforeRun {
         newlines: 0,
         clear_screen: false,
@@ -44,7 +44,7 @@ mod tests {
         newlines: Some(2),
         clear_screen: Some(true),
       };
-      let have = file_after_run.to_domain();
+      let have = file_after_run.into_domain();
       let want = BeforeRun {
         newlines: 2,
         clear_screen: true,

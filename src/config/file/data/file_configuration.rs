@@ -12,10 +12,10 @@ pub struct FileConfiguration {
 }
 
 impl FileConfiguration {
-  pub fn to_domain(self) -> Result<Configuration> {
+  pub fn into_domain(self) -> Result<Configuration> {
     let mut actions: Vec<Action> = Vec::with_capacity(self.actions.len());
     for json_action in self.actions {
-      actions.push(json_action.to_domain()?);
+      actions.push(json_action.into_domain()?);
     }
     Ok(Configuration {
       actions,

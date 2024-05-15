@@ -15,5 +15,5 @@ pub fn read() -> Result<Configuration> {
     serde_json::from_reader(file).map_err(|err| UserError::ConfigFileInvalidContent {
       err: err.to_string(),
     })?;
-  file_data.to_domain()
+  file_data.into_domain()
 }
