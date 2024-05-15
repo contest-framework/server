@@ -27,7 +27,7 @@ impl FileAction {
       });
     }
     let Some(files) = self.files else {
-      return Err(UserError::MissingFilesInTestFile);
+      return Err(UserError::MissingFileInTrigger);
     };
     let pattern =
       glob::Pattern::new(&files).map_err(|err| UserError::ConfigInvalidGlobPattern {

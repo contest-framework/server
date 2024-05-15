@@ -1,11 +1,11 @@
 //! commands received from the client (through the FIFO)
 
-use crate::{Result, UserError};
-use serde::Deserialize;
+use crate::Result;
 use std::fmt::Display;
 
-#[derive(Deserialize, Debug, Eq, PartialEq)]
-#[serde(deny_unknown_fields)]
+use super::fifo_data::FifoTrigger;
+
+#[derive(Debug, Eq, PartialEq)]
 pub enum Trigger {
   TestAll,
   TestFile { file: String },
@@ -26,70 +26,6 @@ impl Display for Trigger {
 
 impl Trigger {
   pub fn parse(line: &str) -> Result<Self> {
-    match serde_json::from_str(line) {
-      Ok(trigger) => Ok(trigger),
-      Err(err) => Err(UserError::InvalidTrigger {
-        line: line.to_owned(),
-        err: err.to_string(),
-      }),
-    }
-  }
-}
-
-#[cfg(test)]
-mod tests {
-
-  mod parse {
-    use super::super::Trigger;
-    use crate::UserError;
-    use big_s::S;
-
-    #[test]
-    fn test_all() {
-      let give = r#"{ "command": "testAll" }"#;
-      let have = Trigger::parse(give).unwrap();
-      let want = Trigger::TestAll;
-      assert_eq!(have, want);
-    }
-
-    #[test]
-    fn filename() {
-      let give = r#"{ "command": "testFile", "file": "foo.rs" }"#;
-      let have = Trigger::parse(give).unwrap();
-      let want = Trigger::TestFile { file: S("foo.rs") };
-      assert_eq!(have, want);
-    }
-
-    #[test]
-    fn filename_line() {
-      let give = r#"{ "command": "testFunction", "file": "foo.rs", "line": "12" }"#;
-      let have = Trigger::parse(give).unwrap();
-      let want = Trigger::TestFileLine {
-        file: S("foo.rs"),
-        line: 12,
-      };
-      assert_eq!(have, want);
-    }
-
-    #[test]
-    fn extra_fields() {
-      let give = r#"{ "command": "testFile", "file": "foo.rs", "other": "12" }"#;
-      let have = Trigger::parse(give);
-      assert!(have.is_err());
-    }
-
-    #[test]
-    fn invalid_json() {
-      let give = "{\"filename}";
-      let have = Trigger::parse(give);
-      let want = UserError::InvalidTrigger {
-        line: give.into(),
-        err: "EOF while parsing a string at line 1 column 11".into(),
-      };
-      match have {
-        Ok(_) => panic!("this shouldn't work"),
-        Err(err) => assert_eq!(err, want),
-      }
-    }
+    FifoTrigger::parse(line)?.into_trigger()
   }
 }
