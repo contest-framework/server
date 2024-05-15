@@ -26,6 +26,13 @@ pub struct Options {
   pub after_run: AfterRun,
 }
 
+#[derive(Debug, PartialEq)]
+pub struct AfterRun {
+  pub newlines: u8,
+  pub indicator_lines: u8,
+}
+
+#[derive(Debug, PartialEq)]
 pub struct BeforeRun {
   pub clear_screen: bool,
   pub newlines: u8,
@@ -134,6 +141,7 @@ impl Options {
   }
 }
 
+#[derive(Debug, PartialEq)]
 pub struct AfterRun {
   pub newlines: u8,
   pub indicator_lines: u8,
