@@ -1,4 +1,4 @@
-use crate::{Result, Trigger, UserError};
+use crate::{Result, UserError};
 use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
 use prettytable::Table;
 use regex::Regex;
@@ -14,11 +14,16 @@ pub struct Configuration {
 }
 
 /// Actions are executed when receiving a trigger.
-#[derive(Deserialize)]
 pub struct Action {
-  trigger: Trigger,
-  run: String,
-  vars: Option<Vec<Var>>,
+  pub trigger: Trigger,
+  pub run: String,
+  pub vars: Vec<Var>,
+}
+
+pub enum Trigger {
+  TestAll,
+  TestFile { files: glob::Pattern },
+  TestFileLine { files: glob::Pattern },
 }
 
 pub struct Options {
