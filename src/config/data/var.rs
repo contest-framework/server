@@ -55,6 +55,14 @@ impl Var {
   }
 }
 
+impl PartialEq for Var {
+  fn eq(&self, other: &Self) -> bool {
+    self.name == other.name
+      && self.source == other.source
+      && self.filter.to_string() == other.filter.to_string()
+  }
+}
+
 fn filter(text: &str, filter: &Regex) -> Result<String> {
   let captures = filter.captures(text).unwrap();
   if captures.len() != 2 {
@@ -76,6 +84,42 @@ fn replace(text: &str, placeholder: &str, replacement: &str) -> String {
 
 #[cfg(test)]
 mod tests {
+
+  mod eq {
+    use super::super::{Var, VarSource};
+    use big_s::S;
+
+    #[test]
+    fn equal() {
+      let regex = "fn (.*) \\{";
+      let left = Var {
+        name: S("name"),
+        source: VarSource::File,
+        filter: regex::Regex::new(&regex).unwrap(),
+      };
+      let right = Var {
+        name: S("name"),
+        source: VarSource::File,
+        filter: regex::Regex::new(&regex).unwrap(),
+      };
+      assert_eq!(left, right);
+    }
+
+    #[test]
+    fn not_equal() {
+      let left = Var {
+        name: S("name"),
+        source: VarSource::File,
+        filter: regex::Regex::new("left regex").unwrap(),
+      };
+      let right = Var {
+        name: S("name"),
+        source: VarSource::File,
+        filter: regex::Regex::new("right regex").unwrap(),
+      };
+      assert_ne!(left, right);
+    }
+  }
 
   #[cfg(test)]
   mod replace {
