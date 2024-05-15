@@ -1,3 +1,5 @@
+use super::{AfterRun, BeforeRun};
+
 #[derive(Debug, PartialEq)]
 pub struct Options {
   pub before_run: BeforeRun,

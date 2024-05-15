@@ -1,5 +1,6 @@
-#[derive(Deserialize, Debug, PartialEq)]
-#[serde(rename_all = "camelCase")]
+use std::fmt::{self, Display};
+
+#[derive(Debug, PartialEq)]
 pub enum VarSource {
   File,
   Line,

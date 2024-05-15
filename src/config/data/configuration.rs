@@ -1,3 +1,11 @@
+use super::{Action, Options, Trigger};
+use crate::Result;
+use crate::UserError;
+use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
+use prettytable::Table;
+use std::collections::HashMap;
+use std::fmt::{self, Display};
+
 pub struct Configuration {
   pub actions: Vec<Action>,
   pub options: Options,
@@ -70,7 +78,7 @@ mod tests {
 
   #[cfg(test)]
   mod get_command {
-    use super::super::super::{Action, Configuration};
+    use super::super::super::{Action, BeforeRun, Configuration};
     use super::super::*;
 
     #[test]

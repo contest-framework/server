@@ -1,3 +1,5 @@
+use super::{Trigger, Var};
+
 /// Actions are executed when receiving a trigger.
 #[derive(Debug, PartialEq)]
 pub struct Action {
