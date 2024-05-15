@@ -82,32 +82,27 @@ impl Pattern {
 mod tests {
 
   mod matches_client_trigger {
-    use super::super::*;
+    use super::super::Pattern;
+    use crate::Trigger;
+    use big_s::S;
+    use regex::Regex;
 
     #[test]
     fn matching() {
-      let config = Trigger {
-        command: "testFunction".into(),
-        file: Some("**/*.rs".into()),
-        line: Some("*".into()),
+      let pattern = Pattern {
+        command: Regex::new("testFunction").unwrap(),
+        file: Some(Regex::new("\\.rs$").unwrap()),
       };
-      let give = Trigger {
-        command: "testFunction".into(),
-        file: Some("foo.rs".into()),
-        line: Some("12".into()),
+      let give = Trigger::TestFileLine {
+        file: S("subdir1/subdir2/bar.rs"),
+        line: 12,
       };
-      assert!(config.matches_client_trigger(&give).unwrap());
-      let give = Trigger {
-        command: "testFunction".into(),
-        file: Some("subdir1/subdir2/bar.rs".into()),
-        line: Some("12".into()),
-      };
-      assert!(config.matches_client_trigger(&give).unwrap());
+      assert!(pattern.matches_client_trigger(&give).unwrap());
     }
 
     #[test]
     fn mismatching_command() {
-      let config = Trigger {
+      let pattern = Pattern {
         command: "testFunction".into(),
         file: Some("filename".into()),
         line: None,
@@ -117,7 +112,7 @@ mod tests {
         file: Some("filename".into()),
         line: None,
       };
-      assert!(!config.matches_client_trigger(&give).unwrap());
+      assert!(!pattern.matches_client_trigger(&give).unwrap());
     }
 
     #[test]
