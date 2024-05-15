@@ -16,3 +16,40 @@ impl FileBeforeRun {
     }
   }
 }
+
+#[cfg(test)]
+mod tests {
+
+  mod to_domain {
+    use super::super::FileBeforeRun;
+    use crate::config::BeforeRun;
+
+    #[test]
+    fn empty() {
+      let file_after_run = FileBeforeRun {
+        newlines: None,
+        clear_screen: None,
+      };
+      let have = file_after_run.to_domain();
+      let want = BeforeRun {
+        newlines: 0,
+        clear_screen: false,
+      };
+      assert_eq!(have, want);
+    }
+
+    #[test]
+    fn has_content() {
+      let file_after_run = FileBeforeRun {
+        newlines: Some(2),
+        clear_screen: Some(true),
+      };
+      let have = file_after_run.to_domain();
+      let want = BeforeRun {
+        newlines: 2,
+        clear_screen: true,
+      };
+      assert_eq!(have, want);
+    }
+  }
+}

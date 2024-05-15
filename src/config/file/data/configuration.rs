@@ -4,15 +4,14 @@ use super::FileAction;
 
 /// The structure of the configuration file.
 #[derive(Deserialize)]
-pub struct FileContent {
+pub struct FileConfiguration {
   actions: Vec<FileAction>,
   options: Option<FileOptions>,
 }
 
 
-impl FileContent {
-  /// backfills missing values in the given FileConfiguration with default values
-  pub fn to_configuration(self) -> Result<Configuration> {
+impl FileConfiguration {
+  pub fn to_domain(self) -> Result<Configuration> {
     let mut actions: Vec<Action> = Vec::with_capacity(self.actions.len());
     for json_action in self.actions {
       actions.push(json_action.to_domain()?);
