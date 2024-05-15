@@ -6,10 +6,8 @@ Feature: test only a specific function
       {
         "actions": [
           {
-            "trigger": {
-              "command": "testFunction",
-              "file": "**/*.ts"
-            },
+            "type": "testFunction",
+            "files": "**/*.ts",
             "run": "echo testing file {{file}}:{{line}}"
           }
         ]

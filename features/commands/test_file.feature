@@ -6,10 +6,8 @@ Feature: run all tests in a file
       {
         "actions": [
           {
-            "trigger": {
-              "command": "testFile",
-              "file": "**/*.rs"
-            },
+            "type": "testFile",
+            "files": "**/*.rs",
             "run": "echo testing file {{file}}"
           }
         ]

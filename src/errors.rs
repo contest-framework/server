@@ -1,17 +1,17 @@
 //! error types used in this app
 
 /// The possible errors that the user can cause and needs to be notified about.
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug)]
 pub enum UserError {
   CannotCreateConfigFile {
     err: String,
   },
   ConfigFileNotFound {},
-  ConfigFileNotReadable {
-    err: String,
+  ConfigFileError {
+    err: std::io::Error,
   },
   ConfigFileInvalidContent {
-    err: String,
+    err: serde_json::Error,
   },
   ConfigInvalidGlobPattern {
     pattern: String,
@@ -61,10 +61,10 @@ impl UserError {
     match self {
             UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {}", err), "".into()),
             UserError::ConfigFileInvalidContent{err} => {
-                (format!("Cannot parse configuration file: {}", err), "".into())
+                (format!("Cannot parse configuration file: {}", err.to_string()), "".into())
             }
             UserError::ConfigFileNotFound{} => ("Configuration file not found".into(), "Tertestrial requires a configuration file named \".testconfig.json\" in the current directory. Please run \"tertestrial setup \" to create one.".into()),
-            UserError::ConfigFileNotReadable{err} => (format!("Cannot open configuration file: {}", err), "".into()),
+            UserError::ConfigFileError{err} => (format!("Cannot open configuration file: {}", err), "".into()),
             UserError::ConfigInvalidGlobPattern{pattern, err} => (format!("Invalid glob pattern: {}", pattern), err.into()),
             UserError::FifoAlreadyExists{path} => (format!("A fifo pipe \"{}\" already exists.", path), "This could mean a Tertestrial instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Tertestrial again.".into()),
             UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), "".into()),

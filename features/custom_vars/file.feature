@@ -7,10 +7,8 @@ Feature: define a custom variable with a part of the filename
         "actions": [
           {
             "desc": "run all tests for a TS source file",
-            "trigger": {
-              "command": "testFile",
-              "file": "**/*.ts"
-            },
+            "type": "testFile",
+            "files": "**/*.ts",
             "vars": [
               {
                 "name": "file_without_ext",

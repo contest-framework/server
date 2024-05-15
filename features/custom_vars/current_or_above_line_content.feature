@@ -7,10 +7,8 @@ Feature: define a custom variable with a regex match of the file content
         "actions": [
           {
             "desc": "tests the function that the cursor is in right now",
-            "trigger": {
-              "command": "testFunction",
-              "file": "**/*.rs"
-            },
+            "type": "testFunction",
+            "files": "**/*.rs",
             "vars": [
               {
                 "name": "fn_name",

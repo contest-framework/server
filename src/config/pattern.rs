@@ -1,40 +1,22 @@
-use regex::Regex;
-use serde::{Deserialize, Deserializer};
-
-use crate::Trigger;
+use super::Var;
+use crate::{Trigger, UserError};
 
 /// a pattern in the config file that matches incoming commands from the client
-pub struct Pattern {
-  command: Regex,
-  pub file: Option<Regex>,
-}
-
-impl<'de> Deserialize<'de> for Pattern {
-  fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-  where
-    D: Deserializer<'de>,
-  {
-    #[derive(Deserialize)]
-    struct Inner {
-      command: String,
-      file: Option<String>,
-    }
-    let inner = Inner::deserialize(deserializer)?;
-    let command_regex = Regex::new(&inner.command).map_err(|err| {
-      serde::de::Error::custom(format!("Invalid regex for field \"command\": {}", err))
-    })?;
-    let file_regex = if let Some(file) = &inner.file {
-      Some(Regex::new(file).map_err(|err| {
-        serde::de::Error::custom(format!("Invalide regex for field \"file\": {}", err))
-      })?)
-    } else {
-      None
-    };
-    Ok(Pattern {
-      command: command_regex,
-      file: file_regex,
-    })
-  }
+pub enum Pattern {
+  TestAll {
+    run: String,
+  },
+  TestFile {
+    files: glob::Pattern,
+    run: String,
+    vars: Vec<Var>,
+  },
+  TestFunction {
+    files: glob::Pattern,
+    line: i64,
+    run: String,
+    vars: Vec<Var>,
+  },
 }
 
 impl Pattern {

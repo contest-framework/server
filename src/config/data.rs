@@ -16,7 +16,6 @@ pub struct Configuration {
 }
 
 /// Actions are executed when receiving a trigger.
-#[derive(Deserialize)]
 pub struct Action {
   pattern: Pattern,
   run: String,
@@ -34,7 +33,7 @@ pub struct BeforeRun {
 }
 
 #[derive(Deserialize)]
-struct Var {
+pub struct Var {
   name: String,
   source: VarSource,
   filter: String,
