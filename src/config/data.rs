@@ -26,6 +26,7 @@ pub enum Trigger {
   TestFileLine { files: glob::Pattern },
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Options {
   pub before_run: BeforeRun,
   pub after_run: AfterRun,
