@@ -1,7 +1,7 @@
 //! error types used in this app
 
 /// The possible errors that the user can cause and needs to be notified about.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum UserError {
   CannotCreateConfigFile {
     err: String,
@@ -69,7 +69,7 @@ impl UserError {
     match self {
             UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {}", err), "".into()),
             UserError::ConfigFileInvalidContent{err} => {
-                (format!("Cannot parse configuration file: {}", err.to_string()), "".into())
+                (format!("Cannot parse configuration file: {}", err), "".into())
             }
             UserError::ConfigFileNotFound{} => ("Configuration file not found".into(), "Tertestrial requires a configuration file named \".testconfig.json\" in the current directory. Please run \"tertestrial setup \" to create one.".into()),
             UserError::ConfigFileError{err} => (format!("Cannot open configuration file: {}", err), "".into()),
@@ -78,9 +78,9 @@ impl UserError {
             UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotDelete{err, path} => (format!("Cannot delete pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {}", err), "This is an internal error".into()),
-            UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), format!("{err}")),
+            UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), err.to_string()),
             UserError::InvalidTrigger{line, err} => (format!("cannot parse command received from client: {}", line), err.to_owned()),
-            UserError::MissingFilesInTestFile => (format!(r#"missing "files" entry in "testFile" action"#), "".into()),
+            UserError::MissingFilesInTestFile => (r#"missing "files" entry in "testFile" action"#.into(), "".into()),
             UserError::MissingLineFieldInCurrentOrAboveLineContent => ("missing \"line\" field".into(), "".into()),
             UserError::NoCommandToRepeat{} => ("No command to repeat found".into(), "You must submit a test command first before you can repeat it.".into()),
             UserError::RunCommandNotFound{command} => (format!("test command to run not found: {}", command),

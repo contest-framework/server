@@ -10,7 +10,7 @@ pub struct FileVar {
 }
 
 impl FileVar {
-  pub fn to_domain(self) -> Result<Var> {
+  pub fn into_domain(self) -> Result<Var> {
     let filter = regex::Regex::new(&self.filter).map_err(|err| UserError::InvalidRegex {
       regex: self.filter,
       err: err.to_string(),

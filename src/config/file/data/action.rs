@@ -17,7 +17,7 @@ impl FileAction {
     let file_vars = self.vars.unwrap_or_default();
     let mut vars: Vec<Var> = Vec::with_capacity(file_vars.len());
     for file_var in file_vars {
-      vars.push(file_var.to_domain()?);
+      vars.push(file_var.into_domain()?);
     }
     if &action_type == "testall" {
       return Ok(Action {
