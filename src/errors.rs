@@ -31,6 +31,10 @@ pub enum UserError {
   FifoCannotRead {
     err: String,
   },
+  InvalidRegex {
+    regex: String,
+    err: String,
+  },
   InvalidTrigger {
     line: String,
     err: String,
@@ -74,6 +78,7 @@ impl UserError {
             UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotDelete{err, path} => (format!("Cannot delete pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {}", err), "This is an internal error".into()),
+            UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), format!("{err}")),
             UserError::InvalidTrigger{line, err} => (format!("cannot parse command received from client: {}", line), err.to_owned()),
             UserError::MissingFilesInTestFile => (format!(r#"missing "files" entry in "testFile" action"#), "".into()),
             UserError::MissingLineFieldInCurrentOrAboveLineContent => ("missing \"line\" field".into(), "".into()),

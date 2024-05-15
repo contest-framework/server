@@ -1,4 +1,5 @@
-use crate::config::{Action, Trigger, Var};
+use super::FileVar;
+use crate::config::{Action, Trigger};
 use crate::{Result, UserError};
 use serde::Deserialize;
 
@@ -7,7 +8,7 @@ pub struct FileAction {
   r#type: String,
   files: Option<String>,
   run: String,
-  vars: Option<Vec<Var>>,
+  vars: Option<Vec<FileVar>>,
   desc: Option<String>,
 }
 
@@ -47,5 +48,82 @@ impl FileAction {
     Err(UserError::UnknownActionType {
       action_type: action_type,
     })
+  }
+}
+
+#[cfg(test)]
+mod tests {
+
+  mod to_domain {
+    use super::super::FileAction;
+    use crate::config::{Action, Trigger, Var, VarSource};
+    use big_s::S;
+
+    mod test_all {
+      use super::super::super::FileAction;
+      use crate::config::{Action, Trigger};
+      use big_s::S;
+
+      #[test]
+      fn empty() {
+        let file_action = FileAction {
+          r#type: S("testAll"),
+          files: None,
+          run: S("make test"),
+          vars: None,
+          desc: None,
+        };
+        let have = file_action.to_domain().unwrap();
+        let want = Action {
+          trigger: Trigger::TestAll,
+          run: S("make test"),
+          vars: vec![],
+        };
+        assert_eq!(have, want);
+      }
+    }
+    #[test]
+    fn with_content() {
+      let file_action = FileAction {
+        r#type: S("testAll"),
+        files: None,
+        run: S("make test"),
+        vars: Some(vec![FileVar {
+          name: S("my_var"),
+          source: VarSource::File,
+          filter: S("^fn (.*) \\{"),
+        }]),
+        desc: Some(S("tests everything")),
+      };
+      let have = file_action.to_domain().unwrap();
+      let want = Action {
+        trigger: Trigger::TestAll,
+        run: S("make test"),
+        vars: vec![Var {
+          name: S("my_var"),
+          source: VarSource::File,
+          filter: regex::Regex::new("^fn (.*) \\{").unwrap(),
+        }],
+      };
+      assert_eq!(have, want);
+    }
+
+    #[test]
+    fn test_all() {
+      let file_action = FileAction {
+        r#type: S("testAll"),
+        files: None,
+        run: S("make test"),
+        vars: None,
+        desc: None,
+      };
+      let have = file_action.to_domain().unwrap();
+      let want = Action {
+        trigger: Trigger::TestAll,
+        run: S("make test"),
+        vars: vec![],
+      };
+      assert_eq!(have, want);
+    }
   }
 }

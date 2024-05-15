@@ -14,12 +14,14 @@ pub struct Configuration {
 }
 
 /// Actions are executed when receiving a trigger.
+#[derive(Debug, PartialEq)]
 pub struct Action {
   pub trigger: Trigger,
   pub run: String,
   pub vars: Vec<Var>,
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Trigger {
   TestAll,
   TestFile { files: glob::Pattern },
@@ -44,16 +46,16 @@ pub struct BeforeRun {
   pub newlines: u8,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug)]
 pub struct Var {
-  name: String,
-  source: VarSource,
-  filter: String,
+  pub name: String,
+  pub source: VarSource,
+  pub filter: regex::Regex,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "camelCase")]
-enum VarSource {
+pub enum VarSource {
   File,
   Line,
   CurrentOrAboveLineContent,

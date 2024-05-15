@@ -7,9 +7,11 @@ mod after_run;
 mod before_run;
 mod configuration;
 mod options;
+mod var;
 
 pub use action::FileAction;
 pub use after_run::FileAfterRun;
 pub use before_run::FileBeforeRun;
 pub use configuration::FileConfiguration;
 pub use options::FileOptions;
+pub use var::FileVar;
