@@ -18,6 +18,7 @@ impl Var {
       VarSource::File => filter(values.get("file").unwrap(), &self.filter),
       VarSource::Line => filter(values.get("line").unwrap(), &self.filter),
       VarSource::CurrentOrAboveLineContent => {
+        // TODO: extract this logic into a dedicated module for better testing
         let file_name = values.get("file").unwrap();
         let file_content = fs::read_to_string(file_name).unwrap();
         let lines: Vec<&str> = file_content.split('\n').collect();
