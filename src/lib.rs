@@ -6,7 +6,6 @@ mod errors;
 mod subshell;
 
 use client::fifo;
-pub use client::Trigger;
 pub use errors::{Result, UserError};
 use std::env;
 use std::io::Write;

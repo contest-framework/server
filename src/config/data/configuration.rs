@@ -1,4 +1,5 @@
-use super::{Action, Options, Trigger};
+use super::{Action, Options};
+use crate::client::Trigger;
 use crate::Result;
 use crate::UserError;
 use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
@@ -13,7 +14,7 @@ pub struct Configuration {
 
 impl Configuration {
   pub fn get_command(&self, trigger: Trigger, last_command: &mut Option<String>) -> Result<String> {
-    if trigger.command == "repeatTest" {
+    if trigger == Trigger::RepeatLastTest {
       match last_command {
         Some(command) => return Ok(command.to_owned()),
         None => return Err(UserError::NoCommandToRepeat {}),
