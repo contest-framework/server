@@ -80,15 +80,16 @@ pub enum UserError {
 }
 
 impl UserError {
-  /// Provides human-readable messages for TertErrors.
+  /// Provides human-readable messages for `UserError`.
+  #[must_use]
   pub fn messages(&self) -> (String, String) {
     match self {
-            UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {}", err), String::new()),
+            UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {err}"), String::new()),
             UserError::CannotDetermineCurrentDirectory { err } => (format!("cannot determine the current directory: {err}"), String::new()),
             UserError::CannotReadFile { path, err } => (format!("cannot read file {path}"), err.into()),
             UserError::CannotSplitShellString { source, err } => (format!("cannot split this shell string: {source}"), err.into()),
             UserError::ConfigFileInvalidContent{err} => {
-                (format!("Cannot parse configuration file: {}", err), String::new())
+                (format!("Cannot parse configuration file: {err}"), String::new())
             }
             UserError::ConfigFileNotFound{} => ("Configuration file not found".into(), "Tertestrial requires a configuration file named \".testconfig.json\" in the current directory. Please run \"tertestrial setup \" to create one.".into()),
             UserError::ConfigFileError{err} => (format!("Cannot open configuration file: {err}" ), String::new()),
