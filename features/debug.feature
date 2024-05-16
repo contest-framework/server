@@ -16,8 +16,8 @@ Feature: run all tests
     Then it prints
       """
       using this configuration:
-      TRIGGER               | RUN
-      { "type": "testAll" } | echo running all tests
+      TRIGGER | RUN
+      TestAll | echo running all tests
       Options:- beforeRun.clearScreen: false
       """
     And it prints
@@ -25,7 +25,6 @@ Feature: run all tests
       Tertestrial is online in debug mode, Ctrl-C to exit
       """
 
-  @this
   Scenario: receiving a valid command
     When receiving the command '{ "command": "testAll" }'
     Then it prints
