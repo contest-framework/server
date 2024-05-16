@@ -14,6 +14,7 @@ pub struct Configuration {
 impl Configuration {
   pub fn get_command(&self, trigger: Trigger, last_command: &mut Option<String>) -> Result<String> {
     if trigger == Trigger::RepeatLastTest {
+      println!("1111111111111");
       match last_command {
         Some(command) => return Ok(command.to_owned()),
         None => return Err(UserError::NoCommandToRepeat {}),
