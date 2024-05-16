@@ -45,7 +45,7 @@ impl Configuration {
     for var in &action.vars {
       values.insert(&var.name, var.calculate_var(&values)?);
     }
-    Ok(template::replace_all(&action.run, &values))
+    template::replace_all(&action.run, &values)
   }
 }
 
