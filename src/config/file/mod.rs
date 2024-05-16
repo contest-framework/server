@@ -8,7 +8,6 @@ pub use create::create;
 use data::FileConfiguration;
 #[cfg(test)]
 use data::{FileAfterRun, FileBeforeRun};
-
 pub use read::read;
 
 /// filename of the Tertestrial config file

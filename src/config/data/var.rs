@@ -1,7 +1,6 @@
-use regex::Regex;
-
 use super::VarSource;
 use crate::{Result, UserError};
+use regex::Regex;
 use std::collections::HashMap;
 use std::fs;
 

@@ -1,7 +1,6 @@
+use super::Trigger;
 use crate::{Result, UserError};
 use serde::Deserialize;
-
-use super::Trigger;
 
 /// The `Trigger` data as it comes in through the FIFO.
 #[derive(Deserialize, Debug, Eq, PartialEq)]

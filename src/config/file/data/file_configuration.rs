@@ -1,5 +1,4 @@
-use super::FileAction;
-use super::FileOptions;
+use super::{FileAction, FileOptions};
 use crate::config::{Action, Configuration};
 use crate::Result;
 use serde::Deserialize;

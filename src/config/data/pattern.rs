@@ -1,6 +1,5 @@
-use std::fmt::Display;
-
 use crate::client::Trigger;
+use std::fmt::Display;
 
 /// a pattern defined in the config file, describes conditions that match actions
 #[derive(Debug, Eq, PartialEq)]
@@ -45,8 +44,7 @@ mod tests {
   mod matches_client_trigger {
 
     mod test_all {
-      use crate::client;
-      use crate::config;
+      use crate::{client, config};
       use big_s::S;
 
       #[test]
@@ -65,8 +63,7 @@ mod tests {
     }
 
     mod test_file {
-      use crate::client;
-      use crate::config;
+      use crate::{client, config};
       use big_s::S;
 
       #[test]
@@ -100,8 +97,7 @@ mod tests {
     }
 
     mod test_file_line {
-      use crate::client;
-      use crate::config;
+      use crate::{client, config};
       use big_s::S;
 
       #[test]

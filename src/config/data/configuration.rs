@@ -1,8 +1,6 @@
 use super::{Action, Options};
 use crate::client::Trigger;
-use crate::template;
-use crate::Result;
-use crate::UserError;
+use crate::{template, Result, UserError};
 use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
 use prettytable::Table;
 use std::collections::HashMap;
@@ -78,12 +76,10 @@ mod tests {
 
   #[cfg(test)]
   mod get_command {
-    use big_s::S;
-
-    use crate::config::Pattern;
-
     use super::super::super::{Action, AfterRun, BeforeRun, Configuration};
     use super::super::*;
+    use crate::config::Pattern;
+    use big_s::S;
 
     #[test]
     fn test_all() {

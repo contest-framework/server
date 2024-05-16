@@ -1,9 +1,8 @@
 //! commands received from the client (through the FIFO)
 
+use super::fifo_data::FifoTrigger;
 use crate::Result;
 use std::fmt::Display;
-
-use super::fifo_data::FifoTrigger;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Trigger {
