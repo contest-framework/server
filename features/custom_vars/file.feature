@@ -35,12 +35,14 @@ Feature: define a custom variable with a part of the filename
     When receiving the command '{ "command": "testFile", "file": "my_file.go" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: { "command": "testFile", "file": "my_file.go" }
+      Error: cannot determine command for trigger: test my_file.go
+      Please make sure that this trigger is listed in your configuration file
       """
 
   Scenario: receiving no file
     When receiving the command '{ "command": "testFile" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: { "command": "testFile" }
+      Error: cannot parse command received from client: { "command": "testFile" }
+      trigger "testFile" is missing field "file".
       """
