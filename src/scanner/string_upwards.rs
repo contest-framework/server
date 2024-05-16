@@ -12,6 +12,10 @@ pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<S
       index -= 1;
       continue;
     };
+    let Some(match_1) = captures.get(1) else {
+      index -= 1;
+      continue;
+    };
     if captures.len() > 2 {
       // we should get only 2 captures: one for the entire string, and one for the capture
       return Err(UserError::TriggerTooManyCaptures {
@@ -20,7 +24,7 @@ pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<S
         line: (*line_text).to_string(),
       });
     }
-    return Ok(Some(captures.get(1).unwrap().as_str().to_owned()));
+    return Ok(Some(match_1.as_str().to_owned()));
   }
   Ok(None)
 }
