@@ -73,7 +73,7 @@ mod tests {
 
   #[cfg(test)]
   mod get_command {
-    use super::super::super::{Action, AfterRun, BeforeRun, Configuration};
+    use super::super::super::{Action, Configuration};
     use super::super::*;
     use crate::config::Pattern;
     use big_s::S;
@@ -125,16 +125,7 @@ mod tests {
       };
       let config = Configuration {
         actions: vec![action1],
-        options: Options {
-          before_run: BeforeRun {
-            clear_screen: false,
-            newlines: 0,
-          },
-          after_run: AfterRun {
-            newlines: 0,
-            indicator_lines: 0,
-          },
-        },
+        ..Configuration::default()
       };
       let give = Trigger::TestFile {
         file: S("other_filename"),
@@ -148,16 +139,7 @@ mod tests {
     fn no_actions() {
       let config = Configuration {
         actions: vec![],
-        options: Options {
-          before_run: BeforeRun {
-            clear_screen: false,
-            newlines: 0,
-          },
-          after_run: AfterRun {
-            newlines: 0,
-            indicator_lines: 0,
-          },
-        },
+        ..Configuration::default()
       };
       let trigger = Trigger::TestAll;
       let mut last_command: Option<String> = None;
