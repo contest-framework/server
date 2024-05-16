@@ -229,7 +229,7 @@ mod tests {
           pattern: Pattern::TestFileLine {
             files: glob::Pattern::new("**/*.rs").unwrap(),
           },
-          run: S("cargo test"),
+          run: S("cargo test {{ my_var }}"),
           vars: vec![Var {
             name: S("my_var"),
             source: VarSource::File,
