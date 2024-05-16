@@ -6,7 +6,9 @@ use regex::Regex;
 pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<String>> {
   let lines: Vec<&str> = text.split('\n').collect();
   while index > 0 {
-    let line_text = lines.get(index as usize).unwrap();
+    let Some(line_text) = lines.get(index as usize) else {
+      return Ok(None);
+    };
     let Some(captures) = re.captures(line_text) else {
       // no match on this line --> try the one above
       index -= 1;
@@ -21,7 +23,7 @@ pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<S
       return Err(UserError::TriggerTooManyCaptures {
         count: captures.len(),
         regex: re.to_string(),
-        line: (*line_text).to_string(),
+        line: (*line_text).to_owned(),
       });
     }
     return Ok(Some(match_1.as_str().to_owned()));
