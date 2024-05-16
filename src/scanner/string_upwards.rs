@@ -1,7 +1,8 @@
 use crate::{Result, UserError};
 use regex::Regex;
 
-/// provides the first capture of the given regex in the given string starting at the given line and looking upwards
+/// provides the first capture of the given regex in the given string
+/// starting at the given line and scanning towards the beginning of the file
 pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<String>> {
   let lines: Vec<&str> = text.split('\n').collect();
   while index > 0 {
