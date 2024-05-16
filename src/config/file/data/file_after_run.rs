@@ -40,7 +40,7 @@ mod tests {
     }
 
     #[test]
-    fn has_content() {
+    fn with_content() {
       let file_after_run = FileAfterRun {
         newlines: Some(2),
         indicator_lines: Some(4),
