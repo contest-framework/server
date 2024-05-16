@@ -1,8 +1,8 @@
 use super::replace;
 use std::collections::HashMap;
 
-pub fn replace_all(text: String, replacements: &HashMap<&str, String>) -> String {
-  let mut result = text;
+pub fn replace_all(text: &str, replacements: &HashMap<&str, String>) -> String {
+  let mut result = text.to_owned();
   for (placeholder, replacement) in replacements {
     result = replace(&result, placeholder, replacement);
   }
@@ -22,7 +22,7 @@ mod tests {
       "foo" => S("bar"),
     };
     let give = "my name is {{ foo }}";
-    let have = replace_all(give.into(), &replacements);
+    let have = replace_all(give, &replacements);
     let want = "my name is bar";
     assert_eq!(have, want);
   }
@@ -31,7 +31,7 @@ mod tests {
   fn no_placeholders() {
     let replacements = HashMap::new();
     let give = "my name is {{ foo }}";
-    let have = replace_all(give.into(), &replacements);
+    let have = replace_all(give, &replacements);
     let want = "my name is {{ foo }}";
     assert_eq!(have, want);
   }
@@ -42,7 +42,7 @@ mod tests {
       "foo" => S("bar"),
     };
     let give = "my name is {{ other }}";
-    let have = replace_all(give.into(), &replacements);
+    let have = replace_all(give, &replacements);
     let want = "my name is {{ other }}";
     assert_eq!(have, want);
   }
