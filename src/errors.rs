@@ -55,6 +55,7 @@ pub enum UserError {
   LineIsNotANumber {
     line: String,
   },
+  LineNotAvailable,
   MissingFilesInPattern,
   MissingFileInTrigger,
   MissingFilesInTestFile,
@@ -106,6 +107,7 @@ impl UserError {
             UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), err.to_string()),
             UserError::InvalidTrigger{source: line, err} => (format!("cannot parse command received from client: {line}"), err.to_owned()),
             UserError::LineIsNotANumber { line  } => (format!("the provided line ({line})is not a number"), String::new()),
+            UserError::LineNotAvailable => ("Line not available".into(), r#"To use the {{line}} placeholder in the "run" field, you need to use the "testFunction" action type."#.into()),
             UserError::MissingFilesInPattern  => (r#"the pattern in the config file is missing the "files" field."#.into(), String::new()),
             UserError::MissingFileInTrigger  => (r#"the trigger received from the client is missing the "file" field."#.into(), String::new()),
             UserError::MissingFilesInTestFile => (r#"missing "files" entry in "testFile" action"#.into(), String::new()),
