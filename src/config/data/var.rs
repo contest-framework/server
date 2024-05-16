@@ -20,7 +20,11 @@ impl Var {
         let Some(original_line) = values.get("line") else {
           return Err(UserError::MissingLineFieldInCurrentOrAboveLineContent);
         };
-        let original_line = original_line.parse().unwrap();
+        let original_line = original_line
+          .parse()
+          .map_err(|_| UserError::LineIsNotANumber {
+            line: original_line.to_owned(),
+          })?;
         scanner::file_upwards(filename, &self.filter, original_line)
       }
     }

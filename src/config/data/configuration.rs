@@ -61,6 +61,7 @@ impl Display for Configuration {
     table.printstd();
     f.write_str("Options:")?;
     f.write_fmt(format_args!(
+      // TODO: add a newline to the end
       "- beforeRun.clearScreen: {}",
       self.options.before_run.clear_screen
     ))?;

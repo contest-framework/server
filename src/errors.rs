@@ -51,6 +51,9 @@ pub enum UserError {
     source: String,
     err: String,
   },
+  LineIsNotANumber {
+    line: String,
+  },
   MissingFilesInPattern,
   MissingFileInTrigger,
   MissingFilesInTestFile,
@@ -101,6 +104,7 @@ impl UserError {
             UserError::FilesIsEmpty => (r#"The "files" field in your config file is empty"#.into(), String::new()),
             UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), err.to_string()),
             UserError::InvalidTrigger{source: line, err} => (format!("cannot parse command received from client: {line}"), err.to_owned()),
+            UserError::LineIsNotANumber { line  } => (format!("the provided line ({line})is not a number"), String::new()),
             UserError::MissingFilesInPattern  => (r#"the pattern in the config file is missing the "files" field."#.into(), String::new()),
             UserError::MissingFileInTrigger  => (r#"the trigger received from the client is missing the "file" field."#.into(), String::new()),
             UserError::MissingFilesInTestFile => (r#"missing "files" entry in "testFile" action"#.into(), String::new()),
