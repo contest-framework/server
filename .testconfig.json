@@ -7,7 +7,7 @@
 
     {
       "type": "testFile",
-      "file": "**/*.rs",
+      "files": "**/*.rs",
       "vars": [
         {
           "name": "file_without_ext",
@@ -20,7 +20,7 @@
 
     {
       "type": "testFunction",
-      "file": "**/*.rs",
+      "files": "**/*.rs",
       "vars": [
         {
           "name": "test_name",
@@ -33,7 +33,7 @@
 
     {
       "type": "testFile",
-      "file": "**/*.test.ts",
+      "files": "**/*.test.ts",
       "run": "echo mocha {{file}}"
     },
 
@@ -51,9 +51,8 @@
     },
 
     {
-      "desc": "individual TS unit test",
       "type": "testFunction",
-      "file": "**/*.test.ts",
+      "files": "**/*.test.ts",
       "run": "echo mocha {{file}}:{{line}}"
     }
   ],

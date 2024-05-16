@@ -2,6 +2,7 @@ use serde::Deserialize;
 use std::fmt::{self, Display};
 
 #[derive(Debug, Deserialize, Eq, PartialEq)]
+#[serde(rename_all = "camelCase")]
 pub enum VarSource {
   File,
   Line,

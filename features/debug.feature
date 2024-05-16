@@ -25,6 +25,7 @@ Feature: run all tests
       Tertestrial is online in debug mode, Ctrl-C to exit
       """
 
+  @this
   Scenario: receiving a valid command
     When receiving the command '{ "command": "testAll" }'
     Then it prints

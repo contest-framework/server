@@ -27,7 +27,7 @@ impl FileAction {
       });
     }
     let Some(files) = self.files else {
-      return Err(UserError::MissingFileInTrigger);
+      return Err(UserError::MissingFileInPattern);
     };
     let pattern =
       glob::Pattern::new(&files).map_err(|err| UserError::ConfigInvalidGlobPattern {
@@ -41,7 +41,7 @@ impl FileAction {
         vars,
       });
     }
-    if &action_type == "testFunction" {
+    if &action_type == "testfunction" {
       return Ok(Action {
         pattern: Pattern::TestFileLine { files: pattern },
         run: self.run,
