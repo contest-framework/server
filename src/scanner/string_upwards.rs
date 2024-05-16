@@ -17,7 +17,7 @@ pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<S
       return Err(UserError::TriggerTooManyCaptures {
         count: captures.len(),
         regex: re.to_string(),
-        line: line_text.to_string(),
+        line: (*line_text).to_string(),
       });
     }
     return Ok(Some(captures.get(1).unwrap().as_str().to_owned()));
