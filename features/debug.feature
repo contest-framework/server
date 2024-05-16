@@ -6,9 +6,7 @@ Feature: run all tests
       {
         "actions": [
           {
-            "trigger": {
-              "command": "testAll"
-            },
+            "type": "testAll",
             "run": "echo running all tests"
           }
         ]
@@ -18,8 +16,8 @@ Feature: run all tests
     Then it prints
       """
       using this configuration:
-      TRIGGER                  | RUN
-      { "command": "testAll" } | echo running all tests
+      TRIGGER | RUN
+      TestAll | echo running all tests
       Options:- beforeRun.clearScreen: false
       """
     And it prints

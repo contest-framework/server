@@ -6,10 +6,8 @@ Feature: test only a specific function
       {
         "actions": [
           {
-            "trigger": {
-              "command": "testFunction",
-              "file": "**/*.ts"
-            },
+            "type": "testFunction",
+            "files": "**/*.ts",
             "run": "echo testing file {{file}}:{{line}}"
           }
         ]
@@ -30,13 +28,14 @@ Feature: test only a specific function
     When receiving the command '{ "command": "testFunction", "file": "foo.ts" }'
     Then it prints
       """
-      executing: echo testing file foo.ts:{{line}}
-      testing file foo.ts:{{line}}
+      Error: cannot parse command received from client: { "command": "testFunction", "file": "foo.ts" }
+      trigger "testFunction" is missing field "line"
       """
 
   Scenario: receiving a mismatching file
     When receiving the command '{ "command": "testFunction", "file": "foo.go", "line": "23" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: { "command": "testFunction", "file": "foo.go", "line": "23" }
+      Error: cannot determine command for trigger: testFunction foo.go:23
+      Please make sure that this action is listed in your configuration file
       """

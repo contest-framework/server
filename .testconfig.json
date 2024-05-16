@@ -1,19 +1,13 @@
 {
   "actions": [
     {
-      "desc": "run all tests",
-      "trigger": {
-        "command": "testAll"
-      },
+      "type": "testAll",
       "run": "make test"
     },
 
     {
-      "desc": "test RS file",
-      "trigger": {
-        "command": "testFile",
-        "file": "**/*.rs"
-      },
+      "type": "testFile",
+      "files": "**/*.rs",
       "vars": [
         {
           "name": "file_without_ext",
@@ -25,11 +19,8 @@
     },
 
     {
-      "desc": "individual RS unit test",
-      "trigger": {
-        "command": "testFunction",
-        "file": "**/*.rs"
-      },
+      "type": "testFunction",
+      "files": "**/*.rs",
       "vars": [
         {
           "name": "test_name",
@@ -41,20 +32,14 @@
     },
 
     {
-      "desc": "TS unit test file",
-      "trigger": {
-        "command": "testFile",
-        "file": "**/*.test.ts"
-      },
+      "type": "testFile",
+      "files": "**/*.test.ts",
       "run": "echo mocha {{file}}"
     },
 
     {
-      "desc": "TS source file",
-      "trigger": {
-        "command": "testFile",
-        "file": "**/*.ts"
-      },
+      "type": "testFile",
+      "files": "**/*.ts",
       "vars": [
         {
           "name": "file_without_ext",
@@ -66,11 +51,8 @@
     },
 
     {
-      "desc": "individual TS unit test",
-      "trigger": {
-        "command": "testFunction",
-        "file": "**/*.test.ts"
-      },
+      "type": "testFunction",
+      "files": "**/*.test.ts",
       "run": "echo mocha {{file}}:{{line}}"
     }
   ],

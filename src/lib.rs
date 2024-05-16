@@ -4,9 +4,9 @@ pub mod client;
 pub mod config;
 mod errors;
 mod subshell;
+pub mod template;
 
-use client::fifo;
-pub use client::Trigger;
+use client::{fifo, Trigger};
 pub use errors::{Result, UserError};
 use std::env;
 use std::io::Write;
@@ -93,7 +93,7 @@ fn run_command(
   configuration: &config::Configuration,
   last_command: &mut Option<String>,
 ) -> Result<bool> {
-  let trigger = client::trigger::from_string(&text)?;
+  let trigger = Trigger::parse(&text)?;
   match configuration.get_command(trigger, last_command) {
     Err(err) => match err {
       UserError::NoCommandToRepeat {} => {

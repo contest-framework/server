@@ -6,9 +6,7 @@ Feature: client sends unknown fields in the command
       {
         "actions": [
           {
-            "trigger": {
-              "command": "testAll"
-            },
+            "type": "testAll",
             "run": "echo running all tests"
           }
         ]

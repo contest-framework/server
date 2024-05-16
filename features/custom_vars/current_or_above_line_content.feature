@@ -7,10 +7,8 @@ Feature: define a custom variable with a regex match of the file content
         "actions": [
           {
             "desc": "tests the function that the cursor is in right now",
-            "trigger": {
-              "command": "testFunction",
-              "file": "**/*.rs"
-            },
+            "type": "testFunction",
+            "files": "**/*.rs",
             "vars": [
               {
                 "name": "fn_name",
@@ -52,5 +50,6 @@ Feature: define a custom variable with a regex match of the file content
     When receiving the command '{ "command": "testFunction", "file": "foo.rs" }'
     Then it prints
       """
-      Error: missing "line" field
+      Error: cannot parse command received from client: { "command": "testFunction", "file": "foo.rs" }
+      trigger "testFunction" is missing field "line"
       """

@@ -6,9 +6,7 @@ Feature: Starting Tertestrial
       {
         "actions": [
           {
-            "trigger": {
-              "command": "testAll"
-            },
+            "type": "testAll",
             "run": "echo running all tests"
           }
         ]

@@ -7,13 +7,13 @@ pub enum UserError {
     err: String,
   },
   ConfigFileNotFound {},
-  ConfigFileNotReadable {
+  ConfigFileError {
     err: String,
   },
   ConfigFileInvalidContent {
     err: String,
   },
-  ConfigInvalidGlobPattern {
+  ConfigInvalidGlob {
     pattern: String,
     err: String,
   },
@@ -31,15 +31,25 @@ pub enum UserError {
   FifoCannotRead {
     err: String,
   },
-  InvalidTrigger {
-    line: String,
+  FilesIsEmpty,
+  InvalidRegex {
+    regex: String,
     err: String,
   },
+  InvalidTrigger {
+    source: String,
+    err: String,
+  },
+  MissingFilesInPattern,
+  MissingFileInTrigger,
+  MissingFilesInTestFile,
   MissingLineFieldInCurrentOrAboveLineContent,
+  MissingLineInTrigger,
   NoCommandToRepeat {},
   RunCommandNotFound {
     command: String,
   },
+  RunCommandIsEmpty,
   TriggerTooManyCaptures {
     count: usize,
     regex: String,
@@ -50,8 +60,11 @@ pub enum UserError {
     filename: String,
     line: u32,
   },
+  UnknownActionType {
+    action_type: String,
+  },
   UnknownTrigger {
-    line: String,
+    source: String,
   },
 }
 
@@ -64,23 +77,31 @@ impl UserError {
                 (format!("Cannot parse configuration file: {}", err), "".into())
             }
             UserError::ConfigFileNotFound{} => ("Configuration file not found".into(), "Tertestrial requires a configuration file named \".testconfig.json\" in the current directory. Please run \"tertestrial setup \" to create one.".into()),
-            UserError::ConfigFileNotReadable{err} => (format!("Cannot open configuration file: {}", err), "".into()),
-            UserError::ConfigInvalidGlobPattern{pattern, err} => (format!("Invalid glob pattern: {}", pattern), err.into()),
+            UserError::ConfigFileError{err} => (format!("Cannot open configuration file: {}", err), "".into()),
+            UserError::ConfigInvalidGlob{pattern, err} => (format!("Invalid glob pattern: {}", pattern), err.into()),
             UserError::FifoAlreadyExists{path} => (format!("A fifo pipe \"{}\" already exists.", path), "This could mean a Tertestrial instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Tertestrial again.".into()),
             UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotDelete{err, path} => (format!("Cannot delete pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {}", err), "This is an internal error".into()),
-            UserError::InvalidTrigger{line, err} => (format!("cannot parse command received from client: {}", line), err.to_owned()),
+            UserError::FilesIsEmpty => (r#"The "files" field in your config file is empty"#.into(), "".into()),
+            UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), err.to_string()),
+            UserError::InvalidTrigger{source: line, err} => (format!("cannot parse command received from client: {}", line), err.to_owned()),
+            UserError::MissingFilesInPattern  => (r#"the pattern in the config file is missing the "files" field."#.into(), "".into()),
+            UserError::MissingFileInTrigger  => (r#"the trigger received from the client is missing the "file" field."#.into(), "".into()),
+            UserError::MissingFilesInTestFile => (r#"missing "files" entry in "testFile" action"#.into(), "".into()),
             UserError::MissingLineFieldInCurrentOrAboveLineContent => ("missing \"line\" field".into(), "".into()),
+            UserError::MissingLineInTrigger  => (r#"the trigger received from the client is missing the "line" field."#.into(), "".into()),
             UserError::NoCommandToRepeat{} => ("No command to repeat found".into(), "You must submit a test command first before you can repeat it.".into()),
             UserError::RunCommandNotFound{command} => (format!("test command to run not found: {}", command),
                         "Please verify that the command is in the path or fix your config file.".into()),
+            UserError::RunCommandIsEmpty => (r#"the "run" field in your configuration file is empty"#.into(), "".into()),
             UserError::TriggerTooManyCaptures{count, regex, line} => (format!("found {} captures using regex \"{}\" on line: {}", count, regex, line),
                     "filters in the Tertestrial configuration file can only contain one capture group".into()),
             UserError::TriggerRegexNotFound{regex, filename, line } => (format!("Did not find pattern {} in file {} at line {}", regex, filename, line),
                 "Please check that the file .testconfig.json is correct".into()),
-            UserError::UnknownTrigger{line} => (format!("cannot determine command for trigger: {}", line),
-            "Please make sure that this trigger is listed in your configuration file".into()),
+            UserError::UnknownActionType { action_type } => (format!("unknown action type: {action_type}"), r#"Valid types are "testAll", "testFile", and "testFunction"."#.into()),
+            UserError::UnknownTrigger{source } => (format!("cannot determine command for trigger: {}", source),
+            "Please make sure that this action is listed in your configuration file".into()),
         }
   }
 }

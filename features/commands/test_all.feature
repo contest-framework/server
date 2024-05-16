@@ -6,9 +6,7 @@ Feature: run all tests
       {
         "actions": [
           {
-            "trigger": {
-              "command": "testAll"
-            },
+            "type": "testAll",
             "run": "echo running all tests"
           }
         ]

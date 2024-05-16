@@ -5,23 +5,17 @@ use std::fs;
 const EXAMPLE_CONTENT: &str = r#"{
   "actions": [
     {
-      "trigger": { "command": "testAll" },
+      "type": "testAll",
       "run": "echo test all files"
     },
-
     {
-      "trigger": {
-        "command": "testFile",
-        "file": "\\.rs$"
-      },
+      "type": "testFile",
+      "file": "\\.rs$",
       "run": "echo testing file {{file}}"
     },
-
     {
-      "trigger": {
-        "command": "testFunction",
-        "file": "\\.ext$",
-      },
+      "type": "testFunction",
+      "file": "\\.ext$",
       "run": "echo testing file {{file}} at line {{line}}"
     }
   ]

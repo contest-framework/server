@@ -1,0 +1,56 @@
+use crate::config::AfterRun;
+use serde::Deserialize;
+
+/// low-level, unvalidated `AfterRun` data exactly how it is stored in the config file
+#[derive(Default, Deserialize, Eq, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct FileAfterRun {
+  pub newlines: Option<u8>,
+  pub indicator_lines: Option<u8>,
+}
+
+impl FileAfterRun {
+  pub fn into_domain(self) -> AfterRun {
+    AfterRun {
+      newlines: self.newlines.unwrap_or_default(),
+      indicator_lines: self.indicator_lines.unwrap_or_default(),
+    }
+  }
+}
+
+#[cfg(test)]
+mod tests {
+
+  mod into_domain {
+    use super::super::FileAfterRun;
+    use crate::config::AfterRun;
+
+    #[test]
+    fn empty() {
+      let file_after_run = FileAfterRun {
+        newlines: None,
+        indicator_lines: None,
+      };
+      let have = file_after_run.into_domain();
+      let want = AfterRun {
+        newlines: 0,
+        indicator_lines: 0,
+      };
+      assert_eq!(have, want);
+    }
+
+    #[test]
+    fn with_content() {
+      let file_after_run = FileAfterRun {
+        newlines: Some(2),
+        indicator_lines: Some(4),
+      };
+      let have = file_after_run.into_domain();
+      let want = AfterRun {
+        newlines: 2,
+        indicator_lines: 4,
+      };
+      assert_eq!(have, want);
+    }
+  }
+}

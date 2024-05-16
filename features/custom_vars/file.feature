@@ -7,10 +7,8 @@ Feature: define a custom variable with a part of the filename
         "actions": [
           {
             "desc": "run all tests for a TS source file",
-            "trigger": {
-              "command": "testFile",
-              "file": "**/*.ts"
-            },
+            "type": "testFile",
+            "files": "**/*.ts",
             "vars": [
               {
                 "name": "file_without_ext",
@@ -37,12 +35,14 @@ Feature: define a custom variable with a part of the filename
     When receiving the command '{ "command": "testFile", "file": "my_file.go" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: { "command": "testFile", "file": "my_file.go" }
+      Error: cannot determine command for trigger: testFile my_file.go
+      Please make sure that this action is listed in your configuration file
       """
 
   Scenario: receiving no file
     When receiving the command '{ "command": "testFile" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: { "command": "testFile" }
+      Error: cannot parse command received from client: { "command": "testFile" }
+      trigger "testFile" is missing field "file".
       """

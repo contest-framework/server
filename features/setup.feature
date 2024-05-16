@@ -8,23 +8,17 @@ Feature: create example config file as part of setup
       {
         "actions": [
           {
-            "trigger": { "command": "testAll" },
+            "type": "testAll",
             "run": "echo test all files"
           },
-
           {
-            "trigger": {
-              "command": "testFile",
-              "file": "\\.rs$"
-            },
+            "type": "testFile",
+            "file": "\\.rs$",
             "run": "echo testing file {{file}}"
           },
-
           {
-            "trigger": {
-              "command": "testFunction",
-              "file": "\\.ext$",
-            },
+            "type": "testFunction",
+            "file": "\\.ext$",
             "run": "echo testing file {{file}} at line {{line}}"
           }
         ]

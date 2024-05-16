@@ -21,15 +21,14 @@ Here is an example **.testconfig.json** file for JavaScript developers who use
 {
   "actions": [
     {
-      "trigger": {},
+      "type": "testAll",
       "run": "mocha"
     },
     {
-      "trigger": {
-        "filename": "**/*.js",
-        "line": "*"
-      },
-      "command": "mocha {{filename}}:{{line}}"
+      "type": "testFunction",
+      "filename": "**/*.js",
+      "line": "*",
+      "run": "mocha {{filename}}:{{line}}"
     }
   ]
 }
