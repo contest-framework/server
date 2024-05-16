@@ -201,9 +201,8 @@ mod tests {
   }
 
   mod into_trigger {
-    use big_s::S;
-
     use crate::client::{FifoTrigger, Trigger};
+    use big_s::S;
 
     #[test]
     fn test_all() {
