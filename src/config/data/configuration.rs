@@ -6,7 +6,7 @@ use prettytable::Table;
 use std::collections::HashMap;
 use std::fmt::{self, Display};
 
-#[derive(Default)]
+#[derive(Debug, Default, PartialEq)]
 pub struct Configuration {
   pub actions: Vec<Action>,
   pub options: Options,

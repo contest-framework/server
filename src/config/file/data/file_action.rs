@@ -6,10 +6,10 @@ use serde::Deserialize;
 /// low-level, unvalidated `Action` data exactly how it is stored in the config file
 #[derive(Deserialize)]
 pub struct FileAction {
-  r#type: String,
-  files: Option<String>,
-  run: String,
-  vars: Option<Vec<FileVar>>,
+  pub r#type: String,
+  pub files: Option<String>,
+  pub run: String,
+  pub vars: Option<Vec<FileVar>>,
 }
 
 impl FileAction {
