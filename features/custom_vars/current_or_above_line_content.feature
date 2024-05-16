@@ -51,5 +51,5 @@ Feature: define a custom variable with a regex match of the file content
     Then it prints
       """
       Error: cannot parse command received from client: { "command": "testFunction", "file": "foo.rs" }
-      trigger "testLine" is missing field "line"
+      trigger "testFunction" is missing field "line"
       """

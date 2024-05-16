@@ -64,19 +64,19 @@ impl FifoTrigger {
         (true, false) => {
           return Err(UserError::InvalidTrigger {
             source: source.into(),
-            err: r#"trigger "testLine" is missing field "line""#.into(),
+            err: r#"trigger "testFunction" is missing field "line""#.into(),
           })
         }
         (false, true) => {
           return Err(UserError::InvalidTrigger {
             source: source.into(),
-            err: r#"trigger "testLine" is missing field "file""#.into(),
+            err: r#"trigger "testFunction" is missing field "file""#.into(),
           })
         }
         (false, false) => {
           return Err(UserError::InvalidTrigger {
             source: source.into(),
-            err: r#"trigger "testLine" is missing fields "file" and "line""#.into(),
+            err: r#"trigger "testFunction" is missing fields "file" and "line""#.into(),
           })
         }
       }

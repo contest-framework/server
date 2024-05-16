@@ -29,7 +29,7 @@ Feature: test only a specific function
     Then it prints
       """
       Error: cannot parse command received from client: { "command": "testFunction", "file": "foo.ts" }
-      trigger "testLine" is missing field "line"
+      trigger "testFunction" is missing field "line"
       """
 
   Scenario: receiving a mismatching file
