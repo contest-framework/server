@@ -29,11 +29,10 @@ impl FileAction {
     let Some(files) = self.files else {
       return Err(UserError::MissingFilesInPattern);
     };
-    let pattern =
-      glob::Pattern::new(&files).map_err(|err| UserError::ConfigInvalidGlobPattern {
-        pattern: files,
-        err: err.to_string(),
-      })?;
+    let pattern = glob::Pattern::new(&files).map_err(|err| UserError::ConfigInvalidGlob {
+      pattern: files,
+      err: err.to_string(),
+    })?;
     if &action_type == "testfile" {
       return Ok(Action {
         pattern: Pattern::TestFile { files: pattern },

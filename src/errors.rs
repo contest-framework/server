@@ -13,7 +13,7 @@ pub enum UserError {
   ConfigFileInvalidContent {
     err: String,
   },
-  ConfigInvalidGlobPattern {
+  ConfigInvalidGlob {
     pattern: String,
     err: String,
   },
@@ -76,7 +76,7 @@ impl UserError {
             }
             UserError::ConfigFileNotFound{} => ("Configuration file not found".into(), "Tertestrial requires a configuration file named \".testconfig.json\" in the current directory. Please run \"tertestrial setup \" to create one.".into()),
             UserError::ConfigFileError{err} => (format!("Cannot open configuration file: {}", err), "".into()),
-            UserError::ConfigInvalidGlobPattern{pattern, err} => (format!("Invalid glob pattern: {}", pattern), err.into()),
+            UserError::ConfigInvalidGlob{pattern, err} => (format!("Invalid glob pattern: {}", pattern), err.into()),
             UserError::FifoAlreadyExists{path} => (format!("A fifo pipe \"{}\" already exists.", path), "This could mean a Tertestrial instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Tertestrial again.".into()),
             UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotDelete{err, path} => (format!("Cannot delete pipe at {path}: {err}"), "".into()),
