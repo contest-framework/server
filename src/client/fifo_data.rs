@@ -41,7 +41,9 @@ impl FifoTrigger {
     if command == "testfunction" {
       return Ok(Trigger::TestFileLine { file, line });
     };
-    Err(UserError::UnknownTrigger { line: self.command })
+    Err(UserError::UnknownTrigger {
+      source: self.command,
+    })
   }
 
   pub fn validate(&self, source: &str) -> Result<()> {

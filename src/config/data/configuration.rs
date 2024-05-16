@@ -27,7 +27,7 @@ impl Configuration {
       }
     }
     Err(UserError::UnknownTrigger {
-      line: trigger.to_string(),
+      source: trigger.to_string(),
     })
   }
 

@@ -62,7 +62,7 @@ pub enum UserError {
     action_type: String,
   },
   UnknownTrigger {
-    line: String,
+    source: String,
   },
 }
 
@@ -96,7 +96,7 @@ impl UserError {
             UserError::TriggerRegexNotFound{regex, filename, line } => (format!("Did not find pattern {} in file {} at line {}", regex, filename, line),
                 "Please check that the file .testconfig.json is correct".into()),
             UserError::UnknownActionType { action_type } => (format!("unknown action type: {action_type}"), r#"Valid types are "testAll", "testFile", and "testFunction"."#.into()),
-            UserError::UnknownTrigger{line} => (format!("cannot determine command for trigger: {}", line),
+            UserError::UnknownTrigger{source } => (format!("cannot determine command for trigger: {}", source),
             "Please make sure that this action is listed in your configuration file".into()),
         }
   }
