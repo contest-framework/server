@@ -1,7 +1,7 @@
 use super::VarSource;
 use crate::{scanner, Result, UserError};
+use ahash::AHashMap;
 use regex::Regex;
-use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Var {
@@ -11,7 +11,7 @@ pub struct Var {
 }
 
 impl Var {
-  pub fn calculate_var(&self, values: &HashMap<&str, String>) -> Result<String> {
+  pub fn calculate_var(&self, values: &AHashMap<&str, String>) -> Result<String> {
     match self.source {
       VarSource::File => filter(values.get("file").unwrap(), &self.filter),
       VarSource::Line => filter(values.get("line").unwrap(), &self.filter),
