@@ -1,4 +1,3 @@
-@this
 Feature: repeat the last command
 
   Background:
@@ -32,10 +31,10 @@ Feature: repeat the last command
       SUCCESS!
       Warning: cannot determine terminal size
       """
-# When receiving the command '{ "command": "repeatTest" }'
-# Then it prints
-#   """
-#   executing: echo running all tests
-#   running all tests
-#   SUCCESS!
-#   """
+    When receiving the command '{ "command": "repeatTest" }'
+    Then it prints
+      """
+      executing: echo running all tests
+      running all tests
+      SUCCESS!
+      """
