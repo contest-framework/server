@@ -36,7 +36,7 @@ Feature: define a custom variable with a part of the filename
     Then it prints
       """
       Error: cannot determine command for trigger: testFile my_file.go
-      Please make sure that this trigger is listed in your configuration file
+      Please make sure that this action is listed in your configuration file
       """
 
   Scenario: receiving no file

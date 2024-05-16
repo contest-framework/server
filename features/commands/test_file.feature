@@ -28,5 +28,5 @@ Feature: run all tests in a file
     Then it prints
       """
       Error: cannot determine command for trigger: testFile foo.go
-      Please make sure that this trigger is listed in your configuration file
+      Please make sure that this action is listed in your configuration file
       """

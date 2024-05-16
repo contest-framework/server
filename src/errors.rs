@@ -97,7 +97,7 @@ impl UserError {
                 "Please check that the file .testconfig.json is correct".into()),
             UserError::UnknownActionType { action_type } => (format!("unknown action type: {action_type}"), r#"Valid types are "testAll", "testFile", and "testFunction"."#.into()),
             UserError::UnknownTrigger{line} => (format!("cannot determine command for trigger: {}", line),
-            "Please make sure that this trigger is listed in your configuration file".into()),
+            "Please make sure that this action is listed in your configuration file".into()),
         }
   }
 }
