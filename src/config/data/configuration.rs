@@ -78,27 +78,6 @@ mod tests {
     use big_s::S;
 
     #[test]
-    fn test_all() {
-      let config = Configuration {
-        actions: vec![],
-        options: Options {
-          before_run: BeforeRun {
-            clear_screen: false,
-            newlines: 0,
-          },
-          after_run: AfterRun {
-            newlines: 0,
-            indicator_lines: 0,
-          },
-        },
-      };
-      let trigger = Trigger::TestAll;
-      let mut last_command: Option<String> = None;
-      let have = config.get_command(trigger, &mut last_command);
-      assert!(have.is_err());
-    }
-
-    #[test]
     fn exact_match() {
       let action1 = Action {
         pattern: Pattern::TestFileLine {
@@ -170,6 +149,27 @@ mod tests {
       };
       let mut last_command: Option<String> = None;
       let have = config.get_command(give, &mut last_command);
+      assert!(have.is_err());
+    }
+
+    #[test]
+    fn no_actions() {
+      let config = Configuration {
+        actions: vec![],
+        options: Options {
+          before_run: BeforeRun {
+            clear_screen: false,
+            newlines: 0,
+          },
+          after_run: AfterRun {
+            newlines: 0,
+            indicator_lines: 0,
+          },
+        },
+      };
+      let trigger = Trigger::TestAll;
+      let mut last_command: Option<String> = None;
+      let have = config.get_command(trigger, &mut last_command);
       assert!(have.is_err());
     }
   }
