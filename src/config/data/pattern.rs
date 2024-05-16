@@ -10,6 +10,7 @@ pub enum Pattern {
 }
 
 impl Pattern {
+  /// indicates whether this `Pattern` matches the given `Trigger` received via the FIFO
   pub fn matches_trigger(&self, trigger: &Trigger) -> bool {
     match self {
       Pattern::TestAll => return trigger == &Trigger::TestAll,
