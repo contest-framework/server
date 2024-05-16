@@ -1,8 +1,5 @@
-use regex::Regex;
-
 pub fn replace(text: &str, placeholder: &str, replacement: &str) -> String {
-  Regex::new(&format!("\\{{\\{{\\s*{}\\s*\\}}\\}}", placeholder))
-    .unwrap()
+  super::regex(placeholder)
     .replace_all(text, regex::NoExpand(replacement))
     .to_string()
 }
