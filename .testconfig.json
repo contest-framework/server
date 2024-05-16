@@ -39,7 +39,7 @@
 
     {
       "type": "testFile",
-      "file": "**/*.ts",
+      "files": "**/*.ts",
       "vars": [
         {
           "name": "file_without_ext",
