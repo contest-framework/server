@@ -1,7 +1,7 @@
 //! finds regular expression matches in the content of files on disk
 
-mod scan_file;
-mod scan_string;
+mod file_upwards;
+mod string_upwards;
 
-pub use scan_file::scan_file_upwards;
-pub use scan_string::scan_string_upwards;
+pub use file_upwards::file_upwards;
+pub use string_upwards::string_upwards;

@@ -21,7 +21,7 @@ impl Var {
           return Err(UserError::MissingLineFieldInCurrentOrAboveLineContent);
         };
         let original_line = original_line.parse().unwrap();
-        scanner::scan_file_upwards(&filename, &self.filter, original_line)
+        scanner::file_upwards(filename, &self.filter, original_line)
       }
     }
   }

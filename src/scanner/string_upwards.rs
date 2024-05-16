@@ -2,12 +2,12 @@ use crate::{Result, UserError};
 use regex::Regex;
 
 /// provides the first capture of the given regex in the given string starting at the given line and looking upwards
-pub fn scan_string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<String>> {
+pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<String>> {
   let lines: Vec<&str> = text.split('\n').collect();
   while index > 0 {
     let line_text = lines.get(index as usize).unwrap();
     index -= 1;
-    let Some(captures) = re.captures(&line_text) else {
+    let Some(captures) = re.captures(line_text) else {
       // no match on this line --> try the one above
       continue;
     };
@@ -26,7 +26,7 @@ pub fn scan_string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Opt
 
 #[cfg(test)]
 mod tests {
-  use super::scan_string_upwards;
+  use super::string_upwards;
 
   #[test]
   fn match_on_the_given_line() {
@@ -38,7 +38,7 @@ pub fn test_func(param: &str) -> String {
 }
 "#;
     let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
-    let have = scan_string_upwards(text, &re, 3).unwrap().unwrap();
+    let have = string_upwards(text, &re, 3).unwrap().unwrap();
     let want = "test_func";
     assert_eq!(have, want);
   }
@@ -53,7 +53,7 @@ pub fn test_func(param: &str) -> String {
 }
 "#;
     let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
-    let have = scan_string_upwards(text, &re, 4).unwrap().unwrap();
+    let have = string_upwards(text, &re, 4).unwrap().unwrap();
     let want = "test_func";
     assert_eq!(have, want);
   }
@@ -66,7 +66,7 @@ pub fn test_func(param: &str) -> String {
 }
 "#;
     let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
-    let have = scan_string_upwards(text, &re, 3).unwrap().unwrap();
+    let have = string_upwards(text, &re, 3).unwrap().unwrap();
     let want = "test_func";
     assert_eq!(have, want);
   }
@@ -77,7 +77,7 @@ pub fn test_func(param: &str) -> String {
 placeholder
 "#;
     let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
-    let have = scan_string_upwards(text, &re, 1).unwrap();
+    let have = string_upwards(text, &re, 1).unwrap();
     assert!(have.is_none());
   }
 }
