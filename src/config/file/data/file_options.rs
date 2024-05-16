@@ -2,6 +2,7 @@ use super::{FileAfterRun, FileBeforeRun};
 use crate::config::Options;
 use serde::Deserialize;
 
+/// Low-level `Options` data exactly how it is stored in the config file
 #[derive(Default, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FileOptions {
