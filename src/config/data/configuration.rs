@@ -102,16 +102,7 @@ mod tests {
       };
       let config = Configuration {
         actions: vec![action1, action2, action3],
-        options: Options {
-          before_run: BeforeRun {
-            clear_screen: false,
-            newlines: 0,
-          },
-          after_run: AfterRun {
-            newlines: 0,
-            indicator_lines: 0,
-          },
-        },
+        options: Options::defaults(),
       };
       let trigger = Trigger::TestFileLine {
         file: S("filename2"),
