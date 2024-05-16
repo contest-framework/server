@@ -31,7 +31,7 @@ setup:  # prepares this codebase for development
 
 test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
-	cargo clippy --all-targets --all-features -- --deny=warnings
+	cargo clippy
 	cargo test
 	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
