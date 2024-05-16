@@ -1,9 +1,9 @@
 use super::{Action, Options};
 use crate::client::Trigger;
 use crate::{template, Result, UserError};
+use ahash::AHashMap;
 use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
 use prettytable::Table;
-use std::collections::HashMap;
 use std::fmt::{self, Display};
 
 #[derive(Debug, Default, PartialEq)]
@@ -34,7 +34,7 @@ impl Configuration {
 
   /// replaces all placeholders in the given run string
   fn format_run(&self, action: &Action, trigger: &Trigger) -> Result<String> {
-    let mut values: HashMap<&str, String> = HashMap::new();
+    let mut values: AHashMap<&str, String> = AHashMap::new();
     if let Trigger::TestFile { file } = &trigger {
       values.insert("file", file.to_owned());
     }

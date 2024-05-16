@@ -1,8 +1,8 @@
 use super::replace;
 use crate::Result;
-use std::collections::HashMap;
+use ahash::AHashMap;
 
-pub fn replace_all(text: &str, replacements: &HashMap<&str, String>) -> Result<String> {
+pub fn replace_all(text: &str, replacements: &AHashMap<&str, String>) -> Result<String> {
   let mut result = text.to_owned();
   for (placeholder, replacement) in replacements {
     result = replace(&result, placeholder, replacement)?;
@@ -13,15 +13,13 @@ pub fn replace_all(text: &str, replacements: &HashMap<&str, String>) -> Result<S
 #[cfg(test)]
 mod tests {
   use super::replace_all;
+  use ahash::AHashMap;
   use big_s::S;
-  use maplit::hashmap;
-  use std::collections::HashMap;
 
   #[test]
   fn normal() {
-    let replacements = hashmap! {
-      "foo" => S("bar"),
-    };
+    let mut replacements = AHashMap::new();
+    replacements.insert("foo", S("bar"));
     let give = "a skeleton walks into a {{ foo }}";
     let have = replace_all(give, &replacements).unwrap();
     let want = "a skeleton walks into a bar";
@@ -30,7 +28,7 @@ mod tests {
 
   #[test]
   fn no_placeholders() {
-    let replacements = HashMap::new();
+    let replacements = AHashMap::new();
     let give = "a skeleton walks into a {{ foo }}";
     let have = replace_all(give, &replacements).unwrap();
     let want = "a skeleton walks into a {{ foo }}";
@@ -39,9 +37,8 @@ mod tests {
 
   #[test]
   fn no_match() {
-    let replacements = hashmap! {
-      "foo" => S("bar"),
-    };
+    let mut replacements = AHashMap::new();
+    replacements.insert("foo", S("bar"));
     let give = "a skeleton walks into a {{ other }}";
     let have = replace_all(give, &replacements).unwrap();
     let want = "a skeleton walks into a {{ other }}";
