@@ -9,7 +9,7 @@ use super::fifo_data::FifoTrigger;
 pub enum Trigger {
   TestAll,
   TestFile { file: String },
-  TestFileLine { file: String, line: i64 },
+  TestFileLine { file: String, line: String },
   RepeatLastTest,
 }
 

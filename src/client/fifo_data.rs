@@ -9,7 +9,7 @@ use super::Trigger;
 pub struct FifoTrigger {
   pub command: String,
   pub file: Option<String>,
-  pub line: Option<i64>,
+  pub line: Option<String>,
 }
 
 impl FifoTrigger {
@@ -56,7 +56,7 @@ impl FifoTrigger {
         err: r#"trigger "testFile" is missing field "file"."#.into(),
       });
     }
-    if command == "testline" {
+    if command == "testfunction" {
       match (self.file.is_some(), self.line.is_some()) {
         (true, true) => return Ok(()),
         (true, false) => {
@@ -125,7 +125,7 @@ mod tests {
       let want = FifoTrigger {
         command: S("testFunction"),
         file: Some(S("foo.rs")),
-        line: Some(12),
+        line: Some(S("12")),
       };
       assert_eq!(have, want);
     }
