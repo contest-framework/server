@@ -22,18 +22,18 @@ mod tests {
     let replacements = hashmap! {
       "foo" => S("bar"),
     };
-    let give = "my name is {{ foo }}";
+    let give = "a skeleton walks into a {{ foo }}";
     let have = replace_all(give, &replacements).unwrap();
-    let want = "my name is bar";
+    let want = "a skeleton walks into a bar";
     assert_eq!(have, want);
   }
 
   #[test]
   fn no_placeholders() {
     let replacements = HashMap::new();
-    let give = "my name is {{ foo }}";
+    let give = "a skeleton walks into a {{ foo }}";
     let have = replace_all(give, &replacements).unwrap();
-    let want = "my name is {{ foo }}";
+    let want = "a skeleton walks into a {{ foo }}";
     assert_eq!(have, want);
   }
 
@@ -42,9 +42,9 @@ mod tests {
     let replacements = hashmap! {
       "foo" => S("bar"),
     };
-    let give = "my name is {{ other }}";
+    let give = "a skeleton walks into a {{ other }}";
     let have = replace_all(give, &replacements).unwrap();
-    let want = "my name is {{ other }}";
+    let want = "a skeleton walks into a {{ other }}";
     assert_eq!(have, want);
   }
 }
