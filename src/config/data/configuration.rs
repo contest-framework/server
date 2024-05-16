@@ -44,11 +44,7 @@ impl Configuration {
     for var in &action.vars {
       values.insert(&var.name, var.calculate_var(&values)?);
     }
-    let mut replaced = action.run.clone();
-    for (placeholder, replacement) in values {
-      replaced = template::replace(&replaced, placeholder, &replacement);
-    }
-    Ok(replaced)
+    Ok(template::replace_all(action.run.clone(), &values))
   }
 }
 
