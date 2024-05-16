@@ -45,7 +45,17 @@ pub fn test_func(param: &str) -> String {
 
   #[test]
   fn match_on_the_line_above() {
-    // TODO
+    let text = r#"\
+//! a test module
+
+pub fn test_func(param: &str) -> String {
+  println!("a test function");
+}
+"#;
+    let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
+    let have = scan_string_upwards(text, &re, 4).unwrap().unwrap();
+    let want = "test_func";
+    assert_eq!(have, want);
   }
 
   #[test]
