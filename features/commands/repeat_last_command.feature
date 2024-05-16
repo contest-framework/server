@@ -1,3 +1,4 @@
+@this
 Feature: repeat the last command
 
   Background:
@@ -6,9 +7,7 @@ Feature: repeat the last command
       {
         "actions": [
           {
-            "trigger": {
-              "command": "testAll"
-            },
+            "type": "testAll",
             "run": "echo running all tests"
           }
         ]
