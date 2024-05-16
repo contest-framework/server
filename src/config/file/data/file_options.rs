@@ -22,7 +22,7 @@ impl FileOptions {
 #[cfg(test)]
 mod tests {
 
-  mod to_domain {
+  mod into_domain {
     use super::super::FileOptions;
     use crate::config::file::{FileAfterRun, FileBeforeRun};
     use crate::config::{AfterRun, BeforeRun, Options};

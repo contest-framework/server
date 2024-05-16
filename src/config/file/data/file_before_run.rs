@@ -21,7 +21,7 @@ impl FileBeforeRun {
 #[cfg(test)]
 mod tests {
 
-  mod to_domain {
+  mod into_domain {
     use super::super::FileBeforeRun;
     use crate::config::BeforeRun;
 
