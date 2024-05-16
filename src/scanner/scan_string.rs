@@ -60,11 +60,24 @@ pub fn test_func(param: &str) -> String {
 
   #[test]
   fn match_on_the_first_line() {
-    // TODO
+    let text = r#"\
+pub fn test_func(param: &str) -> String {
+  println!("a test function");
+}
+"#;
+    let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
+    let have = scan_string_upwards(text, &re, 3).unwrap().unwrap();
+    let want = "test_func";
+    assert_eq!(have, want);
   }
 
   #[test]
   fn no_match() {
-    // TODO
+    let text = r#"\
+placeholder
+"#;
+    let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
+    let have = scan_string_upwards(text, &re, 1).unwrap();
+    assert!(have.is_none());
   }
 }
