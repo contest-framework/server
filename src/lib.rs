@@ -34,10 +34,13 @@ pub fn listen(debug: bool) -> Result<()> {
   }
   for signal in receiver {
     match signal {
-      channel::Signal::ReceivedLine(line) => match debug {
-        true => println!("received from client: {}", line),
-        false => run_with_decoration(&line, &config, &mut last_command)?,
-      },
+      channel::Signal::ReceivedLine(line) => {
+        if debug {
+          println!("received from client: {line}");
+        } else {
+          run_with_decoration(&line, &config, &mut last_command)?;
+        }
+      }
       channel::Signal::CannotReadPipe(err) => {
         return Err(UserError::FifoCannotRead {
           err: err.to_string(),
@@ -63,7 +66,7 @@ pub fn run_with_decoration(
   if config.options.before_run.clear_screen {
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
   }
-  let result = run_command(&text, config, last_command)?;
+  let result = run_command(text, config, last_command)?;
   for _ in 0..config.options.after_run.newlines {
     println!();
   }
