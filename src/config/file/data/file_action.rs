@@ -12,10 +12,14 @@ pub struct FileAction {
 }
 
 impl FileAction {
+  /// converts the raw file data into the validated format
   pub fn into_domain(self) -> Result<Action> {
     let action_type = self.r#type.to_ascii_lowercase();
     let file_vars = self.vars.unwrap_or_default();
     let mut vars: Vec<Var> = Vec::with_capacity(file_vars.len());
+    if self.run.is_empty() {
+      return Err(UserError::RunCommandIsEmpty);
+    }
     for file_var in file_vars {
       vars.push(file_var.into_domain()?);
     }
@@ -54,16 +58,15 @@ impl FileAction {
 #[cfg(test)]
 mod tests {
 
-  mod to_domain {
+  mod into_domain {
 
     mod test_all {
       use super::super::super::FileAction;
-      use crate::config::file::data::FileVar;
-      use crate::config::{Action, Pattern, Var, VarSource};
+      use crate::config::{Action, Pattern};
       use big_s::S;
 
       #[test]
-      fn empty() {
+      fn valid() {
         let file_action = FileAction {
           r#type: S("testAll"),
           files: None,
@@ -80,28 +83,15 @@ mod tests {
       }
 
       #[test]
-      fn with_content() {
+      fn empty_run() {
         let file_action = FileAction {
           r#type: S("testAll"),
           files: None,
-          run: S("make test"),
-          vars: Some(vec![FileVar {
-            name: S("my_var"),
-            source: VarSource::File,
-            filter: S("^fn (.*) \\{"),
-          }]),
+          run: S(""),
+          vars: None,
         };
-        let have = file_action.into_domain().unwrap();
-        let want = Action {
-          pattern: Pattern::TestAll,
-          run: S("make test"),
-          vars: vec![Var {
-            name: S("my_var"),
-            source: VarSource::File,
-            filter: regex::Regex::new("^fn (.*) \\{").unwrap(),
-          }],
-        };
-        assert_eq!(have, want);
+        let have = file_action.into_domain();
+        assert!(have.is_err());
       }
     }
 
@@ -112,7 +102,7 @@ mod tests {
       use big_s::S;
 
       #[test]
-      fn empty() {
+      fn valid_simple() {
         let file_action = FileAction {
           r#type: S("testFile"),
           files: Some(S("**/*.rs")),
@@ -131,11 +121,11 @@ mod tests {
       }
 
       #[test]
-      fn with_content() {
+      fn valid_with_vars() {
         let file_action = FileAction {
           r#type: S("testFile"),
           files: Some(S("**/*.rs")),
-          run: S("cargo test"),
+          run: S("cargo test {{ my_var }}"),
           vars: Some(vec![FileVar {
             name: S("my_var"),
             source: VarSource::File,
@@ -155,6 +145,131 @@ mod tests {
           }],
         };
         assert_eq!(have, want);
+      }
+
+      #[test]
+      fn missing_files() {
+        let file_action = FileAction {
+          r#type: S("testFile"),
+          files: None,
+          run: S("make test"),
+          vars: None,
+        };
+        let have = file_action.into_domain();
+        assert!(have.is_err());
+      }
+
+      #[test]
+      fn empty_files() {
+        let file_action = FileAction {
+          r#type: S("testFile"),
+          files: Some(S("")),
+          run: S("make test"),
+          vars: None,
+        };
+        let have = file_action.into_domain();
+        assert!(have.is_err());
+      }
+
+      #[test]
+      fn empty_run() {
+        let file_action = FileAction {
+          r#type: S("testFile"),
+          files: Some(S("**/*.rs")),
+          run: S(""),
+          vars: None,
+        };
+        let have = file_action.into_domain();
+        assert!(have.is_err());
+      }
+    }
+
+    mod test_function {
+      use super::super::super::FileAction;
+      use crate::config::file::data::FileVar;
+      use crate::config::{Action, Pattern, Var, VarSource};
+      use big_s::S;
+
+      #[test]
+      fn valid_simple() {
+        let file_action = FileAction {
+          r#type: S("testFunction"),
+          files: Some(S("**/*.rs")),
+          run: S("cargo test"),
+          vars: None,
+        };
+        let have = file_action.into_domain().unwrap();
+        let want = Action {
+          pattern: Pattern::TestFileLine {
+            files: glob::Pattern::new("**/*.rs").unwrap(),
+          },
+          run: S("cargo test"),
+          vars: vec![],
+        };
+        assert_eq!(have, want);
+      }
+
+      #[test]
+      fn valid_with_vars() {
+        let file_action = FileAction {
+          r#type: S("testFunction"),
+          files: Some(S("**/*.rs")),
+          run: S("cargo test {{ my_var }}"),
+          vars: Some(vec![FileVar {
+            name: S("my_var"),
+            source: VarSource::File,
+            filter: S("^fn (.*) \\{"),
+          }]),
+        };
+        let have = file_action.into_domain().unwrap();
+        let want = Action {
+          pattern: Pattern::TestFileLine {
+            files: glob::Pattern::new("**/*.rs").unwrap(),
+          },
+          run: S("cargo test"),
+          vars: vec![Var {
+            name: S("my_var"),
+            source: VarSource::File,
+            filter: regex::Regex::new("^fn (.*) \\{").unwrap(),
+          }],
+        };
+        assert_eq!(have, want);
+      }
+
+      #[test]
+      fn missing_files() {
+        let file_action = FileAction {
+          r#type: S("testFunction"),
+          files: None,
+          run: S("make test"),
+          vars: None,
+        };
+        let have = file_action.into_domain();
+        assert!(have.is_err());
+      }
+
+      #[test]
+      fn empty_files() {
+        let file_action = FileAction {
+          r#type: S("testFunction"),
+          files: Some(S("")),
+          run: S("make test"),
+          vars: None,
+        };
+        let have = file_action.into_domain();
+        assert!(have.is_err());
+      }
+
+      #[test]
+      fn empty_run() {
+        let file_action = FileAction {
+          r#type: S("testFile"),
+          files: Some(S("**/*.rs")),
+          run: S(""),
+          vars: None,
+        };
+        let have = file_action.into_domain();
+        assert!(have.is_err());
       }
     }
   }

@@ -48,6 +48,7 @@ pub enum UserError {
   RunCommandNotFound {
     command: String,
   },
+  RunCommandIsEmpty,
   TriggerTooManyCaptures {
     count: usize,
     regex: String,
@@ -91,6 +92,7 @@ impl UserError {
             UserError::NoCommandToRepeat{} => ("No command to repeat found".into(), "You must submit a test command first before you can repeat it.".into()),
             UserError::RunCommandNotFound{command} => (format!("test command to run not found: {}", command),
                         "Please verify that the command is in the path or fix your config file.".into()),
+            UserError::RunCommandIsEmpty => (r#"the "run" field in your configuration file is empty"#.into(), "".into()),
             UserError::TriggerTooManyCaptures{count, regex, line} => (format!("found {} captures using regex \"{}\" on line: {}", count, regex, line),
                     "filters in the Tertestrial configuration file can only contain one capture group".into()),
             UserError::TriggerRegexNotFound{regex, filename, line } => (format!("Did not find pattern {} in file {} at line {}", regex, filename, line),
