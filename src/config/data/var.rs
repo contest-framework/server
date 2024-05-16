@@ -30,7 +30,7 @@ impl Var {
           return Err(UserError::FileNameNotAvailable);
         };
         let Some(original_line) = values.get("line") else {
-          return Err(UserError::MissingLineFieldInCurrentOrAboveLineContent);
+          return Err(UserError::LineNotAvailable);
         };
         let original_line = original_line
           .parse()

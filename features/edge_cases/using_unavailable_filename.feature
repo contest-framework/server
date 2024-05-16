@@ -30,5 +30,5 @@ Feature: using unavailable data
     Then it prints
       """
       Error: Filename is not known
-      To use the {{file}} placeholder in a variable, you need to choose either the "testFile" or "testFunction" action type that provides this data.
+      To use the filename in a variable, you need to choose either the "testFile" or "testFunction" action type that provides this data.
       """
