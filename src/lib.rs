@@ -100,7 +100,7 @@ fn run_command(
   last_command: &mut Option<String>,
 ) -> Result<bool> {
   let trigger = Trigger::parse(text)?;
-  match configuration.get_command(trigger, last_command) {
+  match configuration.get_command(&trigger, last_command) {
     Err(err) => match err {
       UserError::NoCommandToRepeat {} => {
         // repeat non-existing command --> don't stop, just print an error message and keep going

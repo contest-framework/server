@@ -13,8 +13,12 @@ pub struct Configuration {
 }
 
 impl Configuration {
-  pub fn get_command(&self, trigger: Trigger, last_command: &mut Option<String>) -> Result<String> {
-    if trigger == Trigger::RepeatLastTest {
+  pub fn get_command(
+    &self,
+    trigger: &Trigger,
+    last_command: &mut Option<String>,
+  ) -> Result<String> {
+    if trigger == &Trigger::RepeatLastTest {
       match last_command {
         Some(command) => return Ok(command.to_owned()),
         None => return Err(UserError::NoCommandToRepeat {}),
@@ -111,7 +115,7 @@ mod tests {
         line: S("2"),
       };
       let mut last_command: Option<String> = None;
-      let have = config.get_command(trigger, &mut last_command);
+      let have = config.get_command(&trigger, &mut last_command);
       assert_eq!(have, Ok(String::from("action2 command")));
     }
 
@@ -132,7 +136,7 @@ mod tests {
         file: S("other_filename"),
       };
       let mut last_command: Option<String> = None;
-      let have = config.get_command(give, &mut last_command);
+      let have = config.get_command(&give, &mut last_command);
       assert!(have.is_err());
     }
 
@@ -144,7 +148,7 @@ mod tests {
       };
       let trigger = Trigger::TestAll;
       let mut last_command: Option<String> = None;
-      let have = config.get_command(trigger, &mut last_command);
+      let have = config.get_command(&trigger, &mut last_command);
       assert!(have.is_err());
     }
   }
