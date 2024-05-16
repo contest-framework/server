@@ -1,5 +1,7 @@
 //! runs commands in a subshell
 
+use crate::Result;
+use crate::UserError;
 use std::process::Command;
 
 pub enum Outcome {
@@ -8,11 +10,14 @@ pub enum Outcome {
   NotFound(String),
 }
 
-pub fn run(command: &str) -> Outcome {
+pub fn run(command: &str) -> Result<Outcome> {
   println!("executing: {command}");
-  let argv = shellwords::split(command).unwrap();
+  let argv = shellwords::split(command).map_err(|err| UserError::CannotSplitShellString {
+    source: command.to_owned(),
+    err: err.to_string(),
+  })?;
   let (cmd, args) = argv.split_at(1);
-  match Command::new(&cmd[0]).args(args).status() {
+  Ok(match Command::new(&cmd[0]).args(args).status() {
     Err(_) => Outcome::NotFound(command.to_owned()),
     Ok(exit_status) => {
       if exit_status.success() {
@@ -21,5 +26,5 @@ pub fn run(command: &str) -> Outcome {
         Outcome::TestFail()
       }
     }
-  }
+  })
 }

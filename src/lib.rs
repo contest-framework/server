@@ -111,7 +111,7 @@ fn run_command(
       }
       _ => Err(err),
     },
-    Ok(command) => match subshell::run(&command) {
+    Ok(command) => match subshell::run(&command)? {
       Outcome::TestPass() => {
         println!("SUCCESS!");
         Ok(true)
