@@ -27,11 +27,11 @@ mod tests {
 
     #[test]
     fn empty() {
-      let file_after_run = FileBeforeRun {
+      let file_before_run = FileBeforeRun {
         newlines: None,
         clear_screen: None,
       };
-      let have = file_after_run.into_domain();
+      let have = file_before_run.into_domain();
       let want = BeforeRun {
         newlines: 0,
         clear_screen: false,
@@ -41,11 +41,11 @@ mod tests {
 
     #[test]
     fn has_content() {
-      let file_after_run = FileBeforeRun {
+      let file_before_run = FileBeforeRun {
         newlines: Some(2),
         clear_screen: Some(true),
       };
-      let have = file_after_run.into_domain();
+      let have = file_before_run.into_domain();
       let want = BeforeRun {
         newlines: 2,
         clear_screen: true,
