@@ -1,6 +1,5 @@
 use super::string_upwards;
-use crate::Result;
-use crate::UserError;
+use crate::{Result, UserError};
 use regex::Regex;
 use std::fs;
 
