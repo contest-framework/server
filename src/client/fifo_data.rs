@@ -109,28 +109,59 @@ mod tests {
       assert_eq!(have, want);
     }
 
-    #[test]
-    fn filename() {
-      let give = r#"{ "command": "testFile", "file": "foo.rs" }"#;
-      let have = FifoTrigger::parse(give).unwrap();
-      let want = FifoTrigger {
-        command: S("testFile"),
-        file: Some(S("foo.rs")),
-        line: None,
-      };
-      assert_eq!(have, want);
+    mod test_file {
+      use crate::client::FifoTrigger;
+      use big_s::S;
+
+      #[test]
+      fn valid() {
+        let give = r#"{ "command": "testFile", "file": "foo.rs" }"#;
+        let have = FifoTrigger::parse(give).unwrap();
+        let want = FifoTrigger {
+          command: S("testFile"),
+          file: Some(S("foo.rs")),
+          line: None,
+        };
+        assert_eq!(have, want);
+      }
+
+      #[test]
+      fn no_filename() {
+        let give = r#"{ "command": "testFile" }"#;
+        let have = FifoTrigger::parse(give);
+        assert!(have.is_err());
+      }
     }
 
-    #[test]
-    fn filename_line() {
-      let give = r#"{ "command": "testFunction", "file": "foo.rs", "line": "12" }"#;
-      let have = FifoTrigger::parse(give).unwrap();
-      let want = FifoTrigger {
-        command: S("testFunction"),
-        file: Some(S("foo.rs")),
-        line: Some(S("12")),
-      };
-      assert_eq!(have, want);
+    mod test_function {
+      use crate::client::FifoTrigger;
+      use big_s::S;
+
+      #[test]
+      fn valid() {
+        let give = r#"{ "command": "testFunction", "file": "foo.rs", "line": "12" }"#;
+        let have = FifoTrigger::parse(give).unwrap();
+        let want = FifoTrigger {
+          command: S("testFunction"),
+          file: Some(S("foo.rs")),
+          line: Some(S("12")),
+        };
+        assert_eq!(have, want);
+      }
+
+      #[test]
+      fn no_file() {
+        let give = r#"{ "command": "testFunction", "line": "12" }"#;
+        let have = FifoTrigger::parse(give);
+        assert!(have.is_err());
+      }
+
+      #[test]
+      fn no_line() {
+        let give = r#"{ "command": "testFunction", "file": "foo.rs" }"#;
+        let have = FifoTrigger::parse(give);
+        assert!(have.is_err());
+      }
     }
 
     #[test]
