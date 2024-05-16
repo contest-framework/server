@@ -1,11 +1,8 @@
 use crate::Result;
 
 pub fn replace(text: &str, placeholder: &str, replacement: &str) -> Result<String> {
-  Ok(
-    super::regex(placeholder)?
-      .replace_all(text, regex::NoExpand(replacement))
-      .to_string(),
-  )
+  let result = super::regex(placeholder)?.replace_all(text, regex::NoExpand(replacement));
+  Ok(result.to_string())
 }
 
 #[cfg(test)]
