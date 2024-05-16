@@ -35,7 +35,7 @@ mod tests {
 //! a test module
 
 pub fn test_func(param: &str) -> String {
-  println!("a test function");
+  println!("hello");
 }
 "#;
     let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
@@ -50,7 +50,7 @@ pub fn test_func(param: &str) -> String {
 //! a test module
 
 pub fn test_func(param: &str) -> String {
-  println!("a test function");
+  println!("hello");
 }
 "#;
     let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
@@ -63,7 +63,7 @@ pub fn test_func(param: &str) -> String {
   fn match_on_the_first_line() {
     let text = r#"\
 pub fn test_func(param: &str) -> String {
-  println!("a test function");
+  println!("hello");
 }
 "#;
     let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
