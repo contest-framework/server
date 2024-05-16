@@ -28,8 +28,8 @@ Feature: test only a specific function
     When receiving the command '{ "command": "testFunction", "file": "foo.ts" }'
     Then it prints
       """
-      executing: echo testing file foo.ts:{{line}}
-      testing file foo.ts:{{line}}
+      Error: cannot parse command received from client: { "command": "testFunction", "file": "foo.ts" }
+      trigger "testLine" is missing field "line"
       """
 
   Scenario: receiving a mismatching file
