@@ -2,7 +2,7 @@ use crate::config::{Var, VarSource};
 use crate::{Result, UserError};
 use serde::Deserialize;
 
-/// Low-level `Var` data exactly how it is stored in the config file
+/// Low-level, unvalidated `Var` data exactly how it is stored in the config file
 #[derive(Deserialize, Debug, Eq, PartialEq)]
 pub struct FileVar {
   pub name: String,
