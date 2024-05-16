@@ -5,8 +5,8 @@ use regex::Regex;
 pub fn scan_string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<String>> {
   let lines: Vec<&str> = text.split('\n').collect();
   while index > 0 {
-    index -= 1;
     let line_text = lines.get(index as usize).unwrap();
+    index -= 1;
     let Some(captures) = re.captures(&line_text) else {
       // no match on this line --> try the one above
       continue;
@@ -22,4 +22,39 @@ pub fn scan_string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Opt
     return Ok(Some(captures.get(1).unwrap().as_str().to_owned()));
   }
   Ok(None)
+}
+
+#[cfg(test)]
+mod tests {
+  use super::scan_string_upwards;
+
+  #[test]
+  fn match_on_the_given_line() {
+    let text = r#"\
+//! a test module
+
+pub fn test_func(param: &str) -> String {
+  println!("a test function");
+}
+"#;
+    let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
+    let have = scan_string_upwards(text, &re, 3).unwrap().unwrap();
+    let want = "test_func";
+    assert_eq!(have, want);
+  }
+
+  #[test]
+  fn match_on_the_line_above() {
+    // TODO
+  }
+
+  #[test]
+  fn match_on_the_first_line() {
+    // TODO
+  }
+
+  #[test]
+  fn no_match() {
+    // TODO
+  }
 }
