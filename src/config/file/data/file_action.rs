@@ -3,7 +3,7 @@ use crate::config::{Action, Pattern, Var};
 use crate::{Result, UserError};
 use serde::Deserialize;
 
-/// Low-level, unvalidated `Action` data exactly how it is stored in the config file
+/// low-level, unvalidated `Action` data exactly how it is stored in the config file
 #[derive(Deserialize)]
 pub struct FileAction {
   r#type: String,

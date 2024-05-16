@@ -1,7 +1,7 @@
 use crate::config::BeforeRun;
 use serde::Deserialize;
 
-/// Low-level, unvalidated `BeforeRun` data exactly how it is stored in the config file
+/// low-level, unvalidated `BeforeRun` data exactly how it is stored in the config file
 #[derive(Default, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FileBeforeRun {

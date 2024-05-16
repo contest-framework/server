@@ -3,7 +3,7 @@ use crate::config::{Action, Configuration};
 use crate::Result;
 use serde::Deserialize;
 
-/// Low-level, unvalidated `Configuration` data exactly how it is stored in the config file
+/// low-level, unvalidated `Configuration` data exactly how it is stored in the config file
 #[derive(Deserialize)]
 pub struct FileConfiguration {
   actions: Vec<FileAction>,
