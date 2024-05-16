@@ -15,10 +15,10 @@ pub enum Trigger {
 impl Display for Trigger {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
-      Trigger::TestAll => f.write_str("run all tests"),
-      Trigger::TestFile { file } => write!(f, "test {file}"),
-      Trigger::TestFileLine { file, line } => write!(f, "test {file}:{line}"),
-      Trigger::RepeatLastTest => f.write_str("repeat the last test"),
+      Trigger::TestAll => f.write_str("testAll"),
+      Trigger::TestFile { file } => write!(f, "testFile {file}"),
+      Trigger::TestFileLine { file, line } => write!(f, "testFunction {file}:{line}"),
+      Trigger::RepeatLastTest => f.write_str("repeatTest"),
     }
   }
 }

@@ -35,7 +35,7 @@ Feature: define a custom variable with a part of the filename
     When receiving the command '{ "command": "testFile", "file": "my_file.go" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: test my_file.go
+      Error: cannot determine command for trigger: testFile my_file.go
       Please make sure that this trigger is listed in your configuration file
       """
 

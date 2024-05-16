@@ -36,6 +36,6 @@ Feature: test only a specific function
     When receiving the command '{ "command": "testFunction", "file": "foo.go", "line": "23" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: test foo.go:23
+      Error: cannot determine command for trigger: testFunction foo.go:23
       Please make sure that this trigger is listed in your configuration file
       """

@@ -27,6 +27,6 @@ Feature: run all tests in a file
     When receiving the command '{ "command": "testFile", "file": "foo.go" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: test foo.go
+      Error: cannot determine command for trigger: testFile foo.go
       Please make sure that this trigger is listed in your configuration file
       """
