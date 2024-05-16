@@ -88,12 +88,12 @@ mod tests {
       let left = Var {
         name: S("name"),
         source: VarSource::File,
-        filter: regex::Regex::new(&regex).unwrap(),
+        filter: regex::Regex::new(regex).unwrap(),
       };
       let right = Var {
         name: S("name"),
         source: VarSource::File,
-        filter: regex::Regex::new(&regex).unwrap(),
+        filter: regex::Regex::new(regex).unwrap(),
       };
       assert_eq!(left, right);
     }

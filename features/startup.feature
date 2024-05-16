@@ -1,14 +1,13 @@
 Feature: Starting Tertestrial
 
+  @this
   Scenario:
     Given file ".testconfig.json" with content
       """
       {
         "actions": [
           {
-            "trigger": {
-              "command": "testAll"
-            },
+            "type": "testAll",
             "run": "echo running all tests"
           }
         ]
