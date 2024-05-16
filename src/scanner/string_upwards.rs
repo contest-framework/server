@@ -7,9 +7,9 @@ pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<S
   let lines: Vec<&str> = text.split('\n').collect();
   while index > 0 {
     let line_text = lines.get(index as usize).unwrap();
-    index -= 1;
     let Some(captures) = re.captures(line_text) else {
       // no match on this line --> try the one above
+      index -= 1;
       continue;
     };
     if captures.len() > 2 {
