@@ -7,7 +7,10 @@ use std::fs;
 /// in the content of the file with the given path
 /// starting at the given index and scanning towards the file beginning
 pub fn file_upwards(file_path: &str, re: &Regex, index: u32) -> Result<String> {
-  let file_content = fs::read_to_string(file_path).unwrap();
+  let file_content = fs::read_to_string(file_path).map_err(|err| UserError::CannotReadFile {
+    path: file_path.to_owned(),
+    err: err.to_string(),
+  })?;
   let Some(result) = string_upwards(&file_content, re, index)? else {
     return Err(UserError::TriggerRegexNotFound {
       regex: re.to_string(),

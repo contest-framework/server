@@ -9,6 +9,10 @@ pub enum UserError {
   CannotDetermineCurrentDirectory {
     err: String,
   },
+  CannotReadFile {
+    path: String,
+    err: String,
+  },
   CannotSplitShellString {
     source: String,
     err: String,
@@ -81,6 +85,7 @@ impl UserError {
     match self {
             UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {}", err), "".into()),
             UserError::CannotDetermineCurrentDirectory { err } => (format!("cannot determine the current directory: {err}"), "".into()),
+            UserError::CannotReadFile { path, err } => (format!("cannot read file {path}"), err.into()),
             UserError::CannotSplitShellString { source, err } => (format!("cannot split this shell string: {source}"), err.into()),
             UserError::ConfigFileInvalidContent{err} => {
                 (format!("Cannot parse configuration file: {}", err), "".into())
