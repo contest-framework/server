@@ -13,7 +13,12 @@ pub struct Var {
 impl Var {
   pub fn calculate_var(&self, values: &AHashMap<&str, String>) -> Result<String> {
     match self.source {
-      VarSource::File => filter(values.get("file").unwrap(), &self.filter),
+      VarSource::File => {
+        let Some(filename) = values.get("file") else {
+          return Err(UserError::FileNameNotAvailable);
+        };
+        filter(filename, &self.filter)
+      }
       VarSource::Line => {
         let Some(line) = values.get("line") else {
           return Err(UserError::LineNotAvailable);
