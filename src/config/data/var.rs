@@ -16,7 +16,9 @@ impl Var {
       VarSource::File => filter(values.get("file").unwrap(), &self.filter),
       VarSource::Line => filter(values.get("line").unwrap(), &self.filter),
       VarSource::CurrentOrAboveLineContent => {
-        let filename = values.get("file").unwrap();
+        let Some(filename) = values.get("file") else {
+          return Err(UserError::FileNameNotAvailable);
+        };
         let Some(original_line) = values.get("line") else {
           return Err(UserError::MissingLineFieldInCurrentOrAboveLineContent);
         };

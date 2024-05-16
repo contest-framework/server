@@ -43,6 +43,7 @@ pub enum UserError {
     err: String,
   },
   FilesIsEmpty,
+  FileNameNotAvailable,
   InvalidRegex {
     regex: String,
     err: String,
@@ -101,7 +102,7 @@ impl UserError {
             UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), String::new()),
             UserError::FifoCannotDelete{err, path} => (format!("Cannot delete pipe at {path}: {err}"), String::new()),
             UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {err}"), "This is an internal error".into()),
-            UserError::FilesIsEmpty => (r#"The "files" field in your config file is empty"#.into(), String::new()),
+            UserError::FileNameNotAvailable => ("Filename is not known".into(), r#"To use the {{file}} placeholder in the \"run\" field, you need to choose either the "testFile" or "testFunction" action type."#.into()),           UserError::FilesIsEmpty => (r#"The "files" field in your config file is empty"#.into(), String::new()),
             UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), err.to_string()),
             UserError::InvalidTrigger{source: line, err} => (format!("cannot parse command received from client: {line}"), err.to_owned()),
             UserError::LineIsNotANumber { line  } => (format!("the provided line ({line})is not a number"), String::new()),
