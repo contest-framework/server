@@ -36,15 +36,20 @@ impl PartialEq for Var {
 }
 
 fn filter(text: &str, filter: &Regex) -> Result<String> {
-  let captures = filter.captures(text).unwrap();
-  if captures.len() != 2 {
+  let Some(captures) = filter.captures(text) else {
+    return Ok(String::new());
+  };
+  let Some(result) = captures.get(1) else {
+    return Ok(String::new());
+  };
+  if captures.len() > 2 {
     return Err(UserError::TriggerTooManyCaptures {
       count: captures.len(),
       regex: filter.to_string(),
       line: text.to_owned(),
     });
   }
-  return Ok(captures.get(1).unwrap().as_str().to_owned());
+  return Ok(result.as_str().to_owned());
 }
 
 #[cfg(test)]
