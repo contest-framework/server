@@ -21,7 +21,7 @@ impl FileAfterRun {
 #[cfg(test)]
 mod tests {
 
-  mod to_domain {
+  mod into_domain {
     use super::super::FileAfterRun;
     use crate::config::AfterRun;
 
