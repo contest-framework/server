@@ -6,6 +6,7 @@ use prettytable::Table;
 use std::collections::HashMap;
 use std::fmt::{self, Display};
 
+#[derive(Default)]
 pub struct Configuration {
   pub actions: Vec<Action>,
   pub options: Options,
@@ -102,7 +103,7 @@ mod tests {
       };
       let config = Configuration {
         actions: vec![action1, action2, action3],
-        options: Options::defaults(),
+        ..Configuration::default()
       };
       let trigger = Trigger::TestFileLine {
         file: S("filename2"),
