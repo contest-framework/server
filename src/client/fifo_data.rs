@@ -82,6 +82,9 @@ impl FifoTrigger {
         }
       }
     }
+    if command == "repeattest" {
+      return Ok(());
+    }
     Err(UserError::InvalidTrigger {
       source: source.into(),
       err: "unknown command".into(),
@@ -165,7 +168,19 @@ mod tests {
     }
 
     #[test]
-    fn extra_fields() {
+    fn repeat_test() {
+      let give = r#"{ "command": "repeatTest" }"#;
+      let have = FifoTrigger::parse(give).unwrap();
+      let want = FifoTrigger {
+        command: S("repeatTest"),
+        file: None,
+        line: None,
+      };
+      assert_eq!(have, want);
+    }
+
+    #[test]
+    fn unknown_fields() {
       let give = r#"{ "command": "testFile", "file": "foo.rs", "other": "12" }"#;
       let have = FifoTrigger::parse(give);
       assert!(have.is_err());
