@@ -36,7 +36,7 @@ pub fn listen(debug: bool) -> Result<()> {
     match signal {
       channel::Signal::ReceivedLine(line) => match debug {
         true => println!("received from client: {}", line),
-        false => run_with_decoration(line, &config, &mut last_command)?,
+        false => run_with_decoration(&line, &config, &mut last_command)?,
       },
       channel::Signal::CannotReadPipe(err) => {
         return Err(UserError::FifoCannotRead {
@@ -53,7 +53,7 @@ pub fn listen(debug: bool) -> Result<()> {
 }
 
 pub fn run_with_decoration(
-  text: String,
+  text: &str,
   config: &config::Configuration,
   last_command: &mut Option<String>,
 ) -> Result<()> {
@@ -63,7 +63,7 @@ pub fn run_with_decoration(
   if config.options.before_run.clear_screen {
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
   }
-  let result = run_command(text, config, last_command)?;
+  let result = run_command(&text, config, last_command)?;
   for _ in 0..config.options.after_run.newlines {
     println!();
   }
@@ -77,11 +77,9 @@ pub fn run_with_decoration(
         } else {
           termcolor::Color::Red
         };
-        stdout
-          .set_color(termcolor::ColorSpec::new().set_fg(Some(color)))
-          .unwrap();
+        let _ = stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(color)));
         let text: String = "█".repeat(width.0 as usize);
-        writeln!(&mut stdout, "{}", text).unwrap();
+        writeln!(&mut stdout, "{text}").unwrap();
         let _ = stdout.reset(); // we really don't care about being unable to reset colors here
       }
     }
@@ -90,18 +88,18 @@ pub fn run_with_decoration(
 }
 
 fn run_command(
-  text: String,
+  text: &str,
   configuration: &config::Configuration,
   last_command: &mut Option<String>,
 ) -> Result<bool> {
-  let trigger = Trigger::parse(&text)?;
+  let trigger = Trigger::parse(text)?;
   match configuration.get_command(trigger, last_command) {
     Err(err) => match err {
       UserError::NoCommandToRepeat {} => {
         // repeat non-existing command --> don't stop, just print an error message and keep going
         let (msg, desc) = err.messages();
-        println!("{}", msg);
-        println!("{}", desc);
+        println!("{msg}");
+        println!("{desc}");
         Ok(false)
       }
       _ => Err(err),
