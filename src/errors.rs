@@ -6,6 +6,9 @@ pub enum UserError {
   CannotCreateConfigFile {
     err: String,
   },
+  CannotDetermineCurrentDirectory {
+    err: String,
+  },
   ConfigFileNotFound {},
   ConfigFileError {
     err: String,
@@ -73,6 +76,7 @@ impl UserError {
   pub fn messages(&self) -> (String, String) {
     match self {
             UserError::CannotCreateConfigFile{err} => (format!("cannot create configuration file: {}", err), "".into()),
+            UserError::CannotDetermineCurrentDirectory { err } => (format!("cannot determine the current directory: {err}"), "".into()),
             UserError::ConfigFileInvalidContent{err} => {
                 (format!("Cannot parse configuration file: {}", err), "".into())
             }

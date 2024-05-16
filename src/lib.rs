@@ -19,18 +19,22 @@ pub fn listen(debug: bool) -> Result<()> {
   let config = config::file::read()?;
   if debug {
     println!("using this configuration:");
-    println!("{}", config);
+    println!("{config}");
   }
   let (sender, receiver) = channel::create(); // cross-thread communication channel
   cli::ctrl_c::handle(sender.clone());
-  let current_dir = env::current_dir().unwrap();
+  let current_dir =
+    env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory {
+      err: err.to_string(),
+    })?;
   let pipe = client::fifo::in_dir(&current_dir);
   pipe.create()?;
   fifo::listen(pipe, sender);
   let mut last_command: Option<String> = None;
-  match debug {
-    false => println!("Tertestrial is online, Ctrl-C to exit"),
-    true => println!("Tertestrial is online in debug mode, Ctrl-C to exit"),
+  if debug {
+    println!("Tertestrial is online in debug mode, Ctrl-C to exit");
+  } else {
+    println!("Tertestrial is online, Ctrl-C to exit");
   }
   for signal in receiver {
     match signal {
