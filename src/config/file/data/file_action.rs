@@ -33,6 +33,9 @@ impl FileAction {
     let Some(files) = self.files else {
       return Err(UserError::MissingFilesInPattern);
     };
+    if files.is_empty() {
+      return Err(UserError::FilesIsEmpty);
+    }
     let pattern = glob::Pattern::new(&files).map_err(|err| UserError::ConfigInvalidGlob {
       pattern: files,
       err: err.to_string(),

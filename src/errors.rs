@@ -31,6 +31,7 @@ pub enum UserError {
   FifoCannotRead {
     err: String,
   },
+  FilesIsEmpty,
   InvalidRegex {
     regex: String,
     err: String,
@@ -82,6 +83,7 @@ impl UserError {
             UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotDelete{err, path} => (format!("Cannot delete pipe at {path}: {err}"), "".into()),
             UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {}", err), "This is an internal error".into()),
+            UserError::FilesIsEmpty => (r#"The "files" field in your config file is empty"#.into(), "".into()),
             UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), err.to_string()),
             UserError::InvalidTrigger{source: line, err} => (format!("cannot parse command received from client: {}", line), err.to_owned()),
             UserError::MissingFilesInPattern  => (r#"the pattern in the config file is missing the "files" field."#.into(), "".into()),
