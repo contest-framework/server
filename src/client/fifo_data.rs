@@ -39,6 +39,9 @@ impl FifoTrigger {
     if command == "testfunction" {
       return Ok(Trigger::TestFileLine { file, line });
     };
+    if command == "repeattest" {
+      return Ok(Trigger::RepeatLastTest);
+    }
     Err(UserError::UnknownTrigger { line: self.command })
   }
 
