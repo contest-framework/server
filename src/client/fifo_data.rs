@@ -26,7 +26,7 @@ impl FifoTrigger {
     match self.command.to_ascii_lowercase().as_str() {
       "testall" => Ok(Trigger::TestAll),
       "repeattest" => Ok(Trigger::RepeatLastTest),
-      "customCommand" => self.into_custom_command(),
+      "customcommand" => self.into_custom_command(),
       "testfile" => self.into_testfile(),
       "testfileline" => self.into_testfileline(),
       _ => Err(UserError::UnknownTrigger {
@@ -238,6 +238,25 @@ mod tests {
       let have = fifo_data.into_trigger().unwrap();
       let want = Trigger::RepeatLastTest;
       assert_eq!(have, want);
+    }
+
+    mod custom_command {
+      use crate::client::{FifoTrigger, Trigger};
+      use big_s::S;
+
+      #[test]
+      fn valid() {
+        let fifo_data = FifoTrigger {
+          command: S("customCommand"),
+          run: Some(S("echo hello")),
+          ..FifoTrigger::default()
+        };
+        let have = fifo_data.into_trigger().unwrap();
+        let want = Trigger::CustomCommand {
+          command: S("echo hello"),
+        };
+        assert_eq!(have, want);
+      }
     }
 
     mod test_file {
