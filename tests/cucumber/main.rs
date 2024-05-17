@@ -39,13 +39,19 @@ async fn it_creates_file_with_content(world: &mut TertestrialWorld, step: &Step,
 #[then("it exits with no output")]
 async fn it_exits_with_no_output(world: &mut TertestrialWorld) {
   logic::verify_prints_text(world, "").await;
-  logic::wait_for_exit(world).await;
+  logic::wait_for_exit(world, 0).await;
 }
 
 #[then("it exits with this output")]
 async fn it_exits_with_output(world: &mut TertestrialWorld, step: &Step) {
   logic::verify_prints_text(world, step.docstring.as_ref().unwrap().trim()).await;
-  logic::wait_for_exit(world).await;
+  logic::wait_for_exit(world, 0).await;
+}
+
+#[then("it fails with this output")]
+async fn it_fails_with_output(world: &mut TertestrialWorld, step: &Step) {
+  logic::verify_prints_text(world, step.docstring.as_ref().unwrap().trim()).await;
+  logic::wait_for_exit(world, 1).await;
 }
 
 #[when(expr = "receiving the command {string}")]

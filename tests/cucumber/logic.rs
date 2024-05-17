@@ -77,8 +77,8 @@ pub async fn verify_prints_text(world: &mut TertestrialWorld, want: &str) {
   pretty::assert_eq!(have.trim(), want.trim());
 }
 
-pub async fn wait_for_exit(world: &mut TertestrialWorld) {
+pub async fn wait_for_exit(world: &mut TertestrialWorld, code: i32) {
   let subprocess = world.subprocess.as_mut().unwrap();
   let exit_status = subprocess.cmd.wait().await.unwrap();
-  assert_eq!(exit_status.code().unwrap(), 0);
+  assert_eq!(exit_status.code().unwrap(), code);
 }

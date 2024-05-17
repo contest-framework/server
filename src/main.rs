@@ -1,14 +1,18 @@
 use clap::{Parser, Subcommand};
 use std::env;
+use std::process::ExitCode;
 use tertestrial::{cli, client, config, listen, run_with_decoration, Result};
 
-fn main() {
+fn main() -> ExitCode {
+  let mut exit_code = ExitCode::SUCCESS;
   if let Err(err) = main_with_result() {
     let (msg, guidance) = err.messages();
     println!("\nError: {msg}\n\n{guidance}");
+    exit_code = ExitCode::FAILURE;
   }
   let current_dir = env::current_dir().unwrap_or_else(|err| cli::exit(&err.to_string()));
   let _ = client::fifo::in_dir(&current_dir).delete();
+  exit_code
 }
 
 fn main_with_result() -> Result<()> {
