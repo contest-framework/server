@@ -3,7 +3,7 @@ use crate::{Result, UserError};
 use serde::Deserialize;
 
 /// The `Trigger` data as it comes in through the FIFO.
-#[derive(Deserialize, Debug, Eq, PartialEq)]
+#[derive(Deserialize, Debug, Default, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct FifoTrigger {
   pub command: String,
@@ -120,9 +120,7 @@ mod tests {
       let have = FifoTrigger::parse(give).unwrap();
       let want = FifoTrigger {
         command: S("testAll"),
-        file: None,
-        line: None,
-        run: None,
+        ..FifoTrigger::default()
       };
       assert_eq!(have, want);
     }
@@ -138,8 +136,7 @@ mod tests {
         let want = FifoTrigger {
           command: S("testFile"),
           file: Some(S("foo.rs")),
-          line: None,
-          run: None,
+          ..FifoTrigger::default()
         };
         assert_eq!(have, want);
       }
@@ -190,9 +187,7 @@ mod tests {
       let have = FifoTrigger::parse(give).unwrap();
       let want = FifoTrigger {
         command: S("repeatTest"),
-        file: None,
-        line: None,
-        run: None,
+        ..FifoTrigger::default()
       };
       assert_eq!(have, want);
     }
@@ -268,7 +263,7 @@ mod tests {
         let fifo_data = FifoTrigger {
           command: S("testFile"),
           file: None,
-          line: None,
+          ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger();
         assert!(have.is_err());
