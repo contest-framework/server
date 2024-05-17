@@ -1,7 +1,9 @@
 //! everything around CLI input
-
 pub mod args;
 pub mod ctrl_c;
+mod exit;
+
+pub use exit::exit;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Command {

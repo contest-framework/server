@@ -1,10 +1,9 @@
 //! manages and reads the FIFO pipe
 
 use crate::channel::Signal;
-use crate::{channel, Result, UserError};
+use crate::{channel, cli, Result, UserError};
 use std::fs::{self, File};
-use std::io::prelude::*;
-use std::io::BufReader;
+use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::thread;
 
@@ -43,18 +42,22 @@ impl Pipe {
     })
   }
 
-  pub fn open(&self) -> BufReader<File> {
-    let file = File::open(&self.filepath).unwrap();
-    BufReader::new(file)
+  pub fn open(&self) -> Result<BufReader<File>> {
+    let file = File::open(&self.filepath).map_err(|err| UserError::FifoCannotOpen {
+      err: err.to_string(),
+    })?;
+    Ok(BufReader::new(file))
   }
 
   /// provides the path of this pipe as a string
+  #[must_use]
   pub fn path_str(&self) -> String {
     self.filepath.display().to_string()
   }
 }
 
 /// constructs a fifo pipe in the current directory
+#[must_use]
 pub fn in_dir(dirpath: &Path) -> Pipe {
   Pipe {
     filepath: dirpath.join(FILE_NAME),
@@ -63,7 +66,14 @@ pub fn in_dir(dirpath: &Path) -> Pipe {
 
 pub fn listen(pipe: Pipe, sender: channel::Sender) {
   thread::spawn(move || loop {
-    for line in pipe.open().lines() {
+    let reader = match pipe.open() {
+      Ok(reader) => reader,
+      Err(err) => {
+        cli::exit(err.messages().0);
+        return;
+      }
+    };
+    for line in reader.lines() {
       match line {
         Ok(text) => sender
           .send(Signal::ReceivedLine(text))

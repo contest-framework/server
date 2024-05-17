@@ -39,6 +39,9 @@ pub enum UserError {
     path: String,
     err: String,
   },
+  FifoCannotOpen {
+    err: String,
+  },
   FifoCannotRead {
     err: String,
   },
@@ -102,6 +105,7 @@ impl UserError {
             UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), String::new()),
             UserError::FifoCannotDelete{err, path} => (format!("Cannot delete pipe at {path}: {err}"), String::new()),
             UserError::FifoCannotRead{err} => (format!("Cannot read from pipe: {err}"), "This is an internal error".into()),
+            UserError::FifoCannotOpen { err } => (format!("Cannot open pipe: {err}"), "This is an internal error".into()),
             UserError::FileNameNotAvailable => ("Filename is not known".into(), r#"To use the filename in a variable, you need to choose either the "testFile" or "testFunction" action type that provides this data."#.into()),           UserError::FilesIsEmpty => (r#"The "files" field in your config file is empty"#.into(), String::new()),
             UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), err.to_string()),
             UserError::InvalidTrigger{source: line, err} => (format!("cannot parse command received from client: {line}"), err.to_owned()),
