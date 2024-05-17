@@ -118,17 +118,16 @@ mod tests {
   }
 
   #[test]
-  fn pipe_delete() -> Result<(), io::Error> {
+  fn pipe_delete() -> Result<(), UserError> {
     let temp_path = tempfile::tempdir().unwrap().into_path();
     let pipe = in_dir(&temp_path);
-    match pipe.create() {
-      Ok(()) => {}
-      _ => panic!(),
+    if let Err(err) = pipe.create() {
+      return Err(err);
     }
     pipe.delete().unwrap();
     let mut files = vec![];
-    for file in fs::read_dir(&temp_path)? {
-      files.push(file?.path());
+    for file in fs::read_dir(&temp_path).unwrap() {
+      files.push(file.unwrap().path());
     }
     assert_eq!(0, files.len());
     fs::remove_dir_all(&temp_path).unwrap();
