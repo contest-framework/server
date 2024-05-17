@@ -4,6 +4,6 @@
 
 - streamlined config file syntax
 - support for running custom commands
-- remove all opportunities to crash
+- remove all possibilities to crash
 - can now run without config file
 - end-to-end tests
