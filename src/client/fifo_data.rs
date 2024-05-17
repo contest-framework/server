@@ -64,6 +64,15 @@ impl FifoTrigger {
     if command == "testall" {
       return Ok(());
     }
+    if command == "customcommand" {
+      if self.run.is_some() {
+        return Ok(());
+      }
+      return Err(UserError::InvalidTrigger {
+        source: source.into(),
+        err: r#"trigger "customCommand" is missing field "run"."#.into(),
+      });
+    }
     if command == "testfile" {
       if self.file.is_some() {
         return Ok(());
@@ -123,6 +132,30 @@ mod tests {
         ..FifoTrigger::default()
       };
       assert_eq!(have, want);
+    }
+
+    mod custom_command {
+      use crate::client::FifoTrigger;
+      use big_s::S;
+
+      #[test]
+      fn valid() {
+        let give = r#"{ "command": "customCommand", "run": "echo hello" }"#;
+        let have = FifoTrigger::parse(give).unwrap();
+        let want = FifoTrigger {
+          command: S("customCommand"),
+          run: Some(S("echo hello")),
+          ..FifoTrigger::default()
+        };
+        assert_eq!(have, want);
+      }
+
+      #[test]
+      fn no_run() {
+        let give = r#"{ "command": "customCommand" }"#;
+        let have = FifoTrigger::parse(give);
+        assert!(have.is_err());
+      }
     }
 
     mod test_file {
