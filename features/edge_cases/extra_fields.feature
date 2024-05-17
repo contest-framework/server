@@ -19,5 +19,5 @@ Feature: client sends unknown fields in the command
     Then it prints
       """
         Error: cannot parse command received from client: { "command": "testAll", "foo": 1, "bar": 2 }
-        unknown field `foo`, expected one of `command`, `file`, `line` at line 1 column 29
+        unknown field `foo`, expected one of `command`, `file`, `line`, `run` at line 1 column 29
       """

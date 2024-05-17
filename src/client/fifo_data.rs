@@ -9,6 +9,7 @@ pub struct FifoTrigger {
   pub command: String,
   pub file: Option<String>,
   pub line: Option<String>,
+  pub run: Option<String>,
 }
 
 impl FifoTrigger {
@@ -25,11 +26,19 @@ impl FifoTrigger {
     match self.command.to_ascii_lowercase().as_str() {
       "testall" => Ok(Trigger::TestAll),
       "repeattest" => Ok(Trigger::RepeatLastTest),
+      "customcommand" => self.into_custom_command(),
       "testfile" => self.into_testfile(),
       "testfileline" => self.into_testfileline(),
       _ => Err(UserError::UnknownTrigger {
         source: self.command,
       }),
+    }
+  }
+
+  fn into_custom_command(self) -> Result<Trigger> {
+    match self.run {
+      Some(run) => Ok(Trigger::CustomCommand { run }),
+      None => Err(UserError::MissingRunInTrigger),
     }
   }
 
@@ -54,6 +63,15 @@ impl FifoTrigger {
     let command = self.command.to_ascii_lowercase();
     if command == "testall" {
       return Ok(());
+    }
+    if command == "customcommand" {
+      if self.run.is_some() {
+        return Ok(());
+      }
+      return Err(UserError::InvalidTrigger {
+        source: source.into(),
+        err: r#"trigger "customCommand" is missing field "run"."#.into(),
+      });
     }
     if command == "testfile" {
       if self.file.is_some() {
@@ -116,6 +134,30 @@ mod tests {
       assert_eq!(have, want);
     }
 
+    mod custom_command {
+      use crate::client::FifoTrigger;
+      use big_s::S;
+
+      #[test]
+      fn valid() {
+        let give = r#"{ "command": "customCommand", "run": "echo hello" }"#;
+        let have = FifoTrigger::parse(give).unwrap();
+        let want = FifoTrigger {
+          command: S("customCommand"),
+          run: Some(S("echo hello")),
+          ..FifoTrigger::default()
+        };
+        assert_eq!(have, want);
+      }
+
+      #[test]
+      fn no_run() {
+        let give = r#"{ "command": "customCommand" }"#;
+        let have = FifoTrigger::parse(give);
+        assert!(have.is_err());
+      }
+    }
+
     mod test_file {
       use crate::client::FifoTrigger;
       use big_s::S;
@@ -152,6 +194,7 @@ mod tests {
           command: S("testFileLine"),
           file: Some(S("foo.rs")),
           line: Some(S("12")),
+          ..FifoTrigger::default()
         };
         assert_eq!(have, want);
       }
@@ -230,6 +273,36 @@ mod tests {
       assert_eq!(have, want);
     }
 
+    mod custom_command {
+      use crate::client::{FifoTrigger, Trigger};
+      use big_s::S;
+
+      #[test]
+      fn valid() {
+        let fifo_data = FifoTrigger {
+          command: S("customCommand"),
+          run: Some(S("echo hello")),
+          ..FifoTrigger::default()
+        };
+        let have = fifo_data.into_trigger().unwrap();
+        let want = Trigger::CustomCommand {
+          run: S("echo hello"),
+        };
+        assert_eq!(have, want);
+      }
+
+      #[test]
+      fn missing_run() {
+        let fifo_data = FifoTrigger {
+          command: S("customCommand"),
+          run: None,
+          ..FifoTrigger::default()
+        };
+        let have = fifo_data.into_trigger();
+        assert!(have.is_err());
+      }
+    }
+
     mod test_file {
       use crate::client::{FifoTrigger, Trigger};
       use big_s::S;
@@ -268,6 +341,7 @@ mod tests {
           command: S("testFileLine"),
           file: Some(S("file.rs")),
           line: Some(S("2")),
+          ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger().unwrap();
         let want = Trigger::TestFileLine {
@@ -283,6 +357,7 @@ mod tests {
           command: S("testFileLine"),
           file: None,
           line: Some(S("2")),
+          ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger();
         assert!(have.is_err());
@@ -294,6 +369,7 @@ mod tests {
           command: S("testFileLine"),
           file: Some(S("file.rs")),
           line: None,
+          ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger();
         assert!(have.is_err());
