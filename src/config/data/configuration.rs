@@ -24,6 +24,10 @@ impl Configuration {
         None => return Err(UserError::NoCommandToRepeat {}),
       }
     }
+    if let Trigger::CustomCommand { command } = trigger {
+      last_command.replace(command.clone());
+      return Ok(command.to_owned());
+    }
     for action in &self.actions {
       if action.pattern.matches_trigger(trigger) {
         let command = format_run(action, trigger)?;

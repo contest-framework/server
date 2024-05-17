@@ -29,6 +29,9 @@ impl FifoTrigger {
     if command == "repeattest" {
       return Ok(Trigger::RepeatLastTest);
     }
+    if command == "customCommand" {
+      return Ok(Trigger::CustomCommand { command: () });
+    }
     let Some(file) = self.file else {
       return Err(UserError::MissingFileInTrigger);
     };
