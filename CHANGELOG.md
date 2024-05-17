@@ -1,6 +1,6 @@
 # Tertestrial Server Changelog
 
-#### 0.1
+#### 0.1.0
 
 - streamlined config file syntax
 - support for running custom commands
