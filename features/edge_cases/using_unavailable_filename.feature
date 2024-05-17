@@ -19,11 +19,8 @@ Feature: using unavailable data
         ]
       }
       """
-    When I run "tertestrial"
-    Then it prints
-      """
-      Tertestrial is online, Ctrl-C to exit
-      """
+    And Tertestrial is running
+
 
   Scenario: receiving a valid command
     When receiving the command '{ "command": "testAll" }'
