@@ -69,11 +69,7 @@ pub fn run_with_decoration(
   let terminal_width = terminal_size().unwrap_or((Width(80), Height(20))).0;
   for _ in 0..config.options.after_run.indicator_lines {
     let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Auto);
-    let color = if result {
-      termcolor::Color::Green
-    } else {
-      termcolor::Color::Red
-    };
+    let color = cli::error_color(result);
     let _ = stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(color)));
     let text: String = "█".repeat(terminal_width.0 as usize);
     writeln!(&mut stdout, "{text}").unwrap();

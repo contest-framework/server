@@ -5,3 +5,12 @@ pub fn print_error(err: &UserError) {
   println!("{msg}");
   println!("{desc}");
 }
+
+#[must_use]
+pub fn error_color(success: bool) -> termcolor::Color {
+  if success {
+    termcolor::Color::Green
+  } else {
+    termcolor::Color::Red
+  }
+}
