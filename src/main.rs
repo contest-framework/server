@@ -1,18 +1,18 @@
 use clap::{Parser, Subcommand};
-use std::{env, panic};
-use tertestrial::{client, config, listen, run_with_decoration, Result};
+use std::env;
+use std::process::ExitCode;
+use tertestrial::{cli, client, config, listen, run_with_decoration, Result};
 
-fn main() {
-  let panic_result = panic::catch_unwind(|| {
-    if let Err(err) = main_with_result() {
-      let (msg, guidance) = err.messages();
-      println!("\nError: {}\n\n{}", msg, guidance);
-    }
-  });
-  let _ = client::fifo::in_dir(&env::current_dir().unwrap()).delete();
-  if panic_result.is_err() {
-    panic!("{:?}", panic_result);
+fn main() -> ExitCode {
+  let mut exit_code = ExitCode::SUCCESS;
+  if let Err(err) = main_with_result() {
+    let (msg, guidance) = err.messages();
+    println!("\nError: {msg}\n\n{guidance}");
+    exit_code = ExitCode::FAILURE;
   }
+  let current_dir = env::current_dir().unwrap_or_else(|err| cli::exit(&err.to_string()));
+  let _ = client::fifo::in_dir(&current_dir).delete();
+  exit_code
 }
 
 fn main_with_result() -> Result<()> {
@@ -20,10 +20,10 @@ fn main_with_result() -> Result<()> {
     Command::Start => listen(false),
     Command::Debug => listen(true),
     Command::Run { trigger } => {
-      println!("running trigger: {}", trigger);
+      println!("running trigger: {trigger}");
       let config = config::file::read()?;
       let mut last_command: Option<String> = None;
-      run_with_decoration(trigger, &config, &mut last_command)
+      run_with_decoration(&trigger, &config, &mut last_command)
     }
     Command::Setup => config::file::create(),
   }

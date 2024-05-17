@@ -13,14 +13,30 @@ pub struct Var {
 impl Var {
   pub fn calculate_var(&self, values: &AHashMap<&str, String>) -> Result<String> {
     match self.source {
-      VarSource::File => filter(values.get("file").unwrap(), &self.filter),
-      VarSource::Line => filter(values.get("line").unwrap(), &self.filter),
-      VarSource::CurrentOrAboveLineContent => {
-        let filename = values.get("file").unwrap();
-        let Some(original_line) = values.get("line") else {
-          return Err(UserError::MissingLineFieldInCurrentOrAboveLineContent);
+      VarSource::File => {
+        let Some(filename) = values.get("file") else {
+          return Err(UserError::FileNameNotAvailable);
         };
-        let original_line = original_line.parse().unwrap();
+        filter(filename, &self.filter)
+      }
+      VarSource::Line => {
+        let Some(line) = values.get("line") else {
+          return Err(UserError::LineNotAvailable);
+        };
+        filter(line, &self.filter)
+      }
+      VarSource::CurrentOrAboveLineContent => {
+        let Some(filename) = values.get("file") else {
+          return Err(UserError::FileNameNotAvailable);
+        };
+        let Some(original_line) = values.get("line") else {
+          return Err(UserError::LineNotAvailable);
+        };
+        let original_line = original_line
+          .parse()
+          .map_err(|_| UserError::LineIsNotANumber {
+            line: original_line.to_owned(),
+          })?;
         scanner::file_upwards(filename, &self.filter, original_line)
       }
     }
@@ -36,15 +52,20 @@ impl PartialEq for Var {
 }
 
 fn filter(text: &str, filter: &Regex) -> Result<String> {
-  let captures = filter.captures(text).unwrap();
-  if captures.len() != 2 {
+  let Some(captures) = filter.captures(text) else {
+    return Ok(String::new());
+  };
+  let Some(result) = captures.get(1) else {
+    return Ok(String::new());
+  };
+  if captures.len() > 2 {
     return Err(UserError::TriggerTooManyCaptures {
       count: captures.len(),
       regex: filter.to_string(),
       line: text.to_owned(),
     });
   }
-  return Ok(captures.get(1).unwrap().as_str().to_owned());
+  return Ok(result.as_str().to_owned());
 }
 
 #[cfg(test)]

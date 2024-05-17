@@ -49,9 +49,14 @@ pedantic = "warn"
 use_self = "deny"
 
 [lints.clippy]
+pedantic = { priority = -1, level = "deny" }
 derive_partial_eq_without_eq = "deny"
 impl_trait_in_params = "deny"
 module_name_repetitions = "deny"
 redundant_pub_crate = "deny"
 str_to_string = "deny"
 string_to_string = "deny"
+missing_errors_doc = "allow"
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"

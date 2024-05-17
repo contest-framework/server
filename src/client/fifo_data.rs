@@ -188,16 +188,16 @@ mod tests {
     }
 
     #[test]
-    fn invalid_json() {
+    fn invalid_json() -> Result<(), String> {
       let give = "{\"filename}";
-      let have = FifoTrigger::parse(give);
-      let want = UserError::InvalidTrigger {
-        source: give.into(),
-        err: "EOF while parsing a string at line 1 column 11".into(),
-      };
-      match have {
-        Ok(_) => panic!("this shouldn't work"),
-        Err(err) => assert_eq!(err, want),
+      match FifoTrigger::parse(give) {
+        Err(UserError::InvalidTrigger { source, err }) => {
+          assert_eq!(source, give.to_owned());
+          assert_eq!(err, S("EOF while parsing a string at line 1 column 11"));
+          Ok(())
+        }
+        Err(_) => Err(S("unexpected UserError")),
+        Ok(_) => Err(S("this should not have worked")),
       }
     }
   }

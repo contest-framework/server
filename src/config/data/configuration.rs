@@ -13,16 +13,20 @@ pub struct Configuration {
 }
 
 impl Configuration {
-  pub fn get_command(&self, trigger: Trigger, last_command: &mut Option<String>) -> Result<String> {
-    if trigger == Trigger::RepeatLastTest {
+  pub fn get_command(
+    &self,
+    trigger: &Trigger,
+    last_command: &mut Option<String>,
+  ) -> Result<String> {
+    if trigger == &Trigger::RepeatLastTest {
       match last_command {
         Some(command) => return Ok(command.to_owned()),
         None => return Err(UserError::NoCommandToRepeat {}),
       }
     }
     for action in &self.actions {
-      if action.pattern.matches_trigger(&trigger) {
-        let command = self.format_run(action, &trigger)?;
+      if action.pattern.matches_trigger(trigger) {
+        let command = format_run(action, trigger)?;
         last_command.replace(command.clone());
         return Ok(command);
       }
@@ -30,22 +34,6 @@ impl Configuration {
     Err(UserError::UnknownTrigger {
       source: trigger.to_string(),
     })
-  }
-
-  /// replaces all placeholders in the given run string
-  fn format_run(&self, action: &Action, trigger: &Trigger) -> Result<String> {
-    let mut values: AHashMap<&str, String> = AHashMap::new();
-    if let Trigger::TestFile { file } = &trigger {
-      values.insert("file", file.to_owned());
-    }
-    if let Trigger::TestFileLine { file, line } = &trigger {
-      values.insert("file", file.to_owned());
-      values.insert("line", line.to_string());
-    }
-    for var in &action.vars {
-      values.insert(&var.name, var.calculate_var(&values)?);
-    }
-    template::replace_all(&action.run, &values)
   }
 }
 
@@ -61,11 +49,28 @@ impl Display for Configuration {
     table.printstd();
     f.write_str("Options:")?;
     f.write_fmt(format_args!(
+      // TODO: add a newline to the end
       "- beforeRun.clearScreen: {}",
       self.options.before_run.clear_screen
     ))?;
     Ok(())
   }
+}
+
+/// replaces all placeholders in the given run string
+fn format_run(action: &Action, trigger: &Trigger) -> Result<String> {
+  let mut values: AHashMap<&str, String> = AHashMap::new();
+  if let Trigger::TestFile { file } = &trigger {
+    values.insert("file", file.to_owned());
+  }
+  if let Trigger::TestFileLine { file, line } = &trigger {
+    values.insert("file", file.to_owned());
+    values.insert("line", line.to_string());
+  }
+  for var in &action.vars {
+    values.insert(&var.name, var.calculate_var(&values)?);
+  }
+  template::replace_all(&action.run, &values)
 }
 
 #[cfg(test)]
@@ -110,7 +115,7 @@ mod tests {
         line: S("2"),
       };
       let mut last_command: Option<String> = None;
-      let have = config.get_command(trigger, &mut last_command);
+      let have = config.get_command(&trigger, &mut last_command);
       assert_eq!(have, Ok(String::from("action2 command")));
     }
 
@@ -131,7 +136,7 @@ mod tests {
         file: S("other_filename"),
       };
       let mut last_command: Option<String> = None;
-      let have = config.get_command(give, &mut last_command);
+      let have = config.get_command(&give, &mut last_command);
       assert!(have.is_err());
     }
 
@@ -143,7 +148,7 @@ mod tests {
       };
       let trigger = Trigger::TestAll;
       let mut last_command: Option<String> = None;
-      let have = config.get_command(trigger, &mut last_command);
+      let have = config.get_command(&trigger, &mut last_command);
       assert!(have.is_err());
     }
   }

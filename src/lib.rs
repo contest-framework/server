@@ -19,29 +19,28 @@ pub fn listen(debug: bool) -> Result<()> {
   let config = config::file::read()?;
   if debug {
     println!("using this configuration:");
-    println!("{}", config);
+    println!("{config}");
   }
   let (sender, receiver) = channel::create(); // cross-thread communication channel
   cli::ctrl_c::handle(sender.clone());
-  let current_dir = env::current_dir().unwrap();
+  let current_dir =
+    env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory {
+      err: err.to_string(),
+    })?;
   let pipe = client::fifo::in_dir(&current_dir);
   pipe.create()?;
   fifo::listen(pipe, sender);
   let mut last_command: Option<String> = None;
-  match debug {
-    false => println!("Tertestrial is online, Ctrl-C to exit"),
-    true => println!("Tertestrial is online in debug mode, Ctrl-C to exit"),
+  if debug {
+    println!("Tertestrial is online in debug mode, Ctrl-C to exit");
+  } else {
+    println!("Tertestrial is online, Ctrl-C to exit");
   }
   for signal in receiver {
     match signal {
-      channel::Signal::ReceivedLine(line) => match debug {
-        true => println!("received from client: {}", line),
-        false => run_with_decoration(line, &config, &mut last_command)?,
-      },
-      channel::Signal::CannotReadPipe(err) => {
-        return Err(UserError::FifoCannotRead {
-          err: err.to_string(),
-        })
+      channel::Signal::ReceivedLine(line) if debug => println!("received from client: {line}"),
+      channel::Signal::ReceivedLine(line) => {
+        run_with_decoration(&line, &config, &mut last_command)?;
       }
       channel::Signal::Exit => {
         println!("\nSee you later!");
@@ -53,7 +52,7 @@ pub fn listen(debug: bool) -> Result<()> {
 }
 
 pub fn run_with_decoration(
-  text: String,
+  text: &str,
   config: &config::Configuration,
   last_command: &mut Option<String>,
 ) -> Result<()> {
@@ -77,11 +76,9 @@ pub fn run_with_decoration(
         } else {
           termcolor::Color::Red
         };
-        stdout
-          .set_color(termcolor::ColorSpec::new().set_fg(Some(color)))
-          .unwrap();
+        let _ = stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(color)));
         let text: String = "█".repeat(width.0 as usize);
-        writeln!(&mut stdout, "{}", text).unwrap();
+        writeln!(&mut stdout, "{text}").unwrap();
         let _ = stdout.reset(); // we really don't care about being unable to reset colors here
       }
     }
@@ -90,23 +87,23 @@ pub fn run_with_decoration(
 }
 
 fn run_command(
-  text: String,
+  text: &str,
   configuration: &config::Configuration,
   last_command: &mut Option<String>,
 ) -> Result<bool> {
-  let trigger = Trigger::parse(&text)?;
-  match configuration.get_command(trigger, last_command) {
+  let trigger = Trigger::parse(text)?;
+  match configuration.get_command(&trigger, last_command) {
     Err(err) => match err {
       UserError::NoCommandToRepeat {} => {
         // repeat non-existing command --> don't stop, just print an error message and keep going
         let (msg, desc) = err.messages();
-        println!("{}", msg);
-        println!("{}", desc);
+        println!("{msg}");
+        println!("{desc}");
         Ok(false)
       }
       _ => Err(err),
     },
-    Ok(command) => match subshell::run(&command) {
+    Ok(command) => match subshell::run(&command)? {
       Outcome::TestPass() => {
         println!("SUCCESS!");
         Ok(true)

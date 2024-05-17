@@ -2,7 +2,7 @@ Feature: run Tertestrial without configuration
 
   Scenario: run
     When I run "tertestrial"
-    Then it exits with this output
+    Then it fails with this output
       """
       Error: Configuration file not found
 

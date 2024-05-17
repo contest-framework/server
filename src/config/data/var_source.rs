@@ -16,6 +16,6 @@ impl Display for VarSource {
       VarSource::Line => "line",
       VarSource::CurrentOrAboveLineContent => "currentOrAboveLineContent",
     };
-    write!(f, "{}", text)
+    write!(f, "{text}")
   }
 }
