@@ -1,6 +1,5 @@
 Feature: run a custom command sent by the client
 
-  @this
   Scenario:
     Given Tertestrial is running
     When receiving the command '{ "command": "customCommand", "run": "echo custom command" }'
