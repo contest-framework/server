@@ -85,6 +85,7 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
 mod tests {
   use crate::client::fifo::in_dir;
   use crate::UserError;
+  use big_s::S;
   use std::{fs, io};
 
   #[test]
@@ -103,14 +104,14 @@ mod tests {
   }
 
   #[test]
-  fn pipe_create_exists() -> Result<(), &'static str> {
+  fn pipe_create_exists() -> Result<(), String> {
     let temp_path = tempfile::tempdir().unwrap().into_path();
     let pipe = in_dir(&temp_path);
     pipe.create().unwrap();
     match pipe.create() {
       Err(UserError::FifoAlreadyExists { path: _ }) => {}
-      Ok(()) => return Err("should not create second pipe"),
-      Err(err) => panic!("{}", err.messages().0),
+      Ok(()) => return Err(S("should not create second pipe")),
+      Err(err) => return Err(err.messages().0),
     }
     fs::remove_dir_all(&temp_path).unwrap();
     Ok(())
