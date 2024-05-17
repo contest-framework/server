@@ -16,19 +16,17 @@ fn main() {
 }
 
 fn main_with_result() -> Result<()> {
-  match Args::parse().command {
-    None => listen(false),
-    Some(command) => match command {
-      Command::Start => listen(false),
-      Command::Debug => listen(true),
-      Command::Run { trigger } => {
-        println!("running trigger: {}", trigger);
-        let config = config::file::read()?;
-        let mut last_command: Option<String> = None;
-        run_with_decoration(trigger, &config, &mut last_command)
-      }
-      Command::Setup => config::file::create(),
-    },
+  let command = Args::parse().command.unwrap_or(Command::Start);
+  match command {
+    Command::Start => listen(false),
+    Command::Debug => listen(true),
+    Command::Run { trigger } => {
+      println!("running trigger: {}", trigger);
+      let config = config::file::read()?;
+      let mut last_command: Option<String> = None;
+      run_with_decoration(trigger, &config, &mut last_command)
+    }
+    Command::Setup => config::file::create(),
   }
 }
 
