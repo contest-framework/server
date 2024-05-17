@@ -14,4 +14,5 @@ Feature: run a custom command sent by the client
       """
       executing: echo custom command
       custom command
+      SUCCESS!
       """
