@@ -290,6 +290,17 @@ mod tests {
         };
         assert_eq!(have, want);
       }
+
+      #[test]
+      fn missing_run() {
+        let fifo_data = FifoTrigger {
+          command: S("customCommand"),
+          run: None,
+          ..FifoTrigger::default()
+        };
+        let have = fifo_data.into_trigger();
+        assert!(have.is_err());
+      }
     }
 
     mod test_file {
