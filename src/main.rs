@@ -1,5 +1,5 @@
+use clap::{Parser, Subcommand};
 use std::{env, panic};
-use tertestrial::cli::{self, Command};
 use tertestrial::{client, config, listen, run_with_decoration, Result};
 
 fn main() {
@@ -16,15 +16,34 @@ fn main() {
 }
 
 fn main_with_result() -> Result<()> {
-  match cli::args::parse(env::args())? {
-    Command::Normal => listen(false),
-    Command::Debug => listen(true),
-    Command::Run(cmd) => {
-      println!("running cmd: {}", cmd);
-      let config = config::file::read()?;
-      let mut last_command: Option<String> = None;
-      run_with_decoration(cmd, &config, &mut last_command)
-    }
-    Command::Setup => config::file::create(),
+  let args = Args::parse();
+  match args.command {
+    None => listen(false),
+    Some(command) => match command {
+      Command::Start => listen(false),
+      Command::Debug => listen(true),
+      Command::Run { trigger } => {
+        println!("running trigger: {}", trigger);
+        let config = config::file::read()?;
+        let mut last_command: Option<String> = None;
+        run_with_decoration(trigger, &config, &mut last_command)
+      }
+      Command::Setup => config::file::create(),
+    },
   }
+}
+
+#[derive(Parser)]
+#[command(version, about, long_about = None)]
+struct Args {
+  #[command(subcommand)]
+  command: Option<Command>,
+}
+
+#[derive(Subcommand)]
+enum Command {
+  Debug,
+  Run { trigger: String },
+  Setup,
+  Start,
 }
