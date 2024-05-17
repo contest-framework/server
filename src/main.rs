@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 use std::{env, panic};
-use tertestrial::{client, config, listen, run_with_decoration, Result};
+use tertestrial::{cli, client, config, listen, run_with_decoration, Result};
 
 fn main() {
   let panic_result = panic::catch_unwind(|| {
@@ -9,7 +9,11 @@ fn main() {
       println!("\nError: {msg}\n\n{guidance}");
     }
   });
-  let _ = client::fifo::in_dir(&env::current_dir().unwrap()).delete();
+  let current_dir = match env::current_dir() {
+    Ok(dir) => dir,
+    Err(err) => cli::exit(&err.to_string()),
+  };
+  let _ = client::fifo::in_dir(&current_dir).delete();
   if panic_result.is_err() {
     panic!("{panic_result:?}");
   }
