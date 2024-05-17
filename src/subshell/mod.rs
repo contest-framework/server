@@ -12,11 +12,11 @@ pub enum Outcome {
 
 pub fn run(command: &str) -> Result<Outcome> {
   println!("executing: {command}");
-  let argv = shellwords::split(command).map_err(|err| UserError::CannotSplitShellString {
+  let words = shellwords::split(command).map_err(|err| UserError::CannotSplitShellString {
     source: command.to_owned(),
     err: err.to_string(),
   })?;
-  let (cmd, args) = argv.split_at(1);
+  let (cmd, args) = words.split_at(1);
   Ok(match Command::new(&cmd[0]).args(args).status() {
     Err(_) => Outcome::NotFound(command.to_owned()),
     Ok(exit_status) => {
