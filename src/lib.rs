@@ -99,6 +99,7 @@ fn run_command(
     Err(err) => return Err(err),
     Ok(command) => command,
   };
+  last_command.replace(command.clone());
   match subshell::run(&command)? {
     Outcome::TestPass() => {
       println!("SUCCESS!");
