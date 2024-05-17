@@ -67,7 +67,7 @@ pub fn run_with_decoration(
     println!();
   }
   match terminal_size() {
-    None => println!("Warning: cannot determine terminal size"),
+    None => eprintln!("Warning: cannot determine terminal size"),
     Some((width, _)) => {
       for _ in 0..config.options.after_run.indicator_lines {
         let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Auto);
