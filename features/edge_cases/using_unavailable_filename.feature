@@ -27,5 +27,5 @@ Feature: using unavailable filename
     Then it prints
       """
       Error: Filename is not known
-      To use the filename in a variable, you need to choose either the "testFile" or "testFunction" action type that provides this data.
+      To use the filename in a variable, you need to choose either the "testFile" or "testFileLine" action type that provides this data.
       """

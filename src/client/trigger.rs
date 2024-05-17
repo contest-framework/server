@@ -17,7 +17,7 @@ impl Display for Trigger {
     match self {
       Trigger::TestAll => f.write_str("testAll"),
       Trigger::TestFile { file } => write!(f, "testFile {file}"),
-      Trigger::TestFileLine { file, line } => write!(f, "testFunction {file}:{line}"),
+      Trigger::TestFileLine { file, line } => write!(f, "testFileLine {file}:{line}"),
       Trigger::RepeatLastTest => f.write_str("repeatTest"),
     }
   }

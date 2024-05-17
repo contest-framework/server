@@ -48,7 +48,7 @@ impl FileAction {
         vars,
       });
     }
-    if &action_type == "testfunction" {
+    if &action_type == "testfileline" {
       return Ok(Action {
         pattern: Pattern::TestFileLine { files: pattern },
         run: self.run,
@@ -197,7 +197,7 @@ mod tests {
       #[test]
       fn valid_simple() {
         let file_action = FileAction {
-          r#type: S("testFunction"),
+          r#type: S("testFileLine"),
           files: Some(S("**/*.rs")),
           run: S("cargo test"),
           vars: None,
@@ -216,7 +216,7 @@ mod tests {
       #[test]
       fn valid_with_vars() {
         let file_action = FileAction {
-          r#type: S("testFunction"),
+          r#type: S("testFileLine"),
           files: Some(S("**/*.rs")),
           run: S("cargo test {{ my_var }}"),
           vars: Some(vec![FileVar {
@@ -243,7 +243,7 @@ mod tests {
       #[test]
       fn missing_files() {
         let file_action = FileAction {
-          r#type: S("testFunction"),
+          r#type: S("testFileLine"),
           files: None,
           run: S("make test"),
           vars: None,
@@ -255,7 +255,7 @@ mod tests {
       #[test]
       fn empty_files() {
         let file_action = FileAction {
-          r#type: S("testFunction"),
+          r#type: S("testFileLine"),
           files: Some(S("")),
           run: S("make test"),
           vars: None,

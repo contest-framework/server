@@ -25,7 +25,7 @@ Here is an example **.testconfig.json** file for JavaScript developers who use
       "run": "mocha"
     },
     {
-      "type": "testFunction",
+      "type": "testFileLine",
       "filename": "**/*.js",
       "line": "*",
       "run": "mocha {{filename}}:{{line}}"
