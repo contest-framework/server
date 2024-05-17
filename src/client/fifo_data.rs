@@ -66,19 +66,19 @@ impl FifoTrigger {
         (true, false) => {
           return Err(UserError::InvalidTrigger {
             source: source.into(),
-            err: r#"trigger "testFunction" is missing field "line""#.into(),
+            err: r#"trigger "testFileLine" is missing field "line""#.into(),
           })
         }
         (false, true) => {
           return Err(UserError::InvalidTrigger {
             source: source.into(),
-            err: r#"trigger "testFunction" is missing field "file""#.into(),
+            err: r#"trigger "testFileLine" is missing field "file""#.into(),
           })
         }
         (false, false) => {
           return Err(UserError::InvalidTrigger {
             source: source.into(),
-            err: r#"trigger "testFunction" is missing fields "file" and "line""#.into(),
+            err: r#"trigger "testFileLine" is missing fields "file" and "line""#.into(),
           })
         }
       }
@@ -143,10 +143,10 @@ mod tests {
 
       #[test]
       fn valid() {
-        let give = r#"{ "command": "testFunction", "file": "foo.rs", "line": "12" }"#;
+        let give = r#"{ "command": "testFileLine", "file": "foo.rs", "line": "12" }"#;
         let have = FifoTrigger::parse(give).unwrap();
         let want = FifoTrigger {
-          command: S("testFunction"),
+          command: S("testFileLine"),
           file: Some(S("foo.rs")),
           line: Some(S("12")),
         };
@@ -155,14 +155,14 @@ mod tests {
 
       #[test]
       fn no_file() {
-        let give = r#"{ "command": "testFunction", "line": "12" }"#;
+        let give = r#"{ "command": "testFileLine", "line": "12" }"#;
         let have = FifoTrigger::parse(give);
         assert!(have.is_err());
       }
 
       #[test]
       fn no_line() {
-        let give = r#"{ "command": "testFunction", "file": "foo.rs" }"#;
+        let give = r#"{ "command": "testFileLine", "file": "foo.rs" }"#;
         let have = FifoTrigger::parse(give);
         assert!(have.is_err());
       }
@@ -265,7 +265,7 @@ mod tests {
       #[test]
       fn valid() {
         let fifo_data = FifoTrigger {
-          command: S("testFunction"),
+          command: S("testFileLine"),
           file: Some(S("file.rs")),
           line: Some(S("2")),
         };
@@ -280,7 +280,7 @@ mod tests {
       #[test]
       fn missing_file() {
         let fifo_data = FifoTrigger {
-          command: S("testFunction"),
+          command: S("testFileLine"),
           file: None,
           line: Some(S("2")),
         };
@@ -291,7 +291,7 @@ mod tests {
       #[test]
       fn missing_line() {
         let fifo_data = FifoTrigger {
-          command: S("testFunction"),
+          command: S("testFileLine"),
           file: Some(S("file.rs")),
           line: None,
         };

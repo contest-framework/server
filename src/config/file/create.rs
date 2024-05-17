@@ -14,7 +14,7 @@ const EXAMPLE_CONTENT: &str = r#"{
       "run": "echo testing file {{file}}"
     },
     {
-      "type": "testFunction",
+      "type": "testFileLine",
       "file": "\\.ext$",
       "run": "echo testing file {{file}} at line {{line}}"
     }

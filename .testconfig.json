@@ -19,7 +19,7 @@
     },
 
     {
-      "type": "testFunction",
+      "type": "testFileLine",
       "files": "**/*.rs",
       "vars": [
         {
@@ -51,7 +51,7 @@
     },
 
     {
-      "type": "testFunction",
+      "type": "testFileLine",
       "files": "**/*.test.ts",
       "run": "echo mocha {{file}}:{{line}}"
     }

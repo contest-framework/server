@@ -24,7 +24,7 @@ Feature: using unavailable line
     Then it prints
       """
       Error: Filename is not known
-      To use the filename in a variable, you need to choose either the "testFile" or "testFunction" action type that provides this data.
+      To use the filename in a variable, you need to choose either the "testFile" or "testFileLine" action type that provides this data.
       """
 
   Scenario: in a "testFile" command
@@ -52,5 +52,5 @@ Feature: using unavailable line
     Then it prints
       """
       Error: Line not available
-      To use the current line in a variable, you need to use the "testFunction" action type that provides this data.
+      To use the current line in a variable, you need to use the "testFileLine" action type that provides this data.
       """
