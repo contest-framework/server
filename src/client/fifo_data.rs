@@ -37,7 +37,7 @@ impl FifoTrigger {
 
   fn into_custom_command(self) -> Result<Trigger> {
     match self.run {
-      Some(run) => Ok(Trigger::CustomCommand { command: run }),
+      Some(run) => Ok(Trigger::CustomCommand { run }),
       None => Err(UserError::MissingRunInTrigger),
     }
   }
@@ -286,7 +286,7 @@ mod tests {
         };
         let have = fifo_data.into_trigger().unwrap();
         let want = Trigger::CustomCommand {
-          command: S("echo hello"),
+          run: S("echo hello"),
         };
         assert_eq!(have, want);
       }

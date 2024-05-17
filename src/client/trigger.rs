@@ -9,7 +9,7 @@ pub enum Trigger {
   TestAll,
   TestFile { file: String },
   TestFileLine { file: String, line: String },
-  CustomCommand { command: String },
+  CustomCommand { run: String },
   RepeatLastTest,
 }
 
@@ -19,7 +19,7 @@ impl Display for Trigger {
       Trigger::TestAll => f.write_str("testAll"),
       Trigger::TestFile { file } => write!(f, "testFile {file}"),
       Trigger::TestFileLine { file, line } => write!(f, "testFileLine {file}:{line}"),
-      Trigger::CustomCommand { command } => write!(f, "customCommand {command}"),
+      Trigger::CustomCommand { run } => write!(f, "customCommand {run}"),
       Trigger::RepeatLastTest => f.write_str("repeatTest"),
     }
   }

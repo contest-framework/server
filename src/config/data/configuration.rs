@@ -24,7 +24,7 @@ impl Configuration {
         None => return Err(UserError::NoCommandToRepeat {}),
       }
     }
-    if let Trigger::CustomCommand { command } = trigger {
+    if let Trigger::CustomCommand { run: command } = trigger {
       // TODO: store the last command outside this function
       last_command.replace(command.clone());
       return Ok(command.to_owned());
