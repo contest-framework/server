@@ -42,8 +42,15 @@ struct Args {
 
 #[derive(Subcommand)]
 enum Command {
+  /// Start in debug mode
   Debug,
-  Run { trigger: String },
+  /// Run the given client-side command and exit
+  Run {
+    /// the client-side trigger to execute
+    trigger: String,
+  },
+  /// Create an example configuration file
   Setup,
+  /// Start in production mode
   Start,
 }
