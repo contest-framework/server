@@ -121,9 +121,7 @@ mod tests {
   fn pipe_delete() -> Result<(), UserError> {
     let temp_path = tempfile::tempdir().unwrap().into_path();
     let pipe = in_dir(&temp_path);
-    if let Err(err) = pipe.create() {
-      return Err(err);
-    }
+    pipe.create()?;
     pipe.delete().unwrap();
     let mut files = vec![];
     for file in fs::read_dir(&temp_path).unwrap() {
