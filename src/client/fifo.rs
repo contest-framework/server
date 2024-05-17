@@ -81,10 +81,6 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
   });
 }
 
-//
-// ----------------------------------------------------------------------------
-//
-
 #[cfg(test)]
 mod tests {
   use crate::client::fifo::in_dir;
