@@ -91,9 +91,7 @@ fn run_command(
   let command = match configuration.get_command(&trigger, last_command) {
     Err(err) if err == UserError::NoCommandToRepeat => {
       // repeat non-existing command --> don't stop, just print an error message and keep going
-      let (msg, desc) = err.messages();
-      println!("{msg}");
-      println!("{desc}");
+      cli::print_error(&err);
       return Ok(false);
     }
     Err(err) => return Err(err),
