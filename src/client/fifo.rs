@@ -106,10 +106,7 @@ mod tests {
   fn pipe_create_exists() -> Result<(), io::Error> {
     let temp_path = tempfile::tempdir().unwrap().into_path();
     let pipe = in_dir(&temp_path);
-    match pipe.create() {
-      Ok(()) => {}
-      _ => panic!("cannot create first pipe"),
-    }
+    pipe.create().unwrap();
     match pipe.create() {
       Err(UserError::FifoAlreadyExists { path: _ }) => {}
       Ok(()) => panic!("should not create second pipe"),
