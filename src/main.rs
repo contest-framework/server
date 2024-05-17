@@ -20,7 +20,7 @@ fn main_with_result() -> Result<()> {
     Command::Start => listen(false),
     Command::Debug => listen(true),
     Command::Run { trigger } => {
-      println!("running trigger: {}", trigger);
+      println!("running trigger: {trigger}");
       let config = config::file::read()?;
       let mut last_command: Option<String> = None;
       run_with_decoration(&trigger, &config, &mut last_command)
