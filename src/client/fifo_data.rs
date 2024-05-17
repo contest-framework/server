@@ -278,6 +278,7 @@ mod tests {
           command: S("testFileLine"),
           file: Some(S("file.rs")),
           line: Some(S("2")),
+          ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger().unwrap();
         let want = Trigger::TestFileLine {
@@ -293,6 +294,7 @@ mod tests {
           command: S("testFileLine"),
           file: None,
           line: Some(S("2")),
+          ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger();
         assert!(have.is_err());
@@ -304,6 +306,7 @@ mod tests {
           command: S("testFileLine"),
           file: Some(S("file.rs")),
           line: None,
+          ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger();
         assert!(have.is_err());
