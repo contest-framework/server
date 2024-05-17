@@ -101,16 +101,14 @@ mod tests {
 
   #[test]
   fn pipe_create_exists() -> Result<(), String> {
-    let temp_path = tempfile::tempdir().unwrap().into_path();
-    let pipe = in_dir(&temp_path);
+    let temp_dir = tempfile::tempdir().unwrap();
+    let pipe = in_dir(temp_dir.path());
     pipe.create().unwrap();
     match pipe.create() {
-      Err(UserError::FifoAlreadyExists { path: _ }) => {}
-      Ok(()) => return Err(S("should not create second pipe")),
-      Err(err) => return Err(err.messages().0),
+      Err(UserError::FifoAlreadyExists { path: _ }) => Ok(()),
+      Ok(()) => Err(S("should not create second pipe")),
+      Err(err) => Err(err.messages().0),
     }
-    fs::remove_dir_all(&temp_path).unwrap();
-    Ok(())
   }
 
   #[test]
