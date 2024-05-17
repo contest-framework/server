@@ -131,7 +131,7 @@ mod tests {
     let temp_path = tempfile::tempdir().unwrap().into_path();
     let pipe = in_dir(&temp_path);
     match pipe.create() {
-      Ok(_) => {}
+      Ok(()) => {}
       _ => panic!(),
     }
     pipe.delete().unwrap();

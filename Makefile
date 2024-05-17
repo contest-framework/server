@@ -24,6 +24,9 @@ help:   # shows all available Make commands
 install:  # compiles and installs the binary on this computer
 	cargo install --path .
 
+lint:  # runs all linters
+	cargo clippy --all-targets --all-features
+
 setup:  # prepares this codebase for development
 	rustup toolchain add nightly
 	rustup component add rustfmt --toolchain nightly
@@ -31,7 +34,7 @@ setup:  # prepares this codebase for development
 
 test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
-	cargo clippy --all-targets --all-features
+	make --no-print-dir lint
 	cargo test
 	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
