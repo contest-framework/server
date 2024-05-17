@@ -21,7 +21,7 @@ impl Pipe {
     match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
       Ok(()) => Ok(()),
       Err(err) => match err.as_errno() {
-        None => cli::exit(format!("cannot determine error code: {err}")),
+        None => cli::exit(&format!("cannot determine error code: {err}")),
         Some(err_code) => match err_code {
           nix::errno::Errno::EEXIST => Err(UserError::FifoAlreadyExists {
             path: self.path_str(),
@@ -68,14 +68,14 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
   thread::spawn(move || loop {
     let reader = match pipe.open() {
       Ok(reader) => reader,
-      Err(err) => cli::exit(err.messages().0),
+      Err(err) => cli::exit(&err.messages().0),
     };
     for line in reader.lines() {
       match line {
         Ok(text) => sender
           .send(Signal::ReceivedLine(text))
           .unwrap_or_else(|err| println!("communication channel failure: {err}")),
-        Err(err) => cli::exit(err.to_string()),
+        Err(err) => cli::exit(&err.to_string()),
       };
     }
   });
