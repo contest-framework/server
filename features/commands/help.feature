@@ -9,7 +9,7 @@ Feature: display help
       Usage: tertestrial [COMMAND]
 
       Commands:
-        debug  Start in debug mode
+        debug  Print the received commands from the pipe without running them
         run    Run the given client-side command and exit
         setup  Create an example configuration file
         start  Start in production mode

@@ -42,7 +42,7 @@ struct Args {
 
 #[derive(Subcommand)]
 enum Command {
-  /// Start in debug mode
+  /// Print the received commands from the pipe without running them
   Debug,
   /// Run the given client-side command and exit
   Run {
