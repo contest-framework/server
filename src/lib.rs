@@ -38,12 +38,9 @@ pub fn listen(debug: bool) -> Result<()> {
   }
   for signal in receiver {
     match signal {
+      channel::Signal::ReceivedLine(line) if debug => println!("received from client: {line}"),
       channel::Signal::ReceivedLine(line) => {
-        if debug {
-          println!("received from client: {line}");
-        } else {
-          run_with_decoration(&line, &config, &mut last_command)?;
-        }
+        run_with_decoration(&line, &config, &mut last_command)?;
       }
       channel::Signal::Exit => {
         println!("\nSee you later!");
