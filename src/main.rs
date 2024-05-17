@@ -16,7 +16,7 @@ fn main() {
 }
 
 fn main_with_result() -> Result<()> {
-  match Args::parse().command.unwrap_or(Command::Start) {
+  match Cli::parse().command.unwrap_or(Command::Start) {
     Command::Start => listen(false),
     Command::Debug => listen(true),
     Command::Run { trigger } => {
@@ -31,7 +31,7 @@ fn main_with_result() -> Result<()> {
 
 #[derive(Parser)]
 #[command(version, about)]
-struct Args {
+struct Cli {
   #[command(subcommand)]
   command: Option<Command>,
 }
