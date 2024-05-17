@@ -1,5 +1,6 @@
 //! manages and reads the FIFO pipe
 
+use crate::channel::Signal;
 use crate::{channel, Result, UserError};
 use std::fs::{self, File};
 use std::io::prelude::*;
@@ -64,9 +65,13 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
   thread::spawn(move || loop {
     for line in pipe.open().lines() {
       match line {
-        Ok(text) => sender.send(channel::Signal::ReceivedLine(text)).unwrap(),
+        Ok(text) => sender
+          .send(Signal::ReceivedLine(text))
+          .unwrap_or_else(|err| println!("communication channel failure: {err}")),
         Err(err) => {
-          sender.send(channel::Signal::CannotReadPipe(err)).unwrap();
+          sender
+            .send(Signal::CannotReadPipe(err))
+            .unwrap_or_else(|err| println!("communication channel failure: {err} "));
           break;
         }
       };
