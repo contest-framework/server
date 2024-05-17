@@ -90,7 +90,7 @@ fn run_command(
   let trigger = Trigger::parse(text)?;
   match configuration.get_command(&trigger, last_command) {
     Err(err) => match err {
-      UserError::NoCommandToRepeat {} => {
+      UserError::NoCommandToRepeat => {
         // repeat non-existing command --> don't stop, just print an error message and keep going
         let (msg, desc) = err.messages();
         println!("{msg}");
