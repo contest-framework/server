@@ -1,4 +1,4 @@
-Feature: using unavailable data
+Feature: using unavailable filename
 
   Background:
     Given file ".testconfig.json" with content

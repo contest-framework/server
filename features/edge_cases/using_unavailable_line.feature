@@ -1,6 +1,33 @@
-Feature: using unavailable data
+Feature: using unavailable line
 
-  Background:
+  Scenario: in a "testAll" command
+    Given file ".testconfig.json" with content
+      """
+      {
+        "actions": [
+          {
+            "type": "testAll",
+            "run": "echo running all tests",
+            "vars": [
+              {
+                "name": "fn_name",
+                "source": "currentOrAboveLineContent",
+                "filter": "\\bfn (\\w+)\\("
+              }
+            ]
+          }
+        ]
+      }
+      """
+    And Tertestrial is running
+    When receiving the command '{ "command": "testFile", "file": "test.rs" }'
+    Then it prints
+      """
+      Error: cannot determine command for trigger: testFile test.rs
+      Please make sure that this action is listed in your configuration file
+      """
+
+  Scenario: in a "testFile" command
     Given file ".testconfig.json" with content
       """
       {
@@ -20,13 +47,7 @@ Feature: using unavailable data
         ]
       }
       """
-    When I run "tertestrial"
-    Then it prints
-      """
-      Tertestrial is online, Ctrl-C to exit
-      """
-
-  Scenario: receiving a valid command
+    And Tertestrial is running
     When receiving the command '{ "command": "testFile", "file": "test.rs" }'
     Then it prints
       """
