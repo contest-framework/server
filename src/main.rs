@@ -11,7 +11,7 @@ fn main() {
   });
   let _ = client::fifo::in_dir(&env::current_dir().unwrap()).delete();
   if panic_result.is_err() {
-    panic!("{:?}", panic_result);
+    panic!("{panic_result:?}");
   }
 }
 
