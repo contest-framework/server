@@ -66,7 +66,7 @@ pub fn run_with_decoration(
   for _ in 0..config.options.after_run.newlines {
     println!();
   }
-  let width = terminal_size().unwrap_or((Width(20), Height(20))).0;
+  let width = terminal_size().unwrap_or((Width(80), Height(20))).0;
   for _ in 0..config.options.after_run.indicator_lines {
     let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Auto);
     let color = if result {
