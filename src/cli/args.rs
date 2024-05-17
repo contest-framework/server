@@ -2,7 +2,22 @@
 
 use super::Command;
 use crate::Result;
-use clap::{crate_description, crate_name, crate_version, App, Arg, SubCommand};
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+#[command(version, about, long_about = None)]
+pub struct Args {
+  #[command(subcommand)]
+  command: Option<Commands>,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+  Debug,
+  Run,
+  Setup,
+  Start,
+}
 
 pub fn parse<I>(argv: I) -> Result<Command>
 where
@@ -15,7 +30,7 @@ where
     )),
     ("setup", _) => Ok(Command::Setup),
     ("", _) => Ok(Command::Normal),
-    (unknown, _) => panic!("unimplemented handler for CLI command '{}'", unknown),
+    (unknown, _) => panic!("unimplemented handler for CLI command '{unknown}'"),
   }
 }
 
