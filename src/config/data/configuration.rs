@@ -25,6 +25,7 @@ impl Configuration {
       }
     }
     if let Trigger::CustomCommand { command } = trigger {
+      // TODO: store the last command outside this function
       last_command.replace(command.clone());
       return Ok(command.to_owned());
     }
