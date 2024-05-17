@@ -9,13 +9,12 @@ pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<S
     let Some(line_text) = lines.get(index as usize) else {
       return Ok(None);
     };
+    index -= 1;
     let Some(captures) = re.captures(line_text) else {
       // no match on this line --> try the one above
-      index -= 1;
       continue;
     };
     let Some(match_1) = captures.get(1) else {
-      index -= 1;
       continue;
     };
     if captures.len() > 2 {
