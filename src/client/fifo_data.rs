@@ -22,28 +22,32 @@ impl FifoTrigger {
   }
 
   pub fn into_trigger(self) -> Result<Trigger> {
-    let command = self.command.to_ascii_lowercase();
-    if command == "testall" {
-      return Ok(Trigger::TestAll);
+    match self.command.to_ascii_lowercase().as_str() {
+      "testall" => Ok(Trigger::TestAll),
+      "repeattest" => Ok(Trigger::RepeatLastTest),
+      "testfile" => self.into_testfile(),
+      "testfileline" => self.into_testfileline(),
+      _ => Err(UserError::UnknownTrigger {
+        source: self.command,
+      }),
     }
-    if command == "repeattest" {
-      return Ok(Trigger::RepeatLastTest);
+  }
+
+  fn into_testfile(self) -> Result<Trigger> {
+    match self.file {
+      Some(file) => Ok(Trigger::TestFile { file }),
+      None => Err(UserError::MissingFileInTrigger),
     }
+  }
+
+  fn into_testfileline(self) -> Result<Trigger> {
     let Some(file) = self.file else {
       return Err(UserError::MissingFileInTrigger);
     };
-    if command == "testfile" {
-      return Ok(Trigger::TestFile { file });
-    }
     let Some(line) = self.line else {
       return Err(UserError::MissingLineInTrigger);
     };
-    if command == "testfileline" {
-      return Ok(Trigger::TestFileLine { file, line });
-    };
-    Err(UserError::UnknownTrigger {
-      source: self.command,
-    })
+    Ok(Trigger::TestFileLine { file, line })
   }
 
   pub fn validate(&self, source: &str) -> Result<()> {
