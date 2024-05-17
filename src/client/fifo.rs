@@ -91,10 +91,7 @@ mod tests {
   fn pipe_create_does_not_exist() -> Result<(), io::Error> {
     let temp_path = tempfile::tempdir().unwrap().into_path();
     let pipe = in_dir(&temp_path);
-    match pipe.create() {
-      Ok(()) => {}
-      _ => panic!("cannot create pipe"),
-    }
+    pipe.create().unwrap();
     let mut files = vec![];
     for file in fs::read_dir(&temp_path)? {
       files.push(file?.path());
