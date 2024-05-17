@@ -1,6 +1,5 @@
 //! cross-thread communication via a message channel
 
-use std::io;
 use std::sync::mpsc;
 
 pub type Sender = mpsc::Sender<Signal>;
@@ -9,8 +8,6 @@ pub type Sender = mpsc::Sender<Signal>;
 pub enum Signal {
   /// A command was received from the FIFO
   ReceivedLine(String),
-  /// Error reading the FIFO
-  CannotReadPipe(io::Error),
   /// Received Ctrl-C
   Exit,
 }

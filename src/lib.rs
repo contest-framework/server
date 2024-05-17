@@ -45,11 +45,6 @@ pub fn listen(debug: bool) -> Result<()> {
           run_with_decoration(&line, &config, &mut last_command)?;
         }
       }
-      channel::Signal::CannotReadPipe(err) => {
-        return Err(UserError::FifoCannotRead {
-          err: err.to_string(),
-        })
-      }
       channel::Signal::Exit => {
         println!("\nSee you later!");
         return Ok(());
