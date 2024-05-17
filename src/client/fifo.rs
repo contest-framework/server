@@ -21,16 +21,13 @@ impl Pipe {
     match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
       Ok(()) => Ok(()),
       Err(err) => match err.as_errno() {
-        None => cli::exit(&format!("cannot determine error code: {err}")),
-        Some(err_code) => match err_code {
-          nix::errno::Errno::EEXIST => Err(UserError::FifoAlreadyExists {
-            path: self.path_str(),
-          }),
-          _ => Err(UserError::FifoCannotCreate {
-            path: self.filepath.to_string_lossy().to_string(),
-            err: err.to_string(),
-          }),
-        },
+        Some(nix::errno::Errno::EEXIST) => Err(UserError::FifoAlreadyExists {
+          path: self.path_str(),
+        }),
+        _ => Err(UserError::FifoCannotCreate {
+          path: self.filepath.to_string_lossy().to_string(),
+          err: err.to_string(),
+        }),
       },
     }
   }
