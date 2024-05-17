@@ -194,7 +194,7 @@ mod tests {
           command: S("testFileLine"),
           file: Some(S("foo.rs")),
           line: Some(S("12")),
-          run: None,
+          ..FifoTrigger::default()
         };
         assert_eq!(have, want);
       }
