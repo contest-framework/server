@@ -19,9 +19,9 @@ impl Pipe {
   // creates the FIFO on the filesystem
   pub fn create(&self) -> Result<()> {
     match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
-      Ok(_) => Ok(()),
+      Ok(()) => Ok(()),
       Err(err) => match err.as_errno() {
-        None => panic!("cannot determine error code"),
+        None => cli::exit(format!("cannot determine error code: {err}")),
         Some(err_code) => match err_code {
           nix::errno::Errno::EEXIST => Err(UserError::FifoAlreadyExists {
             path: self.path_str(),
