@@ -41,12 +41,13 @@ jobs:
           - filename: tertestrial_macos_universal
             target: universal-apple-darwin
             os: macos-latest
-          - filename: tertestrial_windows_intel_64
-            target: x86_64-pc-windows-msvc
-            os: windows-latest
-          - filename: tertestrial_windows_arm_64
-            target: aarch64-pc-windows-msvc
-            os: windows-latest
+          # NOTE: Tertestrial doesn't run on Windows yet due to the Unix-specific FIFO library
+          # - filename: tertestrial_windows_intel_64
+          #   target: x86_64-pc-windows-msvc
+          #   os: windows-latest
+          # - filename: tertestrial_windows_arm_64
+          #   target: aarch64-pc-windows-msvc
+          #   os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
