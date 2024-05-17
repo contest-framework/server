@@ -9,6 +9,7 @@ pub struct FifoTrigger {
   pub command: String,
   pub file: Option<String>,
   pub line: Option<String>,
+  pub run: Option<String>,
 }
 
 impl FifoTrigger {
@@ -25,11 +26,19 @@ impl FifoTrigger {
     match self.command.to_ascii_lowercase().as_str() {
       "testall" => Ok(Trigger::TestAll),
       "repeattest" => Ok(Trigger::RepeatLastTest),
+      "customCommand" => self.into_custom_command(),
       "testfile" => self.into_testfile(),
       "testfileline" => self.into_testfileline(),
       _ => Err(UserError::UnknownTrigger {
         source: self.command,
       }),
+    }
+  }
+
+  fn into_custom_command(self) -> Result<Trigger> {
+    match self.run {
+      Some(run) => Ok(Trigger::CustomCommand { command: run }),
+      None => Err(UserError::MissingRunInTrigger),
     }
   }
 
@@ -113,6 +122,7 @@ mod tests {
         command: S("testAll"),
         file: None,
         line: None,
+        run: None,
       };
       assert_eq!(have, want);
     }
@@ -129,6 +139,7 @@ mod tests {
           command: S("testFile"),
           file: Some(S("foo.rs")),
           line: None,
+          run: None,
         };
         assert_eq!(have, want);
       }
@@ -153,6 +164,7 @@ mod tests {
           command: S("testFileLine"),
           file: Some(S("foo.rs")),
           line: Some(S("12")),
+          run: None,
         };
         assert_eq!(have, want);
       }
@@ -180,6 +192,7 @@ mod tests {
         command: S("repeatTest"),
         file: None,
         line: None,
+        run: None,
       };
       assert_eq!(have, want);
     }
