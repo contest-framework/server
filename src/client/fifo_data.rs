@@ -212,8 +212,7 @@ mod tests {
     fn test_all() {
       let fifo_data = FifoTrigger {
         command: S("testAll"),
-        file: None,
-        line: None,
+        ..FifoTrigger::default()
       };
       let have = fifo_data.into_trigger().unwrap();
       let want = Trigger::TestAll;
@@ -224,8 +223,7 @@ mod tests {
     fn repeat_test() {
       let fifo_data = FifoTrigger {
         command: S("repeatTest"),
-        file: None,
-        line: None,
+        ..FifoTrigger::default()
       };
       let have = fifo_data.into_trigger().unwrap();
       let want = Trigger::RepeatLastTest;
@@ -241,7 +239,7 @@ mod tests {
         let fifo_data = FifoTrigger {
           command: S("testFile"),
           file: Some(S("file.rs")),
-          line: None,
+          ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger().unwrap();
         let want = Trigger::TestFile { file: S("file.rs") };
