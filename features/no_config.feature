@@ -2,9 +2,7 @@ Feature: run Tertestrial without configuration
 
   Scenario: run
     When I run "tertestrial"
-    Then it fails with this output
+    Then it prints
       """
-      Error: Configuration file not found
-
-      Tertestrial requires a configuration file named ".testconfig.json" in the current directory. Please run "tertestrial setup " to create one.
+      Tertestrial is online, Ctrl-C to exit
       """

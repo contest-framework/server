@@ -5,12 +5,15 @@ use std::fs::File;
 use std::io;
 
 pub fn read() -> Result<Configuration> {
-  let file = File::open(PATH).map_err(|err| match err.kind() {
-    io::ErrorKind::NotFound => UserError::ConfigFileNotFound {},
-    _ => UserError::ConfigFileError {
-      err: err.to_string(),
-    },
-  })?;
+  let file = match File::open(PATH) {
+    Ok(file) => file,
+    Err(err) if err.kind() == io::ErrorKind::NotFound => return Ok(Configuration::default()),
+    Err(err) => {
+      return Err(UserError::ConfigFileError {
+        err: err.to_string(),
+      })
+    }
+  };
   let file_data: FileConfiguration =
     serde_json::from_reader(file).map_err(|err| UserError::ConfigFileInvalidContent {
       err: err.to_string(),
