@@ -16,8 +16,7 @@ fn main() {
 }
 
 fn main_with_result() -> Result<()> {
-  let args = Args::parse();
-  match args.command {
+  match Args::parse().command {
     None => listen(false),
     Some(command) => match command {
       Command::Start => listen(false),
