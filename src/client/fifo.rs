@@ -106,8 +106,8 @@ mod tests {
     pipe.create().unwrap();
     match pipe.create() {
       Err(UserError::FifoAlreadyExists { path: _ }) => Ok(()),
-      Ok(()) => Err(S("should not create second pipe")),
       Err(err) => Err(err.messages().0),
+      Ok(()) => Err(S("should not create second pipe")),
     }
   }
 
