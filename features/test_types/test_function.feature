@@ -23,7 +23,6 @@ Feature: test only a specific function
       testing file foo.ts:23
       """
 
-  # TODO: fix the wrong behavior documented by this test
   Scenario: receiving a matching file and no location
     When receiving the command '{ "command": "testFunction", "file": "foo.ts" }'
     Then it prints
