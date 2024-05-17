@@ -9,10 +9,10 @@ Feature: display help
       Usage: tertestrial [COMMAND]
 
       Commands:
-        debug  Print the received commands from the pipe without running them
+        debug  Print the received triggers from the pipe without running them
         run    Run the given client-side trigger and exit
         setup  Create an example configuration file
-        start  Start in production mode
+        start  Execute the received triggers from the pipe
         help   Print this message or the help of the given subcommand(s)
 
       Options:

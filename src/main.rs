@@ -42,7 +42,7 @@ struct Args {
 
 #[derive(Subcommand)]
 enum Command {
-  /// Print the received commands from the pipe without running them
+  /// Print the received triggers from the pipe without running them
   Debug,
   /// Run the given client-side trigger and exit
   Run {
@@ -51,6 +51,6 @@ enum Command {
   },
   /// Create an example configuration file
   Setup,
-  /// Start in production mode
+  /// Execute the received triggers from the pipe
   Start,
 }
