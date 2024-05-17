@@ -63,7 +63,7 @@ pub enum UserError {
   MissingFilesInTestFile,
   MissingLineInTrigger,
   MissingRunInTrigger,
-  NoCommandToRepeat {},
+  NoCommandToRepeat,
   RunCommandNotFound {
     command: String,
   },
