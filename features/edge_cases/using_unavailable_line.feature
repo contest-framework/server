@@ -20,11 +20,11 @@ Feature: using unavailable line
       }
       """
     And Tertestrial is running
-    When receiving the command '{ "command": "testFile", "file": "test.rs" }'
+    When receiving the command '{ "command": "testAll" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: testFile test.rs
-      Please make sure that this action is listed in your configuration file
+      Error: Filename is not known
+      To use the filename in a variable, you need to choose either the "testFile" or "testFunction" action type that provides this data.
       """
 
   Scenario: in a "testFile" command
