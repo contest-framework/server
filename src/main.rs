@@ -1,5 +1,5 @@
+use clap::{Parser, Subcommand};
 use std::{env, panic};
-use tertestrial::cli::{self, Command};
 use tertestrial::{client, config, listen, run_with_decoration, Result};
 
 fn main() {
@@ -16,15 +16,37 @@ fn main() {
 }
 
 fn main_with_result() -> Result<()> {
-  match cli::args::parse(env::args())? {
-    Command::Normal => listen(false),
+  match Cli::parse().command.unwrap_or(Command::Start) {
+    Command::Start => listen(false),
     Command::Debug => listen(true),
-    Command::Run(cmd) => {
-      println!("running cmd: {}", cmd);
+    Command::Run { trigger } => {
+      println!("running trigger: {}", trigger);
       let config = config::file::read()?;
       let mut last_command: Option<String> = None;
-      run_with_decoration(cmd, &config, &mut last_command)
+      run_with_decoration(trigger, &config, &mut last_command)
     }
     Command::Setup => config::file::create(),
   }
+}
+
+#[derive(Parser)]
+#[command(version, about)]
+struct Cli {
+  #[command(subcommand)]
+  command: Option<Command>,
+}
+
+#[derive(Subcommand)]
+enum Command {
+  /// Print the received triggers from the pipe without running them
+  Debug,
+  /// Run the given client-side trigger and exit
+  Run {
+    /// the client-side trigger to execute
+    trigger: String,
+  },
+  /// Create an example configuration file
+  Setup,
+  /// Execute the received triggers from the pipe
+  Start,
 }
