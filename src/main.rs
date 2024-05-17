@@ -1,22 +1,17 @@
 use clap::{Parser, Subcommand};
-use std::{env, panic};
+use std::env;
 use tertestrial::{cli, client, config, listen, run_with_decoration, Result};
 
 fn main() {
-  let panic_result = panic::catch_unwind(|| {
-    if let Err(err) = main_with_result() {
-      let (msg, guidance) = err.messages();
-      println!("\nError: {msg}\n\n{guidance}");
-    }
-  });
+  if let Err(err) = main_with_result() {
+    let (msg, guidance) = err.messages();
+    println!("\nError: {msg}\n\n{guidance}");
+  }
   let current_dir = match env::current_dir() {
     Ok(dir) => dir,
     Err(err) => cli::exit(&err.to_string()),
   };
   let _ = client::fifo::in_dir(&current_dir).delete();
-  if panic_result.is_err() {
-    panic!("{panic_result:?}");
-  }
 }
 
 fn main_with_result() -> Result<()> {
