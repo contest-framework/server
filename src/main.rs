@@ -16,8 +16,7 @@ fn main() {
 }
 
 fn main_with_result() -> Result<()> {
-  let command = Args::parse().command.unwrap_or(Command::Start);
-  match command {
+  match Args::parse().command.unwrap_or(Command::Start) {
     Command::Start => listen(false),
     Command::Debug => listen(true),
     Command::Run { trigger } => {
