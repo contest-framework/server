@@ -4,21 +4,20 @@ Feature: display help
     When I run "tertestrial <OPTION>"
     Then it exits with this output
       """
-      tertestrial 0.0.2
       auto-run tests from within your code editor
 
-      USAGE:
-          tertestrial [SUBCOMMAND]
+      Usage: tertestrial [COMMAND]
 
-      FLAGS:
-          -h, --help       Prints help information
-          -V, --version    Prints version information
+      Commands:
+        debug  Print the received triggers from the pipe without running them
+        run    Run the given client-side trigger and exit
+        setup  Create an example configuration file
+        start  Execute the received triggers from the pipe
+        help   Print this message or the help of the given subcommand(s)
 
-      SUBCOMMANDS:
-          debug    print the received commands from the pipe without running them
-          help     Prints this message or the help of the given subcommand(s)
-          run      runs the given command manually
-          setup    create a config file
+      Options:
+        -h, --help     Print help
+        -V, --version  Print version
       """
 
     Examples:
