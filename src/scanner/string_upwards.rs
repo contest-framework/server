@@ -80,9 +80,9 @@ pub fn test_func(param: &str) -> String {
 
   #[test]
   fn no_match() {
-    let text = r#"\
+    let text = "\
 placeholder
-"#;
+";
     let re = regex::Regex::new("fn (\\w+?)\\(").unwrap();
     let have = string_upwards(text, &re, 1).unwrap();
     assert!(have.is_none());

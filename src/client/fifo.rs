@@ -96,7 +96,7 @@ mod tests {
     let temp_path = tempfile::tempdir().unwrap().into_path();
     let pipe = in_dir(&temp_path);
     match pipe.create() {
-      Ok(_) => {}
+      Ok(()) => {}
       _ => panic!("cannot create pipe"),
     }
     let mut files = vec![];
@@ -114,12 +114,12 @@ mod tests {
     let temp_path = tempfile::tempdir().unwrap().into_path();
     let pipe = in_dir(&temp_path);
     match pipe.create() {
-      Ok(_) => {}
+      Ok(()) => {}
       _ => panic!("cannot create first pipe"),
     }
     match pipe.create() {
       Err(UserError::FifoAlreadyExists { path: _ }) => {}
-      Ok(_) => panic!("should not create second pipe"),
+      Ok(()) => panic!("should not create second pipe"),
       Err(err) => panic!("{}", err.messages().0),
     }
     fs::remove_dir_all(&temp_path)?;
