@@ -15,7 +15,7 @@ where
     )),
     ("setup", _) => Ok(Command::Setup),
     ("", _) => Ok(Command::Normal),
-    (unknown, _) => panic!("unimplemented handler for CLI command '{}'", unknown),
+    (unknown, _) => panic!("unimplemented handler for CLI command '{unknown}'"),
   }
 }
 
