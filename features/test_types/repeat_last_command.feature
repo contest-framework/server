@@ -21,7 +21,6 @@ Feature: repeat the last command
       executing: echo running all tests
       running all tests
       SUCCESS!
-      Warning: cannot determine terminal size
       """
     When receiving the command '{ "command": "repeatTest" }'
     Then it prints
@@ -29,7 +28,6 @@ Feature: repeat the last command
       executing: echo running all tests
       running all tests
       SUCCESS!
-      Warning: cannot determine terminal size
       """
     When receiving the command '{ "command": "repeatTest" }'
     Then it prints

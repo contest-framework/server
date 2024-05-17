@@ -13,7 +13,7 @@ use std::env;
 use std::io::Write;
 use subshell::Outcome;
 use termcolor::WriteColor;
-use terminal_size::terminal_size;
+use terminal_size::{terminal_size, Height, Width};
 
 pub fn listen(debug: bool) -> Result<()> {
   let config = config::file::read()?;
@@ -66,22 +66,18 @@ pub fn run_with_decoration(
   for _ in 0..config.options.after_run.newlines {
     println!();
   }
-  match terminal_size() {
-    None => eprintln!("Warning: cannot determine terminal size"),
-    Some((width, _)) => {
-      for _ in 0..config.options.after_run.indicator_lines {
-        let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Auto);
-        let color = if result {
-          termcolor::Color::Green
-        } else {
-          termcolor::Color::Red
-        };
-        let _ = stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(color)));
-        let text: String = "█".repeat(width.0 as usize);
-        writeln!(&mut stdout, "{text}").unwrap();
-        let _ = stdout.reset(); // we really don't care about being unable to reset colors here
-      }
-    }
+  let terminal_width = terminal_size().unwrap_or((Width(80), Height(20))).0;
+  for _ in 0..config.options.after_run.indicator_lines {
+    let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Auto);
+    let color = if result {
+      termcolor::Color::Green
+    } else {
+      termcolor::Color::Red
+    };
+    let _ = stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(color)));
+    let text: String = "█".repeat(terminal_width.0 as usize);
+    writeln!(&mut stdout, "{text}").unwrap();
+    let _ = stdout.reset(); // we really don't care about being unable to reset colors here
   }
   Ok(())
 }
