@@ -38,7 +38,7 @@ impl FifoTrigger {
     let Some(line) = self.line else {
       return Err(UserError::MissingLineInTrigger);
     };
-    if command == "testfunction" {
+    if command == "testfileline" {
       return Ok(Trigger::TestFileLine { file, line });
     };
     Err(UserError::UnknownTrigger {
@@ -60,7 +60,7 @@ impl FifoTrigger {
         err: r#"trigger "testFile" is missing field "file"."#.into(),
       });
     }
-    if command == "testfunction" {
+    if command == "testfileline" {
       match (self.file.is_some(), self.line.is_some()) {
         (true, true) => return Ok(()),
         (true, false) => {

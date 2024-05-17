@@ -48,7 +48,7 @@ impl FileAction {
         vars,
       });
     }
-    if &action_type == "testfunction" {
+    if &action_type == "testfileline" {
       return Ok(Action {
         pattern: Pattern::TestFileLine { files: pattern },
         run: self.run,
