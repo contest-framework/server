@@ -1,7 +1,6 @@
 //! capture and handle Ctrl-C
 
-use crate::channel;
-use crate::cli;
+use crate::{channel, cli};
 
 /// captures Ctrl-C and messages it as a `Signal::Exit` message via the given sender
 pub fn handle(sender: channel::Sender) {

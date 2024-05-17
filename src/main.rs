@@ -7,10 +7,7 @@ fn main() {
     let (msg, guidance) = err.messages();
     println!("\nError: {msg}\n\n{guidance}");
   }
-  let current_dir = match env::current_dir() {
-    Ok(dir) => dir,
-    Err(err) => cli::exit(&err.to_string()),
-  };
+  let current_dir = env::current_dir().unwrap_or_else(|err| cli::exit(&err.to_string()));
   let _ = client::fifo::in_dir(&current_dir).delete();
 }
 

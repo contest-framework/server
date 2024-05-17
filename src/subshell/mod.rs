@@ -1,7 +1,6 @@
 //! runs commands in a subshell
 
-use crate::Result;
-use crate::UserError;
+use crate::{Result, UserError};
 use std::process::Command;
 
 pub enum Outcome {
