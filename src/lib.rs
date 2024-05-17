@@ -69,11 +69,7 @@ pub fn run_with_decoration(
   let terminal_width = terminal_size().unwrap_or((Width(80), Height(20))).0;
   for _ in 0..config.options.after_run.indicator_lines {
     let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Auto);
-    let color = if result {
-      termcolor::Color::Green
-    } else {
-      termcolor::Color::Red
-    };
+    let color = cli::error_color(result);
     let _ = stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(color)));
     let text: String = "█".repeat(terminal_width.0 as usize);
     writeln!(&mut stdout, "{text}").unwrap();
@@ -88,27 +84,25 @@ fn run_command(
   last_command: &mut Option<String>,
 ) -> Result<bool> {
   let trigger = Trigger::parse(text)?;
-  match configuration.get_command(&trigger, last_command) {
-    Err(err) => match err {
-      UserError::NoCommandToRepeat => {
-        // repeat non-existing command --> don't stop, just print an error message and keep going
-        let (msg, desc) = err.messages();
-        println!("{msg}");
-        println!("{desc}");
-        Ok(false)
-      }
-      _ => Err(err),
-    },
-    Ok(command) => match subshell::run(&command)? {
-      Outcome::TestPass() => {
-        println!("SUCCESS!");
-        Ok(true)
-      }
-      Outcome::TestFail() => {
-        println!("FAILED!");
-        Ok(false)
-      }
-      Outcome::NotFound(command) => Err(UserError::RunCommandNotFound { command }),
-    },
+  let command = match configuration.get_command(&trigger, last_command) {
+    Err(err) if err == UserError::NoCommandToRepeat => {
+      // repeat non-existing command --> don't stop, just print an error message and keep going
+      cli::print_error(&err);
+      return Ok(false);
+    }
+    Err(err) => return Err(err),
+    Ok(command) => command,
+  };
+  last_command.replace(command.clone());
+  match subshell::run(&command)? {
+    Outcome::TestPass() => {
+      println!("SUCCESS!");
+      Ok(true)
+    }
+    Outcome::TestFail() => {
+      println!("FAILED!");
+      Ok(false)
+    }
+    Outcome::NotFound(command) => Err(UserError::RunCommandNotFound { command }),
   }
 }
