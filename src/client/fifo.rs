@@ -79,7 +79,7 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
 
 #[cfg(test)]
 mod tests {
-  use crate::client::fifo::in_dir;
+  use crate::client::fifo;
   use crate::UserError;
   use big_s::S;
   use std::{fs, io};
@@ -87,7 +87,7 @@ mod tests {
   #[test]
   fn pipe_create_does_not_exist() -> Result<(), io::Error> {
     let temp_path = tempfile::tempdir().unwrap().into_path();
-    let pipe = in_dir(&temp_path);
+    let pipe = fifo::in_dir(&temp_path);
     pipe.create().unwrap();
     let mut files = vec![];
     for file in fs::read_dir(&temp_path)? {
@@ -102,7 +102,7 @@ mod tests {
   #[test]
   fn pipe_create_exists() -> Result<(), String> {
     let temp_dir = tempfile::tempdir().unwrap();
-    let pipe = in_dir(temp_dir.path());
+    let pipe = fifo::in_dir(temp_dir.path());
     pipe.create().unwrap();
     match pipe.create() {
       Err(UserError::FifoAlreadyExists { path: _ }) => Ok(()),
@@ -113,16 +113,12 @@ mod tests {
 
   #[test]
   fn pipe_delete() -> Result<(), UserError> {
-    let temp_path = tempfile::tempdir().unwrap().into_path();
-    let pipe = in_dir(&temp_path);
+    let temp_dir = tempfile::tempdir().unwrap();
+    let pipe = fifo::in_dir(temp_dir.path());
     pipe.create()?;
     pipe.delete().unwrap();
-    let mut files = vec![];
-    for file in fs::read_dir(&temp_path).unwrap() {
-      files.push(file.unwrap().path());
-    }
-    assert_eq!(0, files.len());
-    fs::remove_dir_all(&temp_path).unwrap();
+    let file_count = fs::read_dir(temp_dir.path()).unwrap().count();
+    assert_eq!(0, file_count);
     Ok(())
   }
 }
