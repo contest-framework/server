@@ -66,10 +66,9 @@ pub fn in_dir(dirpath: &Path) -> Pipe {
 
 pub fn listen(pipe: Pipe, sender: channel::Sender) {
   thread::spawn(move || loop {
-    let reader = match pipe.open() {
-      Ok(reader) => reader,
-      Err(err) => cli::exit(&err.messages().0),
-    };
+    let reader = pipe
+      .open()
+      .unwrap_or_else(|err| cli::exit(&err.messages().0));
     for line in reader.lines() {
       match line {
         Ok(text) => sender
