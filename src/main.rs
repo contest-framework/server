@@ -6,7 +6,7 @@ fn main() {
   let panic_result = panic::catch_unwind(|| {
     if let Err(err) = main_with_result() {
       let (msg, guidance) = err.messages();
-      println!("\nError: {}\n\n{}", msg, guidance);
+      println!("\nError: {msg}\n\n{guidance}");
     }
   });
   let _ = client::fifo::in_dir(&env::current_dir().unwrap()).delete();
@@ -23,7 +23,7 @@ fn main_with_result() -> Result<()> {
       println!("running trigger: {}", trigger);
       let config = config::file::read()?;
       let mut last_command: Option<String> = None;
-      run_with_decoration(trigger, &config, &mut last_command)
+      run_with_decoration(&trigger, &config, &mut last_command)
     }
     Command::Setup => config::file::create(),
   }
