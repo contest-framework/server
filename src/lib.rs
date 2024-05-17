@@ -88,27 +88,26 @@ fn run_command(
   last_command: &mut Option<String>,
 ) -> Result<bool> {
   let trigger = Trigger::parse(text)?;
-  match configuration.get_command(&trigger, last_command) {
-    Err(err) => match err {
-      UserError::NoCommandToRepeat => {
-        // repeat non-existing command --> don't stop, just print an error message and keep going
-        let (msg, desc) = err.messages();
-        println!("{msg}");
-        println!("{desc}");
-        Ok(false)
-      }
-      _ => Err(err),
-    },
-    Ok(command) => match subshell::run(&command)? {
-      Outcome::TestPass() => {
-        println!("SUCCESS!");
-        Ok(true)
-      }
-      Outcome::TestFail() => {
-        println!("FAILED!");
-        Ok(false)
-      }
-      Outcome::NotFound(command) => Err(UserError::RunCommandNotFound { command }),
-    },
+  let command = match configuration.get_command(&trigger, last_command) {
+    Err(err) if err == UserError::NoCommandToRepeat => {
+      // repeat non-existing command --> don't stop, just print an error message and keep going
+      let (msg, desc) = err.messages();
+      println!("{msg}");
+      println!("{desc}");
+      return Ok(false);
+    }
+    Err(err) => return Err(err),
+    Ok(command) => command,
+  };
+  match subshell::run(&command)? {
+    Outcome::TestPass() => {
+      println!("SUCCESS!");
+      Ok(true)
+    }
+    Outcome::TestFail() => {
+      println!("FAILED!");
+      Ok(false)
+    }
+    Outcome::NotFound(command) => Err(UserError::RunCommandNotFound { command }),
   }
 }
