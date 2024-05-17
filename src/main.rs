@@ -34,7 +34,7 @@ fn main_with_result() -> Result<()> {
 }
 
 #[derive(Parser)]
-#[command(version, about, long_about = None)]
+#[command(version, about)]
 struct Args {
   #[command(subcommand)]
   command: Option<Command>,
