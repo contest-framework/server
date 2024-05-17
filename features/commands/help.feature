@@ -10,7 +10,7 @@ Feature: display help
 
       Commands:
         debug  Print the received commands from the pipe without running them
-        run    Run the given client-side command and exit
+        run    Run the given client-side trigger and exit
         setup  Create an example configuration file
         start  Start in production mode
         help   Print this message or the help of the given subcommand(s)

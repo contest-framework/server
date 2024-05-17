@@ -44,7 +44,7 @@ struct Args {
 enum Command {
   /// Print the received commands from the pipe without running them
   Debug,
-  /// Run the given client-side command and exit
+  /// Run the given client-side trigger and exit
   Run {
     /// the client-side trigger to execute
     trigger: String,
