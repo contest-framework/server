@@ -25,10 +25,11 @@ Feature: test only a specific function
 
   Scenario: receiving a matching file and no location
     When receiving the command '{ "command": "testFileLine", "file": "foo.ts" }'
-    Then it prints
+    Then it fails with this output
       """
-      Error: cannot parse command received from client: { "command": "testFileLine", "file": "foo.ts" }
-      trigger "testFileLine" is missing field "line"
+Error: cannot parse command received from client: { "command": "testFileLine", "file": "foo.ts" }
+
+trigger "testFileLine" is missing field "line"
       """
 
   Scenario: receiving a mismatching file
