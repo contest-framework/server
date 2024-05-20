@@ -1,4 +1,4 @@
-Feature: run all tests
+Feature: run in debug mode
 
   Background:
     Given file ".testconfig.json" with content
