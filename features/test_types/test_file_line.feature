@@ -32,7 +32,6 @@ Error: cannot parse command received from client: { "command": "testFileLine", "
 trigger "testFileLine" is missing field "line"
       """
 
-  @this
   Scenario: receiving a mismatching file
     When receiving the command '{ "command": "testFileLine", "file": "foo.go", "line": 23 }'
     Then it prints
