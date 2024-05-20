@@ -23,7 +23,8 @@ pub fn listen(debug: bool) -> Result<()> {
   }
   let (sender, receiver) = channel::create(); // cross-thread communication channel
   cli::ctrl_c::handle(sender.clone());
-  let current_dir = env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory { err: err.to_string() })?;
+  let current_dir =
+    env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory { err: err.to_string() })?;
   let pipe = client::fifo::in_dir(&current_dir);
   pipe.create()?;
   fifo::listen(pipe, sender);
@@ -48,7 +49,11 @@ pub fn listen(debug: bool) -> Result<()> {
   Ok(())
 }
 
-pub fn run_with_decoration(text: &str, config: &config::Configuration, last_command: &mut Option<String>) -> Result<()> {
+pub fn run_with_decoration(
+  text: &str,
+  config: &config::Configuration,
+  last_command: &mut Option<String>,
+) -> Result<()> {
   for _ in 0..config.options.before_run.newlines {
     println!();
   }
@@ -80,7 +85,11 @@ fn run_command(text: &str, configuration: &config::Configuration, last_command: 
         cli::print_error(&err);
         return Ok(false);
       }
-      UserError::TriggerRegexNotFound { regex: _, filename: _, line: _ } => {
+      UserError::TriggerRegexNotFound {
+        regex: _,
+        filename: _,
+        line: _,
+      } => {
         // user triggered a command in a place where it doesn't match all regexes --> let them know and go to the correct location
         cli::print_error(&err);
         return Ok(false);

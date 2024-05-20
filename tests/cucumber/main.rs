@@ -7,7 +7,11 @@ use world::TertestrialWorld;
 
 #[given(expr = "file {string} with content")]
 async fn file_with_content(world: &mut TertestrialWorld, step: &Step, filename: String) {
-  logic::create_file(&world.dir.as_ref().join(filename), step.docstring.as_ref().expect("no docstring")).await;
+  logic::create_file(
+    &world.dir.as_ref().join(filename),
+    step.docstring.as_ref().expect("no docstring"),
+  )
+  .await;
 }
 
 #[when(expr = "I run {string}")]

@@ -35,7 +35,10 @@ mod tests {
       };
       let have = file_options.into_domain();
       let want = Options {
-        before_run: BeforeRun { clear_screen: false, newlines: 0 },
+        before_run: BeforeRun {
+          clear_screen: false,
+          newlines: 0,
+        },
         after_run: AfterRun {
           newlines: 0,
           indicator_lines: 0,
@@ -60,7 +63,10 @@ mod tests {
       };
       let have = file_options.into_domain();
       let want = Options {
-        before_run: BeforeRun { clear_screen: true, newlines: 2 },
+        before_run: BeforeRun {
+          clear_screen: true,
+          newlines: 2,
+        },
         after_run: AfterRun {
           newlines: 4,
           indicator_lines: 6,

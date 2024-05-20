@@ -41,7 +41,10 @@ pub async fn start_tertestrial(world: &mut TertestrialWorld, args: &[String]) {
     .unwrap();
   let stdout = cmd.stdout.take().expect("Failed to open subshell stdout");
   let stdout_writer = BufReader::new(stdout);
-  world.subprocess = Some(RunningProcess { cmd, stdout: stdout_writer });
+  world.subprocess = Some(RunningProcess {
+    cmd,
+    stdout: stdout_writer,
+  });
 }
 
 pub async fn verify_created_file(file_path: &Path, want: &str) {

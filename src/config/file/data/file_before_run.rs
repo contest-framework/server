@@ -32,7 +32,10 @@ mod tests {
         clear_screen: None,
       };
       let have = file_before_run.into_domain();
-      let want = BeforeRun { newlines: 0, clear_screen: false };
+      let want = BeforeRun {
+        newlines: 0,
+        clear_screen: false,
+      };
       assert_eq!(have, want);
     }
 
@@ -43,7 +46,10 @@ mod tests {
         clear_screen: Some(true),
       };
       let have = file_before_run.into_domain();
-      let want = BeforeRun { newlines: 2, clear_screen: true };
+      let want = BeforeRun {
+        newlines: 2,
+        clear_screen: true,
+      };
       assert_eq!(have, want);
     }
   }
