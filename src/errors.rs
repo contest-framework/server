@@ -76,7 +76,7 @@ pub enum UserError {
   TriggerRegexNotFound {
     regex: String,
     filename: String,
-    line: u32,
+    line: usize,
   },
   UnknownActionType {
     action_type: String,
