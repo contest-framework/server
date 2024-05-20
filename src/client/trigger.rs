@@ -8,7 +8,7 @@ use std::fmt::Display;
 pub enum Trigger {
   TestAll,
   TestFile { file: String },
-  TestFileLine { file: String, line: String },
+  TestFileLine { file: String, line: usize },
   CustomCommand { run: String },
   RepeatLastTest,
 }

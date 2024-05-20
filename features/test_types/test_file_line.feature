@@ -16,7 +16,7 @@ Feature: test only a specific function
     And Tertestrial is running
 
   Scenario: receiving a matching file and location
-    When receiving the command '{ "command": "testFileLine", "file": "foo.ts", "line": "23" }'
+    When receiving the command '{ "command": "testFileLine", "file": "foo.ts", "line": 23 }'
     Then it prints
       """
       executing: echo testing file foo.ts:23
@@ -32,7 +32,7 @@ Feature: test only a specific function
       """
 
   Scenario: receiving a mismatching file
-    When receiving the command '{ "command": "testFileLine", "file": "foo.go", "line": "23" }'
+    When receiving the command '{ "command": "testFileLine", "file": "foo.go", "line": 23 }'
     Then it prints
       """
       Error: cannot determine command for trigger: testFileLine foo.go:23
