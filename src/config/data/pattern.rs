@@ -109,7 +109,7 @@ mod tests {
         };
         let client_trigger = client::Trigger::TestFileLine {
           file: S("foo.rs"),
-          line: S("3"),
+          line: 3,
         };
         assert!(config_trigger.matches_trigger(&client_trigger));
       }
@@ -121,7 +121,7 @@ mod tests {
         };
         let client_trigger = client::Trigger::TestFileLine {
           file: S("mismatch.go"),
-          line: S("3"),
+          line: 3,
         };
         assert!(!config_trigger.matches_trigger(&client_trigger));
       }

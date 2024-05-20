@@ -8,7 +8,7 @@ use serde::Deserialize;
 pub struct FifoTrigger {
   pub command: String,
   pub file: Option<String>,
-  pub line: Option<String>,
+  pub line: Option<usize>,
   pub run: Option<String>,
 }
 
@@ -188,12 +188,12 @@ mod tests {
 
       #[test]
       fn valid() {
-        let give = r#"{ "command": "testFileLine", "file": "foo.rs", "line": "12" }"#;
+        let give = r#"{ "command": "testFileLine", "file": "foo.rs", "line": 12 }"#;
         let have = FifoTrigger::parse(give).unwrap();
         let want = FifoTrigger {
           command: S("testFileLine"),
           file: Some(S("foo.rs")),
-          line: Some(S("12")),
+          line: Some(12),
           ..FifoTrigger::default()
         };
         assert_eq!(have, want);
@@ -201,7 +201,7 @@ mod tests {
 
       #[test]
       fn no_file() {
-        let give = r#"{ "command": "testFileLine", "line": "12" }"#;
+        let give = r#"{ "command": "testFileLine", "line": 12 }"#;
         let have = FifoTrigger::parse(give);
         assert!(have.is_err());
       }
@@ -227,7 +227,7 @@ mod tests {
 
     #[test]
     fn unknown_fields() {
-      let give = r#"{ "command": "testFile", "file": "foo.rs", "other": "12" }"#;
+      let give = r#"{ "command": "testFile", "file": "foo.rs", "other": 12 }"#;
       let have = FifoTrigger::parse(give);
       assert!(have.is_err());
     }
@@ -340,13 +340,13 @@ mod tests {
         let fifo_data = FifoTrigger {
           command: S("testFileLine"),
           file: Some(S("file.rs")),
-          line: Some(S("2")),
+          line: Some(2),
           ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger().unwrap();
         let want = Trigger::TestFileLine {
           file: S("file.rs"),
-          line: S("2"),
+          line: 2,
         };
         assert_eq!(have, want);
       }
@@ -356,7 +356,7 @@ mod tests {
         let fifo_data = FifoTrigger {
           command: S("testFileLine"),
           file: None,
-          line: Some(S("2")),
+          line: Some(2),
           ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger();

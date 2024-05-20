@@ -112,7 +112,7 @@ mod tests {
       };
       let trigger = Trigger::TestFileLine {
         file: S("filename2"),
-        line: S("2"),
+        line: 2,
       };
       let mut last_command: Option<String> = None;
       let have = config.get_command(&trigger, &mut last_command);
