@@ -82,9 +82,7 @@ mod tests {
         let config_trigger = config::Pattern::TestFile {
           files: glob::Pattern::new("*.rs").unwrap(),
         };
-        let client_trigger = client::Trigger::TestFile {
-          file: S("mismatch.go"),
-        };
+        let client_trigger = client::Trigger::TestFile { file: S("mismatch.go") };
         assert!(!config_trigger.matches_trigger(&client_trigger));
       }
 

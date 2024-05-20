@@ -24,11 +24,7 @@ async fn ensure_fifo_exists(fifo_path: &Path) {
 pub async fn send_command(command: String, workspace: &Path) {
   let fifo_path = fifo_path(workspace);
   ensure_fifo_exists(&fifo_path).await;
-  let mut fifo = OpenOptions::new()
-    .write(true)
-    .open(&fifo_path)
-    .await
-    .unwrap();
+  let mut fifo = OpenOptions::new().write(true).open(&fifo_path).await.unwrap();
   fifo.write_all(command.as_bytes()).await.unwrap();
 }
 

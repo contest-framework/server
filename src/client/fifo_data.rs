@@ -29,9 +29,7 @@ impl FifoTrigger {
       "customcommand" => self.into_custom_command(),
       "testfile" => self.into_testfile(),
       "testfileline" => self.into_testfileline(),
-      _ => Err(UserError::UnknownTrigger {
-        source: self.command,
-      }),
+      _ => Err(UserError::UnknownTrigger { source: self.command }),
     }
   }
 
@@ -238,7 +236,10 @@ mod tests {
       match FifoTrigger::parse(give) {
         Err(UserError::InvalidTrigger { source, err }) => {
           assert_eq!(source, give.to_owned());
-          assert_eq!(err, S(" --> 1:12\n  |\n1 | {\"filename}\n  |            ^---\n  |\n  = expected char_literal"));
+          assert_eq!(
+            err,
+            S(" --> 1:12\n  |\n1 | {\"filename}\n  |            ^---\n  |\n  = expected char_literal")
+          );
           Ok(())
         }
         Err(_) => Err(S("unexpected UserError")),
@@ -285,9 +286,7 @@ mod tests {
           ..FifoTrigger::default()
         };
         let have = fifo_data.into_trigger().unwrap();
-        let want = Trigger::CustomCommand {
-          run: S("echo hello"),
-        };
+        let want = Trigger::CustomCommand { run: S("echo hello") };
         assert_eq!(have, want);
       }
 

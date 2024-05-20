@@ -24,9 +24,7 @@ pub fn listen(debug: bool) -> Result<()> {
   let (sender, receiver) = channel::create(); // cross-thread communication channel
   cli::ctrl_c::handle(sender.clone());
   let current_dir =
-    env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory {
-      err: err.to_string(),
-    })?;
+    env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory { err: err.to_string() })?;
   let pipe = client::fifo::in_dir(&current_dir);
   pipe.create()?;
   fifo::listen(pipe, sender);
@@ -78,11 +76,7 @@ pub fn run_with_decoration(
   Ok(())
 }
 
-fn run_command(
-  text: &str,
-  configuration: &config::Configuration,
-  last_command: &mut Option<String>,
-) -> Result<bool> {
+fn run_command(text: &str, configuration: &config::Configuration, last_command: &mut Option<String>) -> Result<bool> {
   let trigger = Trigger::parse(text)?;
   let command = match configuration.get_command(&trigger, last_command) {
     Err(err) => match err {

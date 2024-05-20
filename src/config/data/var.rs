@@ -32,11 +32,9 @@ impl Var {
         let Some(original_line) = values.get("line") else {
           return Err(UserError::LineNotAvailable);
         };
-        let original_line = original_line
-          .parse()
-          .map_err(|_| UserError::LineIsNotANumber {
-            line: original_line.to_owned(),
-          })?;
+        let original_line = original_line.parse().map_err(|_| UserError::LineIsNotANumber {
+          line: original_line.to_owned(),
+        })?;
         scanner::file_upwards(filename, &self.filter, original_line)
       }
     }
@@ -45,9 +43,7 @@ impl Var {
 
 impl PartialEq for Var {
   fn eq(&self, other: &Self) -> bool {
-    self.name == other.name
-      && self.source == other.source
-      && self.filter.to_string() == other.filter.to_string()
+    self.name == other.name && self.source == other.source && self.filter.to_string() == other.filter.to_string()
   }
 }
 

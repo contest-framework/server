@@ -13,11 +13,7 @@ pub struct Configuration {
 }
 
 impl Configuration {
-  pub fn get_command(
-    &self,
-    trigger: &Trigger,
-    last_command: &mut Option<String>,
-  ) -> Result<String> {
+  pub fn get_command(&self, trigger: &Trigger, last_command: &mut Option<String>) -> Result<String> {
     if trigger == &Trigger::RepeatLastTest {
       match last_command {
         Some(command) => return Ok(command.to_owned()),
