@@ -24,8 +24,9 @@ help:   # shows all available Make commands
 install:  # compiles and installs the binary on this computer
 	cargo install --path .
 
-lint:  # runs all linters
+lint: tools/rta@${RUN_THAT_APP_VERSION}  # runs all linters
 	cargo clippy --all-targets --all-features
+	tools/rta actionlint
 
 setup:  # prepares this codebase for development
 	rustup toolchain add nightly
