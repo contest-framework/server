@@ -18,7 +18,7 @@ Feature: configuring textual output of the test result
       """
       executing: echo running all tests
       running all tests
-      SUCCESS!
+      SUCCESS
       """
 
   Scenario: disable the textual output
@@ -75,5 +75,5 @@ Feature: configuring textual output of the test result
       """
       executing: echo running all tests
       running all tests
-      SUCCESS!
+      SUCCESS
       """

@@ -7,12 +7,12 @@ Feature: run a custom command sent by the client
       """
       executing: echo custom command
       custom command
-      SUCCESS!
+      SUCCESS
       """
     When receiving the command '{ "command": "repeatTest" }'
     Then it prints
       """
       executing: echo custom command
       custom command
-      SUCCESS!
+      SUCCESS
       """
