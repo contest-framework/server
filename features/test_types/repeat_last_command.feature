@@ -20,19 +20,19 @@ Feature: repeat the last command
       """
       executing: echo running all tests
       running all tests
-      SUCCESS!
+      SUCCESS
       """
     When receiving the command '{ "command": "repeatTest" }'
     Then it prints
       """
       executing: echo running all tests
       running all tests
-      SUCCESS!
+      SUCCESS
       """
     When receiving the command '{ "command": "repeatTest" }'
     Then it prints
       """
       executing: echo running all tests
       running all tests
-      SUCCESS!
+      SUCCESS
       """

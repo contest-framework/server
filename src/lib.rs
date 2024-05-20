@@ -97,12 +97,12 @@ fn run_command(
   match subshell::run(&command)? {
     Outcome::TestPass() => {
       if configuration.options.after_run.print_result {
-        println!("SUCCESS!");
+        println!("SUCCESS");
       }
       Ok(true)
     }
     Outcome::TestFail() => {
-      println!("FAILED!");
+      println!("FAILED");
       Ok(false)
     }
     Outcome::NotFound(command) => Err(UserError::RunCommandNotFound { command }),
