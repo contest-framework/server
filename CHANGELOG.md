@@ -7,7 +7,6 @@
 - setup assistant now scaffolds options
 - textual output now doesn't output a bang and can be disabled via the new
   `printResult` option
-- distributes FreeBSD binaries
 
 #### 0.1.0
 
