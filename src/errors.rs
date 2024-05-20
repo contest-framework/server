@@ -3,60 +3,23 @@
 /// The possible errors that the user can cause and needs to be notified about.
 #[derive(Debug, Eq, PartialEq)]
 pub enum UserError {
-  CannotCreateConfigFile {
-    err: String,
-  },
-  CannotDetermineCurrentDirectory {
-    err: String,
-  },
-  CannotReadFile {
-    path: String,
-    err: String,
-  },
-  CannotSplitShellString {
-    source: String,
-    err: String,
-  },
-  ConfigFileError {
-    err: String,
-  },
-  ConfigFileInvalidContent {
-    err: String,
-  },
-  ConfigInvalidGlob {
-    pattern: String,
-    err: String,
-  },
-  FifoAlreadyExists {
-    path: String,
-  },
-  FifoCannotCreate {
-    path: String,
-    err: String,
-  },
-  FifoCannotDelete {
-    path: String,
-    err: String,
-  },
-  FifoCannotOpen {
-    err: String,
-  },
-  FifoCannotRead {
-    err: String,
-  },
+  CannotCreateConfigFile { err: String },
+  CannotDetermineCurrentDirectory { err: String },
+  CannotReadFile { path: String, err: String },
+  CannotSplitShellString { source: String, err: String },
+  ConfigFileError { err: String },
+  ConfigFileInvalidContent { err: String },
+  ConfigInvalidGlob { pattern: String, err: String },
+  FifoAlreadyExists { path: String },
+  FifoCannotCreate { path: String, err: String },
+  FifoCannotDelete { path: String, err: String },
+  FifoCannotOpen { err: String },
+  FifoCannotRead { err: String },
   FilesIsEmpty,
   FileNameNotAvailable,
-  InvalidRegex {
-    regex: String,
-    err: String,
-  },
-  InvalidTrigger {
-    source: String,
-    err: String,
-  },
-  LineIsNotANumber {
-    line: String,
-  },
+  InvalidRegex { regex: String, err: String },
+  InvalidTrigger { source: String, err: String },
+  LineIsNotANumber { line: String },
   LineNotAvailable,
   MissingFilesInPattern,
   MissingFileInTrigger,
@@ -64,26 +27,12 @@ pub enum UserError {
   MissingLineInTrigger,
   MissingRunInTrigger,
   NoCommandToRepeat,
-  RunCommandNotFound {
-    command: String,
-  },
+  RunCommandNotFound { command: String },
   RunCommandIsEmpty,
-  TriggerTooManyCaptures {
-    count: usize,
-    regex: String,
-    line: String,
-  },
-  TriggerRegexNotFound {
-    regex: String,
-    filename: String,
-    line: usize,
-  },
-  UnknownActionType {
-    action_type: String,
-  },
-  UnknownTrigger {
-    source: String,
-  },
+  TriggerTooManyCaptures { count: usize, regex: String, line: String },
+  TriggerRegexNotFound { regex: String, filename: String, line: usize },
+  UnknownActionType { action_type: String },
+  UnknownTrigger { source: String },
 }
 
 impl UserError {
