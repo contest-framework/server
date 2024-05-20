@@ -1,8 +1,7 @@
 use super::super::Configuration;
 use super::{FileConfiguration, JSON5_PATH, JSON_PATH};
 use crate::{Result, UserError};
-use std::fs;
-use std::io;
+use std::{fs, io};
 
 pub fn read() -> Result<Configuration> {
   let file_content = match fs::read_to_string(JSON_PATH) {
