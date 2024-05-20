@@ -38,6 +38,9 @@ jobs:
           - filename: tertestrial_macos_intel_64
             target: x86_64-apple-darwin
             os: macos-latest
+          - filename: tertestrial_freebsd_intel_64
+            target: x86_64-unknown-freebsd
+            os: macos-latest
           # NOTE: Tertestrial doesn't run on Windows yet due to the Unix-specific FIFO library
           # - filename: tertestrial_windows_intel_64
           #   target: x86_64-pc-windows-msvc
