@@ -1,4 +1,4 @@
-use super::PATH;
+use super::JSON_PATH;
 use crate::{Result, UserError};
 use std::fs;
 
@@ -23,6 +23,6 @@ const EXAMPLE_CONTENT: &str = r#"{
 
 // creates an example config file on disk
 pub fn create() -> Result<()> {
-  fs::write(PATH, EXAMPLE_CONTENT)
+  fs::write(JSON_PATH, EXAMPLE_CONTENT)
     .map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
 }

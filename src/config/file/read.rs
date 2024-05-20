@@ -1,13 +1,21 @@
 use super::super::Configuration;
-use super::{FileConfiguration, PATH};
+use super::{FileConfiguration, JSON5_PATH, JSON_PATH};
 use crate::{Result, UserError};
 use std::fs;
 use std::io;
 
 pub fn read() -> Result<Configuration> {
-  let file_content = match fs::read_to_string(PATH) {
+  let file_content = match fs::read_to_string(JSON_PATH) {
     Ok(file) => file,
-    Err(err) if err.kind() == io::ErrorKind::NotFound => return Ok(Configuration::default()),
+    Err(err) if err.kind() == io::ErrorKind::NotFound => match fs::read_to_string(JSON5_PATH) {
+      Ok(file) => file,
+      Err(err) if err.kind() == io::ErrorKind::NotFound => return Ok(Configuration::default()),
+      Err(err) => {
+        return Err(UserError::ConfigFileError {
+          err: err.to_string(),
+        })
+      }
+    },
     Err(err) => {
       return Err(UserError::ConfigFileError {
         err: err.to_string(),

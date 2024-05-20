@@ -11,4 +11,5 @@ use data::{FileAfterRun, FileBeforeRun};
 pub use read::read;
 
 /// filename of the Tertestrial config file
-const PATH: &str = ".testconfig.json";
+const JSON_PATH: &str = ".testconfig.json";
+const JSON5_PATH: &str = ".testconfig.json5";
