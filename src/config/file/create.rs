@@ -35,6 +35,5 @@ const EXAMPLE_CONTENT: &str = r#"{
 
 // creates an example config file on disk
 pub fn create() -> Result<()> {
-  fs::write(JSON_PATH, EXAMPLE_CONTENT)
-    .map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
+  fs::write(JSON_PATH, EXAMPLE_CONTENT).map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
 }

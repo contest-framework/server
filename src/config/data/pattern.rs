@@ -82,9 +82,7 @@ mod tests {
         let config_trigger = config::Pattern::TestFile {
           files: glob::Pattern::new("*.rs").unwrap(),
         };
-        let client_trigger = client::Trigger::TestFile {
-          file: S("mismatch.go"),
-        };
+        let client_trigger = client::Trigger::TestFile { file: S("mismatch.go") };
         assert!(!config_trigger.matches_trigger(&client_trigger));
       }
 
@@ -107,10 +105,7 @@ mod tests {
         let config_trigger = config::Pattern::TestFileLine {
           files: glob::Pattern::new("*.rs").unwrap(),
         };
-        let client_trigger = client::Trigger::TestFileLine {
-          file: S("foo.rs"),
-          line: 3,
-        };
+        let client_trigger = client::Trigger::TestFileLine { file: S("foo.rs"), line: 3 };
         assert!(config_trigger.matches_trigger(&client_trigger));
       }
 
@@ -119,10 +114,7 @@ mod tests {
         let config_trigger = config::Pattern::TestFileLine {
           files: glob::Pattern::new("*.rs").unwrap(),
         };
-        let client_trigger = client::Trigger::TestFileLine {
-          file: S("mismatch.go"),
-          line: 3,
-        };
+        let client_trigger = client::Trigger::TestFileLine { file: S("mismatch.go"), line: 3 };
         assert!(!config_trigger.matches_trigger(&client_trigger));
       }
 

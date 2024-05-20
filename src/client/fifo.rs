@@ -21,9 +21,7 @@ impl Pipe {
     match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
       Ok(()) => Ok(()),
       Err(err) => match err.as_errno() {
-        Some(nix::errno::Errno::EEXIST) => Err(UserError::FifoAlreadyExists {
-          path: self.path_str(),
-        }),
+        Some(nix::errno::Errno::EEXIST) => Err(UserError::FifoAlreadyExists { path: self.path_str() }),
         _ => Err(UserError::FifoCannotCreate {
           path: self.filepath.to_string_lossy().to_string(),
           err: err.to_string(),
@@ -40,9 +38,7 @@ impl Pipe {
   }
 
   pub fn open(&self) -> Result<BufReader<File>> {
-    let file = File::open(&self.filepath).map_err(|err| UserError::FifoCannotOpen {
-      err: err.to_string(),
-    })?;
+    let file = File::open(&self.filepath).map_err(|err| UserError::FifoCannotOpen { err: err.to_string() })?;
     Ok(BufReader::new(file))
   }
 
@@ -63,9 +59,7 @@ pub fn in_dir(dirpath: &Path) -> Pipe {
 
 pub fn listen(pipe: Pipe, sender: channel::Sender) {
   thread::spawn(move || loop {
-    let reader = pipe
-      .open()
-      .unwrap_or_else(|err| cli::exit(&err.messages().0));
+    let reader = pipe.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
     for line in reader.lines() {
       match line {
         Ok(text) => sender
