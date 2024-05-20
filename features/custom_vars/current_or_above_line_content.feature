@@ -47,6 +47,7 @@ Feature: define a custom variable with a regex match of the file content
       Error: did not find pattern \bfn (\w+)\( in file foo.rs at line 1
       This is defined in file .testconfig.json.
       """
+    # ensure the server is still running and functional
     When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 3 }'
     Then it prints
       """

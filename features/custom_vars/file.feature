@@ -38,6 +38,7 @@ Feature: define a custom variable with a part of the filename
       Error: cannot determine command for trigger: testFile my_file.go
       Please make sure that this action is listed in your configuration file
       """
+    # ensure the server is still running and functional
     When receiving the command '{ "command": "testFile", "file": "my_file.ts" }'
     Then it prints
       """
