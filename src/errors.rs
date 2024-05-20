@@ -121,7 +121,7 @@ impl UserError {
             UserError::RunCommandIsEmpty => (r#"the "run" field in your configuration file is empty"#.into(), String::new()),
             UserError::TriggerTooManyCaptures{count, regex, line} => (format!("found {count} captures using regex \"{regex}\" on line: {line}"),
                     "filters in the Tertestrial configuration file can only contain one capture group".into()),
-            UserError::TriggerRegexNotFound{regex, filename, line } => (format!("Did not find pattern {regex} in file {filename} at line {line}"),
+            UserError::TriggerRegexNotFound{regex, filename, line } => (format!("did not find pattern {regex} in file {filename} at line {line}"),
                 "This is defined in file .testconfig.json.".into()),
             UserError::UnknownActionType { action_type } => (format!("unknown action type: {action_type}"), r#"Valid types are "testAll", "testFile", and "testFileLine"."#.into()),
             UserError::UnknownTrigger{source } => (format!("cannot determine command for trigger: {source}"),

@@ -100,6 +100,11 @@ fn run_command(
         cli::print_error(&err);
         return Ok(false);
       }
+      UserError::UnknownTrigger { source: _ } => {
+        // user sent a trigger from the wrong file --> let them know and send one from the correct file
+        cli::print_error(&err);
+        return Ok(false);
+      }
       _ => return Err(err),
     },
     Ok(command) => command,

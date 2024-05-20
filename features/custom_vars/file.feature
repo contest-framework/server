@@ -31,12 +31,18 @@ Feature: define a custom variable with a part of the filename
       testing my_file.test.ts
       """
 
-  Scenario: receiving a mismatching file
+  Scenario: receiving a mismatching file prints an error and keeps running
     When receiving the command '{ "command": "testFile", "file": "my_file.go" }'
     Then it prints
       """
       Error: cannot determine command for trigger: testFile my_file.go
       Please make sure that this action is listed in your configuration file
+      """
+    When receiving the command '{ "command": "testFile", "file": "my_file.ts" }'
+    Then it prints
+      """
+      executing: echo testing my_file.test.ts
+      testing my_file.test.ts
       """
 
   Scenario: receiving no file
