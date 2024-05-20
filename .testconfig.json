@@ -64,7 +64,8 @@
     "afterRun": {
       "newlines": 1,
       "indicatorLines": 2,
-      "indicatorBackground": true
+      "indicatorBackground": true,
+      "printResult": false
     },
     "colors": {
       "indicatorLine": {
