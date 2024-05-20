@@ -1,10 +1,13 @@
 {
   "actions": [
+
+    // all tests
     {
       "type": "testAll",
       "run": "make test"
     },
 
+    // Rust unit tests
     {
       "type": "testFile",
       "files": "**/*.rs",
@@ -17,7 +20,6 @@
       ],
       "run": "cargo test {{file_without_ext}}"
     },
-
     {
       "type": "testFileLine",
       "files": "**/*.rs",
@@ -31,30 +33,19 @@
       "run": "cargo test {{test_name}}"
     },
 
-    {
-      "type": "testFile",
-      "files": "**/*.test.ts",
-      "run": "echo mocha {{file}}"
-    },
-
-    {
-      "type": "testFile",
-      "files": "**/*.ts",
-      "vars": [
-        {
-          "name": "file_without_ext",
-          "source": "file",
-          "filter": "^(.+)\\.ts$"
-        }
-      ],
-      "run": "echo mocha {{file_without_ext}}.test.ts"
-    },
-
+    // Cucumber specs
     {
       "type": "testFileLine",
-      "files": "**/*.test.ts",
-      "run": "echo mocha {{file}}:{{line}}"
-    }
+      "files": "**/*.feature",
+      "vars": [
+        {
+          "name": "scenario_name",
+          "source": "currentOrAboveLineContent",
+          "filter": "^  Scenario: (.*)"
+        }
+      ],
+      "run": "cargo test --test=cucumber -- --name='{{ scenario_name }}'"
+     },
   ],
   "options": {
     "beforeRun": {
