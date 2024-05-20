@@ -32,10 +32,17 @@ Error: cannot parse command received from client: { "command": "testFileLine", "
 trigger "testFileLine" is missing field "line"
       """
 
+  @this
   Scenario: receiving a mismatching file
     When receiving the command '{ "command": "testFileLine", "file": "foo.go", "line": 23 }'
     Then it prints
       """
       Error: cannot determine command for trigger: testFileLine foo.go:23
       Please make sure that this action is listed in your configuration file
+      """
+    When receiving the command '{ "command": "testFileLine", "file": "foo.ts", "line": 23 }'
+    Then it prints
+      """
+      executing: echo testing file foo.ts:23
+      testing file foo.ts:23
       """
