@@ -3,10 +3,10 @@ use regex::Regex;
 
 /// provides the first capture of the given regex in the given string
 /// starting at the given line and scanning towards the beginning of the file
-pub fn string_upwards(text: &str, re: &Regex, mut index: usize) -> Result<Option<String>> {
+pub fn string_upwards(text: &str, re: &Regex, mut index: u32) -> Result<Option<String>> {
   let lines: Vec<&str> = text.split('\n').collect();
   while index > 0 {
-    let Some(line_text) = lines.get(index) else {
+    let Some(line_text) = lines.get(index as usize) else {
       return Ok(None);
     };
     index -= 1;
@@ -20,7 +20,7 @@ pub fn string_upwards(text: &str, re: &Regex, mut index: usize) -> Result<Option
     if captures.len() > 2 {
       // we should get only 2 captures: one for the entire string, and one for the capture
       return Err(UserError::TriggerTooManyCaptures {
-        count: captures.len(),
+        count: captures.len() as u32,
         regex: re.to_string(),
         line: (*line_text).to_owned(),
       });

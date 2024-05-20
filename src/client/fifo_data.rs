@@ -8,7 +8,7 @@ use serde::Deserialize;
 pub struct FifoTrigger {
   pub command: String,
   pub file: Option<String>,
-  pub line: Option<usize>,
+  pub line: Option<u32>,
   pub run: Option<String>,
 }
 

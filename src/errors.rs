@@ -69,14 +69,14 @@ pub enum UserError {
   },
   RunCommandIsEmpty,
   TriggerTooManyCaptures {
-    count: usize,
+    count: u32,
     regex: String,
     line: String,
   },
   TriggerRegexNotFound {
     regex: String,
     filename: String,
-    line: usize,
+    line: u32,
   },
   UnknownActionType {
     action_type: String,

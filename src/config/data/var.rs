@@ -60,7 +60,7 @@ fn filter(text: &str, filter: &Regex) -> Result<String> {
   };
   if captures.len() > 2 {
     return Err(UserError::TriggerTooManyCaptures {
-      count: captures.len(),
+      count: captures.len() as u32,
       regex: filter.to_string(),
       line: text.to_owned(),
     });
