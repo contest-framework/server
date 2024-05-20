@@ -30,3 +30,10 @@ Feature: run all tests in a file
       Error: cannot determine command for trigger: testFile foo.go
       Please make sure that this action is listed in your configuration file
       """
+    # ensure the server is still running and functional
+    When receiving the command '{ "command": "testFile", "file": "foo.rs" }'
+    Then it prints
+      """
+      executing: echo testing file foo.rs
+      testing file foo.rs
+      """

@@ -49,8 +49,9 @@ Feature: using unavailable line
       """
     And Tertestrial is running
     When receiving the command '{ "command": "testFile", "file": "test.rs" }'
-    Then it prints
+    Then it fails with this output
       """
-      Error: Line not available
-      To use the current line in a variable, you need to use the "testFileLine" action type that provides this data.
+Error: Line not available
+
+To use the current line in a variable, you need to use the "testFileLine" action type that provides this data.
       """

@@ -37,19 +37,29 @@ Feature: define a custom variable with a regex match of the file content
       """
       executing: echo cargo test my_func
       cargo test my_func
+      SUCCESS
       """
 
-  Scenario: receiving a matching file and mismatching location
+  Scenario: receiving a matching file and mismatching location prints an error and keeps running
     When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 1 }'
     Then it prints
       """
-      Did not find pattern \bfn (\w+)\( in file foo.rs at line 1
+      Error: did not find pattern \bfn (\w+)\( in file foo.rs at line 1
+      This is defined in file .testconfig.json.
+      """
+    # ensure the server is still running and functional
+    When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 3 }'
+    Then it prints
+      """
+      executing: echo cargo test my_func
+      cargo test my_func
       """
 
   Scenario: receiving a matching file and no location
     When receiving the command '{ "command": "testFileLine", "file": "foo.rs" }'
-    Then it prints
+    Then it fails with this output
       """
-      Error: cannot parse command received from client: { "command": "testFileLine", "file": "foo.rs" }
-      trigger "testFileLine" is missing field "line"
+Error: cannot parse command received from client: { "command": "testFileLine", "file": "foo.rs" }
+
+trigger "testFileLine" is missing field "line"
       """

@@ -25,10 +25,11 @@ Feature: test only a specific function
 
   Scenario: receiving a matching file and no location
     When receiving the command '{ "command": "testFileLine", "file": "foo.ts" }'
-    Then it prints
+    Then it fails with this output
       """
-      Error: cannot parse command received from client: { "command": "testFileLine", "file": "foo.ts" }
-      trigger "testFileLine" is missing field "line"
+Error: cannot parse command received from client: { "command": "testFileLine", "file": "foo.ts" }
+
+trigger "testFileLine" is missing field "line"
       """
 
   Scenario: receiving a mismatching file
@@ -37,4 +38,11 @@ Feature: test only a specific function
       """
       Error: cannot determine command for trigger: testFileLine foo.go:23
       Please make sure that this action is listed in your configuration file
+      """
+    # ensure the server is still running and functional
+    When receiving the command '{ "command": "testFileLine", "file": "foo.ts", "line": 23 }'
+    Then it prints
+      """
+      executing: echo testing file foo.ts:23
+      testing file foo.ts:23
       """
