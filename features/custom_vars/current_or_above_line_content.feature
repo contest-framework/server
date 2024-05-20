@@ -32,7 +32,7 @@ Feature: define a custom variable with a regex match of the file content
     And Tertestrial is running
 
   Scenario: receiving a matching file and location
-    When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": "5" }'
+    When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 5 }'
     Then it prints
       """
       executing: echo cargo test my_func
@@ -40,7 +40,7 @@ Feature: define a custom variable with a regex match of the file content
       """
 
   Scenario: receiving a matching file and mismatching location
-    When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": "1" }'
+    When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 1 }'
     Then it prints
       """
       Error: Did not find pattern \bfn (\w+)\( in file foo.rs at line 1
