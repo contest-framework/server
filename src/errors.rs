@@ -122,7 +122,7 @@ impl UserError {
             UserError::TriggerTooManyCaptures{count, regex, line} => (format!("found {count} captures using regex \"{regex}\" on line: {line}"),
                     "filters in the Tertestrial configuration file can only contain one capture group".into()),
             UserError::TriggerRegexNotFound{regex, filename, line } => (format!("Did not find pattern {regex} in file {filename} at line {line}"),
-                "Please check that the file .testconfig.json is correct".into()),
+                "This is defined in file .testconfig.json".into()),
             UserError::UnknownActionType { action_type } => (format!("unknown action type: {action_type}"), r#"Valid types are "testAll", "testFile", and "testFileLine"."#.into()),
             UserError::UnknownTrigger{source } => (format!("cannot determine command for trigger: {source}"),
             "Please make sure that this action is listed in your configuration file".into()),

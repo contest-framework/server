@@ -44,6 +44,13 @@ Feature: define a custom variable with a regex match of the file content
     Then it prints
       """
       Did not find pattern \bfn (\w+)\( in file foo.rs at line 1
+      This is defined in file .testconfig.json
+      """
+    When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 3 }'
+    Then it prints
+      """
+      executing: echo cargo test my_func
+      cargo test my_func
       """
 
   Scenario: receiving a matching file and no location
