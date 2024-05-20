@@ -22,7 +22,6 @@ Feature: comments in the configuration file
       SUCCESS
       """
 
-  @this
   Scenario: JSON5 file extension
     Given file ".testconfig.json5" with content
       """
