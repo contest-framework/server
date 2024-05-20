@@ -96,6 +96,7 @@ fn run_command(
         filename: _,
         line: _,
       } => {
+        // user triggered a command in a place where it doesn't match all regexes --> let them know and go to the correct location
         cli::print_error(&err);
         return Ok(false);
       }
