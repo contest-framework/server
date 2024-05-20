@@ -18,7 +18,19 @@ const EXAMPLE_CONTENT: &str = r#"{
       "file": "\\.ext$",
       "run": "echo testing file {{file}} at line {{line}}"
     }
-  ]
+  ],
+  "options": {
+    "beforeRun": {
+      "clearScreen": false,
+      "newlines": 2
+    },
+    "afterRun": {
+      "newlines": 1,
+      "indicatorLines": 2,
+      "indicatorBackground": true,
+      "printResult": true
+    }
+  }
 }"#;
 
 // creates an example config file on disk

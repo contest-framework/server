@@ -66,16 +66,6 @@
       "indicatorLines": 2,
       "indicatorBackground": true,
       "printResult": false
-    },
-    "colors": {
-      "indicatorLine": {
-        "pass": "\\033[1;32m",
-        "fail": "\\033[1;31m"
-      },
-      "indicatorBackground": {
-        "pass": "\\033[0;32m",
-        "fail": "\\033[0;31m"
-      }
     }
   }
 }

@@ -21,6 +21,18 @@ Feature: create example config file as part of setup
             "file": "\\.ext$",
             "run": "echo testing file {{file}} at line {{line}}"
           }
-        ]
+        ],
+        "options": {
+          "beforeRun": {
+            "clearScreen": false,
+            "newlines": 2
+          },
+          "afterRun": {
+            "newlines": 1,
+            "indicatorLines": 2,
+            "indicatorBackground": true,
+            "printResult": true
+          }
+        }
       }
       """
