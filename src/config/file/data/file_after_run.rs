@@ -2,7 +2,7 @@ use crate::config::AfterRun;
 use serde::Deserialize;
 
 /// low-level, unvalidated `AfterRun` data exactly how it is stored in the config file
-#[derive(Deserialize, Default, Eq, PartialEq)]
+#[derive(Default, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FileAfterRun {
   pub newlines: Option<u8>,
