@@ -33,3 +33,6 @@ Here is an example **.testconfig.json** file for JavaScript developers who use
   ]
 }
 ```
+
+You can also use the filename `.testconfig.json5` if you want to use comments in
+the JSON.
