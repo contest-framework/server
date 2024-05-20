@@ -14,7 +14,7 @@ pub struct FifoTrigger {
 
 impl FifoTrigger {
   pub fn parse(line: &str) -> Result<Self> {
-    let result: Self = serde_json::from_str(line).map_err(|err| UserError::InvalidTrigger {
+    let result: Self = json5::from_str(line).map_err(|err| UserError::InvalidTrigger {
       source: line.to_owned(),
       err: err.to_string(),
     })?;
@@ -238,7 +238,7 @@ mod tests {
       match FifoTrigger::parse(give) {
         Err(UserError::InvalidTrigger { source, err }) => {
           assert_eq!(source, give.to_owned());
-          assert_eq!(err, S("EOF while parsing a string at line 1 column 11"));
+          assert_eq!(err, S(" --> 1:12\n  |\n1 | {\"filename}\n  |            ^---\n  |\n  = expected char_literal"));
           Ok(())
         }
         Err(_) => Err(S("unexpected UserError")),
