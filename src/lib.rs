@@ -96,7 +96,9 @@ fn run_command(
   last_command.replace(command.clone());
   match subshell::run(&command)? {
     Outcome::TestPass() => {
-      println!("SUCCESS!");
+      if configuration.options.after_run.print_result {
+        println!("SUCCESS!");
+      }
       Ok(true)
     }
     Outcome::TestFail() => {
