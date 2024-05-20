@@ -85,12 +85,23 @@ fn run_command(
 ) -> Result<bool> {
   let trigger = Trigger::parse(text)?;
   let command = match configuration.get_command(&trigger, last_command) {
-    Err(err) if err == UserError::NoCommandToRepeat => {
-      // repeat non-existing command --> don't stop, just print an error message and keep going
-      cli::print_error(&err);
-      return Ok(false);
-    }
-    Err(err) => return Err(err),
+    Err(err) => match err {
+      UserError::NoCommandToRepeat => {
+        // repeat non-existing command --> don't stop, just print an error message and keep going
+        cli::print_error(&err);
+        return Ok(false);
+      }
+      UserError::TriggerRegexNotFound {
+        regex: _,
+        filename: _,
+        line: _,
+      } => {
+        // user triggered a command in a place where it doesn't match all regexes --> let them know and go to the correct location
+        cli::print_error(&err);
+        return Ok(false);
+      }
+      _ => return Err(err),
+    },
     Ok(command) => command,
   };
   last_command.replace(command.clone());

@@ -43,7 +43,7 @@ Feature: define a custom variable with a regex match of the file content
     When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 1 }'
     Then it prints
       """
-      Error: Did not find pattern \bfn (\w+)\( in file foo.rs at line 1
+      Did not find pattern \bfn (\w+)\( in file foo.rs at line 1
       """
 
   Scenario: receiving a matching file and no location
