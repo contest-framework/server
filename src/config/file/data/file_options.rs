@@ -42,6 +42,7 @@ mod tests {
         after_run: AfterRun {
           newlines: 0,
           indicator_lines: 0,
+          print_result: true,
         },
       };
       assert_eq!(have, want);
@@ -57,6 +58,7 @@ mod tests {
         after_run: Some(FileAfterRun {
           newlines: Some(4),
           indicator_lines: Some(6),
+          print_result: Some(false),
         }),
       };
       let have = file_options.into_domain();
@@ -68,6 +70,7 @@ mod tests {
         after_run: AfterRun {
           newlines: 4,
           indicator_lines: 6,
+          print_result: false,
         },
       };
       assert_eq!(have, want);
