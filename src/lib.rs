@@ -53,7 +53,7 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, last_comm
     println!();
   }
   if config.options.before_run.clear_screen {
-    print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+    print!("{esc}[2J{esc}[1;1H{esc}c", esc = 27 as char);
   }
   let result = run_command(text, config, last_command)?;
   for _ in 0..config.options.after_run.newlines {
