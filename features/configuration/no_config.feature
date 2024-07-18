@@ -1,8 +1,8 @@
-Feature: run Tertestrial without configuration
+Feature: run Contest without configuration
 
   Scenario: run
-    When I run "tertestrial"
+    When I run "contest"
     Then it prints
       """
-      Tertestrial is online, Ctrl-C to exit
+      Contest is online, Ctrl-C to exit
       """

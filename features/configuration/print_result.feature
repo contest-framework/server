@@ -12,7 +12,7 @@ Feature: configuring textual output of the test result
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
     When receiving the command '{ "command": "testAll" }'
     Then it prints
       """
@@ -38,7 +38,7 @@ Feature: configuring textual output of the test result
         }
       }
       """
-    And Tertestrial is running
+    And Contest is running
     When receiving the command '{ "command": "testAll" }'
     Then it prints
       """
@@ -69,7 +69,7 @@ Feature: configuring textual output of the test result
         }
       }
       """
-    And Tertestrial is running
+    And Contest is running
     When receiving the command '{ "command": "testAll" }'
     Then it prints
       """

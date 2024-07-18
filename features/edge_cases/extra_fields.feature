@@ -12,7 +12,7 @@ Feature: client sends unknown fields in the command
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
 
   Scenario: send a valid command with additional wrong fields
     When receiving the command '{ "command": "testAll", "foo": 1, "bar": 2 }'

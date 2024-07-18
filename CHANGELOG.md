@@ -1,4 +1,4 @@
-# Tertestrial Server Changelog
+# Contest Server Changelog
 
 #### 0.2.0
 

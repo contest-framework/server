@@ -12,7 +12,7 @@ Feature: run in debug mode
         ]
       }
       """
-    When I run "tertestrial debug"
+    When I run "contest debug"
     Then it prints
       """
       using this configuration:
@@ -22,7 +22,7 @@ Feature: run in debug mode
       """
     And it prints
       """
-      Tertestrial is online in debug mode, Ctrl-C to exit
+      Contest is online in debug mode, Ctrl-C to exit
       """
 
   Scenario: receiving a valid command

@@ -12,7 +12,7 @@ Feature: repeat the last command
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
 
   Scenario: repeating the last command
     When receiving the command '{ "command": "testAll" }'

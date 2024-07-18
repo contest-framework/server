@@ -1,4 +1,4 @@
-Feature: Starting Tertestrial
+Feature: Starting Contest
 
   Scenario:
     Given file ".testconfig.json" with content
@@ -12,8 +12,8 @@ Feature: Starting Tertestrial
         ]
       }
       """
-    When I run "tertestrial"
+    When I run "contest"
     Then it prints
       """
-      Tertestrial is online, Ctrl-C to exit
+      Contest is online, Ctrl-C to exit
       """

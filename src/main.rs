@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
+use contest::{cli, client, config, listen, run_with_decoration, Result};
 use std::env;
 use std::process::ExitCode;
-use tertestrial::{cli, client, config, listen, run_with_decoration, Result};
 
 fn main() -> ExitCode {
   let mut exit_code = ExitCode::SUCCESS;
