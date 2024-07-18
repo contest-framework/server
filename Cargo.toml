@@ -1,6 +1,6 @@
 [package]
-name = "tertestrial"
-description = "auto-run tests from within your code editor"
+name = "contest"
+description = "server component for the continuous testing framework"
 version = "0.2.0"
 authors = ["Kevin Goslar <kevin.goslar@gmail.com>"]
 edition = "2021"

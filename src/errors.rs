@@ -49,8 +49,7 @@ impl UserError {
       UserError::ConfigInvalidGlob { pattern, err } => (format!("Invalid glob pattern: {pattern}"), err.into()),
       UserError::FifoAlreadyExists { path } => (
         format!("A fifo pipe \"{path}\" already exists."),
-        "This could mean a Tertestrial instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Tertestrial again."
-          .into(),
+        "This could mean a Contest instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Contest again.".into(),
       ),
       UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), String::new()),
       UserError::FifoCannotDelete { err, path } => (format!("Cannot delete pipe at {path}: {err}"), String::new()),
@@ -81,7 +80,7 @@ impl UserError {
       UserError::RunCommandIsEmpty => (r#"the "run" field in your configuration file is empty"#.into(), String::new()),
       UserError::TriggerTooManyCaptures { count, regex, line } => (
         format!("found {count} captures using regex \"{regex}\" on line: {line}"),
-        "filters in the Tertestrial configuration file can only contain one capture group".into(),
+        "filters in the Contest configuration file can only contain one capture group".into(),
       ),
       UserError::TriggerRegexNotFound { regex, filename, line } => (
         format!("did not find pattern {regex} in file {filename} at line {line}"),

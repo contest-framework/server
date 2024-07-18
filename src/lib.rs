@@ -29,9 +29,9 @@ pub fn listen(debug: bool) -> Result<()> {
   fifo::listen(pipe, sender);
   let mut last_command: Option<String> = None;
   if debug {
-    println!("Tertestrial is online in debug mode, Ctrl-C to exit");
+    println!("Contest is online in debug mode, Ctrl-C to exit");
   } else {
-    println!("Tertestrial is online, Ctrl-C to exit");
+    println!("Contest is online, Ctrl-C to exit");
   }
   for signal in receiver {
     match signal {

@@ -1,14 +1,14 @@
-# Tertestrial Server Configuration
+# Contest Server Configuration
 
-Run <code type="tertestrial-command">tertestrial setup</code> in the root
-directory of your codebase to generate Tertestrial's configuration file
+Run <code type="contest-command">contest setup</code> in the root directory of
+your codebase to generate Contest's configuration file
 (<code type="repo/existing-file">.testconfig.json</code>). This file tells the
-Tertestrial server which actions it should perform when it receives messages
-from a Tertestrial client.
+Contest server which actions it should perform when it receives messages from a
+Contest client.
 
-The `trigger` block of an action describes the command sent by the Tertestrial
-client. Tertestrial performs pattern matching on this block. Attributes can
-contain globs as placeholders.
+The `trigger` block of an action describes the command sent by the Contest
+client. Contest performs pattern matching on this block. Attributes can contain
+globs as placeholders.
 
 The `run` block defines the console command to run. You can insert values
 received in the `trigger` block via placeholders in the

@@ -29,7 +29,7 @@ Feature: define a custom variable with a regex match of the file content
         println!("This is a very simple function.");
       }
       """
-    And Tertestrial is running
+    And Contest is running
 
   Scenario: receiving a matching file and location
     When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 5 }'

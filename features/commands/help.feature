@@ -1,12 +1,12 @@
 Feature: display help
 
   Scenario Outline:
-    When I run "tertestrial <OPTION>"
+    When I run "contest <OPTION>"
     Then it exits with this output
       """
-      auto-run tests from within your code editor
+      server component for the continuous testing framework
 
-      Usage: tertestrial [COMMAND]
+      Usage: contest [COMMAND]
 
       Commands:
         debug  Print the received triggers from the pipe without running them

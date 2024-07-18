@@ -7,7 +7,7 @@ use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::thread;
 
-pub const FILE_NAME: &str = ".tertestrial.tmp";
+pub const FILE_NAME: &str = ".contest.tmp";
 
 /// A FIFO pipe
 #[derive(Debug)]

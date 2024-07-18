@@ -26,23 +26,23 @@ jobs:
     strategy:
       matrix:
         include:
-          - filename: tertestrial_linux_arm_64
+          - filename: contest_linux_arm_64
             target: aarch64-unknown-linux-gnu
             os: ubuntu-20.04
-          - filename: tertestrial_linux_intel_64
+          - filename: contest_linux_intel_64
             target: x86_64-unknown-linux-gnu
             os: ubuntu-20.04
-          - filename: tertestrial_macos_arm_64
+          - filename: contest_macos_arm_64
             target: aarch64-apple-darwin
             os: macos-latest
-          - filename: tertestrial_macos_intel_64
+          - filename: contest_macos_intel_64
             target: x86_64-apple-darwin
             os: macos-latest
-          # NOTE: Tertestrial doesn't run on Windows yet due to the Unix-specific FIFO library
-          # - filename: tertestrial_windows_intel_64
+          # NOTE: Contest doesn't run on Windows yet due to the Unix-specific FIFO library
+          # - filename: contest_windows_intel_64
           #   target: x86_64-pc-windows-msvc
           #   os: windows-latest
-          # - filename: tertestrial_windows_arm_64
+          # - filename: contest_windows_arm_64
           #   target: aarch64-pc-windows-msvc
           #   os: windows-latest
     runs-on: ${{ matrix.os }}
@@ -53,7 +53,7 @@ jobs:
           archive: ${{ matrix.filename }}
           # (required) Comma-separated list of binary names (non-extension portion of filename) to build and upload.
           # Note that glob pattern is not supported yet.
-          bin: tertestrial
+          bin: contest
           # (optional) Target triple, default is host triple.
           target: ${{ matrix.target }}
           # (required) GitHub token for uploading assets to GitHub Releases.

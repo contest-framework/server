@@ -13,7 +13,7 @@ Feature: test only a specific function
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
 
   Scenario: receiving a matching file and location
     When receiving the command '{ "command": "testFileLine", "file": "foo.ts", "line": 23 }'

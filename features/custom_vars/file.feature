@@ -21,7 +21,7 @@ Feature: define a custom variable with a part of the filename
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
 
   Scenario: receiving a matching file
     When receiving the command '{ "command": "testFile", "file": "my_file.ts" }'

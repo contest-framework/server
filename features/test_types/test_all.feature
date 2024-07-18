@@ -12,7 +12,7 @@ Feature: run all tests
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
 
   Scenario: receiving a valid command
     When receiving the command '{ "command": "testAll" }'

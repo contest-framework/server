@@ -13,7 +13,7 @@ Feature: run all tests in a file
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
 
   Scenario: receiving a matching file
     When receiving the command '{ "command": "testFile", "file": "foo.rs" }'

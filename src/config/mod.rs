@@ -1,4 +1,4 @@
-//! everything around configuring Tertestrial
+//! everything around configuring Contest
 
 mod data;
 pub mod file;

@@ -19,7 +19,7 @@ Feature: using unavailable filename
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
 
 
   Scenario: receiving a valid command

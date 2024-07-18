@@ -19,7 +19,7 @@ Feature: using unavailable line
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
     When receiving the command '{ "command": "testAll" }'
     Then it prints
       """
@@ -47,7 +47,7 @@ Feature: using unavailable line
         ]
       }
       """
-    And Tertestrial is running
+    And Contest is running
     When receiving the command '{ "command": "testFile", "file": "test.rs" }'
     Then it fails with this output
       """

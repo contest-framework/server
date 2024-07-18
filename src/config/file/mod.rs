@@ -10,6 +10,6 @@ use data::FileConfiguration;
 use data::{FileAfterRun, FileBeforeRun};
 pub use read::read;
 
-/// filename of the Tertestrial config file
+/// filename of the Contest config file
 const JSON_PATH: &str = ".testconfig.json";
 const JSON5_PATH: &str = ".testconfig.json5";
