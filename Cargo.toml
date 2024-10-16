@@ -45,7 +45,7 @@ panic = "unwind"
 unsafe_code = "forbid"
 
 [workspace.lints.clippy]
-pedantic = "warn"
+pedantic = { level = "warn", priority = -1 }
 use_self = "deny"
 
 [lints.clippy]
