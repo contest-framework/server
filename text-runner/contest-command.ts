@@ -15,7 +15,7 @@ export async function contestCommand(action: tr.actions.Args) {
 }
 
 async function getExistingCommands(): Promise<string[]> {
-  const { stdout, stderr } = await asyncExec(path.join(__dirname, "..", "target", "debug", "contest") + " -h")
+  const { stdout, stderr } = await asyncExec(path.join(__dirname, "..", "target", "debug", "contest") + " help")
   const output = stdout.trim() + stderr.trim()
   let inSubcommandsSection = false
   const result = []
