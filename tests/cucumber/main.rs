@@ -2,7 +2,7 @@ mod logic;
 mod world;
 
 use cucumber::gherkin::Step;
-use cucumber::{given, then, when, World};
+use cucumber::{World, given, then, when};
 use world::ContestWorld;
 
 #[given(expr = "file {string} with content")]

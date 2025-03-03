@@ -1,9 +1,9 @@
 use super::{Action, Options};
 use crate::client::Trigger;
-use crate::{template, Result, UserError};
+use crate::{Result, UserError, template};
 use ahash::AHashMap;
-use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
 use prettytable::Table;
+use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
 use std::fmt::{self, Display};
 
 #[derive(Debug, Default, PartialEq)]

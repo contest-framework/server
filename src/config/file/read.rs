@@ -1,5 +1,5 @@
 use super::super::Configuration;
-use super::{FileConfiguration, JSON5_PATH, JSON_PATH};
+use super::{FileConfiguration, JSON_PATH, JSON5_PATH};
 use crate::{Result, UserError};
 use std::{fs, io};
 

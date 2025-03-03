@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use contest::{cli, client, config, listen, run_with_decoration, Result};
+use contest::{Result, cli, client, config, listen, run_with_decoration};
 use std::env;
 use std::process::ExitCode;
 
