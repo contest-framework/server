@@ -31,7 +31,7 @@ lint: tools/rta@${RUN_THAT_APP_VERSION}  # runs all linters
 setup:  # prepares this codebase for development
 	rustup toolchain add nightly
 	rustup component add rustfmt --toolchain nightly
-	yarn install
+	(cd tools && npm install)
 
 test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
