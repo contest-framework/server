@@ -15,20 +15,22 @@ export async function contestCommand(action: tr.actions.Args) {
 }
 
 async function getExistingCommands(): Promise<string[]> {
-  const { stdout, stderr } = await asyncExec(path.join(__dirname, "..", "target", "debug", "contest") + " help")
+  const { stdout, stderr } = await asyncExec(path.join(__dirname, "..", "target", "debug", "contest") + " -h")
   const output = stdout.trim() + stderr.trim()
   let inSubcommandsSection = false
   const result = []
   const firstWordRE = /^\s*(\w+)/ // extracts the first word in the given string
   const lines = output.split(os.EOL)
   for (const line of lines) {
-    if (line.startsWith("SUBCOMMANDS:")) {
+    if (line.startsWith("Commands:")) {
       inSubcommandsSection = true
       continue
     }
     if (inSubcommandsSection) {
       const matches = line.match(firstWordRE)
-      result.push(matches[1])
+      if (matches && matches.length > 0) {
+        result.push(matches[1])
+      }
     }
   }
   return result
