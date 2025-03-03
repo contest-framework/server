@@ -40,7 +40,7 @@ test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
 	tools/rta dprint check
-# ${CURDIR}/tools/node_modules/.bin/text-run
+	# ${CURDIR}/tools/node_modules/.bin/text-runner
 
 unit:  # runs the unit tests
 	cargo test
