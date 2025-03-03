@@ -7,9 +7,9 @@ edition = "2024"
 
 [dependencies]
 ahash = "0.8.11"
-clap = { version = "4.5.9", features = ["derive"] }
+clap = { version = "4.5.31", features = ["derive"] }
 ctrlc = { version = "3.4", features = ["termination"] }
-glob = "0.3.1"
+glob = "0.3.2"
 json5 = "0.4.1"
 nix = "0.19.1"
 prettytable-rs = "0.10"
@@ -22,10 +22,10 @@ terminal_size = "0.1"
 [dev-dependencies]
 big_s = "1.0.2"
 cucumber = "0.21.1"
-futures = "0.3.30"
-pretty = { package = "pretty_assertions", version = "1.4.0" }
+futures = "0.3.31"
+pretty = { package = "pretty_assertions", version = "1.4.1" }
 tempfile = "3"
-tokio = { version = "1.38.0", features = ["fs", "io-util", "macros", "process", "rt"] }
+tokio = { version = "1.43.0", features = ["fs", "io-util", "macros", "process", "rt"] }
 
 [[test]]
 name = "cucumber" # this should be the same as the filename of your test target
