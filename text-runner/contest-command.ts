@@ -22,13 +22,15 @@ async function getExistingCommands(): Promise<string[]> {
   const firstWordRE = /^\s*(\w+)/ // extracts the first word in the given string
   const lines = output.split(os.EOL)
   for (const line of lines) {
-    if (line.startsWith("SUBCOMMANDS:")) {
+    if (line.startsWith("Commands:")) {
       inSubcommandsSection = true
       continue
     }
     if (inSubcommandsSection) {
       const matches = line.match(firstWordRE)
-      result.push(matches[1])
+      if (matches && matches.length > 0) {
+        result.push(matches[1])
+      }
     }
   }
   return result
