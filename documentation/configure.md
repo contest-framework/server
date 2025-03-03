@@ -2,7 +2,7 @@
 
 Run <code type="contest-command">contest setup</code> in the root directory of
 your codebase to generate Contest's configuration file
-(<code type="repo/existing-file">.testconfig.json</code>). This file tells the
+(<code type="repo/existing-file">.testconfig.json5</code>). This file tells the
 Contest server which actions it should perform when it receives messages from a
 Contest client.
 
