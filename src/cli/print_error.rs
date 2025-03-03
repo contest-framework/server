@@ -8,9 +8,5 @@ pub fn print_error(err: &UserError) {
 
 #[must_use]
 pub fn error_color(success: bool) -> termcolor::Color {
-  if success {
-    termcolor::Color::Green
-  } else {
-    termcolor::Color::Red
-  }
+  if success { termcolor::Color::Green } else { termcolor::Color::Red }
 }

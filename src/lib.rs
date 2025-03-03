@@ -7,13 +7,13 @@ pub mod scanner;
 mod subshell;
 pub mod template;
 
-use client::{fifo, Trigger};
+use client::{Trigger, fifo};
 pub use errors::{Result, UserError};
 use std::env;
 use std::io::Write;
 use subshell::Outcome;
 use termcolor::WriteColor;
-use terminal_size::{terminal_size, Height, Width};
+use terminal_size::{Height, Width, terminal_size};
 
 pub fn listen(debug: bool) -> Result<()> {
   let config = config::file::read()?;

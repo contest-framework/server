@@ -1,5 +1,5 @@
 use super::VarSource;
-use crate::{scanner, Result, UserError};
+use crate::{Result, UserError, scanner};
 use ahash::AHashMap;
 use regex::Regex;
 

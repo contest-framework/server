@@ -1,7 +1,7 @@
 //! manages and reads the FIFO pipe
 
 use crate::channel::Signal;
-use crate::{channel, cli, Result, UserError};
+use crate::{Result, UserError, channel, cli};
 use std::fs::{self, File};
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
@@ -58,23 +58,25 @@ pub fn in_dir(dirpath: &Path) -> Pipe {
 }
 
 pub fn listen(pipe: Pipe, sender: channel::Sender) {
-  thread::spawn(move || loop {
-    let reader = pipe.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
-    for line in reader.lines() {
-      match line {
-        Ok(text) => sender
-          .send(Signal::ReceivedLine(text))
-          .unwrap_or_else(|err| println!("communication channel failure: {err}")),
-        Err(err) => cli::exit(&err.to_string()),
-      };
+  thread::spawn(move || {
+    loop {
+      let reader = pipe.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
+      for line in reader.lines() {
+        match line {
+          Ok(text) => sender
+            .send(Signal::ReceivedLine(text))
+            .unwrap_or_else(|err| println!("communication channel failure: {err}")),
+          Err(err) => cli::exit(&err.to_string()),
+        };
+      }
     }
   });
 }
 
 #[cfg(test)]
 mod tests {
-  use crate::client::fifo;
   use crate::UserError;
+  use crate::client::fifo;
   use big_s::S;
   use std::{fs, io};
 

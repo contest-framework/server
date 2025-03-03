@@ -1,6 +1,6 @@
 use super::{FileAction, FileOptions};
-use crate::config::{Action, Configuration};
 use crate::Result;
+use crate::config::{Action, Configuration};
 use serde::Deserialize;
 
 /// low-level, unvalidated `Configuration` data exactly how it is stored in the config file
