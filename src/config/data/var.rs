@@ -59,7 +59,7 @@ fn filter(text: &str, filter: &Regex) -> Result<String> {
       line: text.to_owned(),
     });
   }
-  return Ok(result.as_str().to_owned());
+  Ok(result.as_str().to_owned())
 }
 
 #[cfg(test)]

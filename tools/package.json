@@ -2,10 +2,9 @@
   "description": "Provides Node-based development tools",
   "private": true,
   "devDependencies": {
-    "text-runner": "5.0.0",
-    "textrun-make": "0.1.0",
-    "textrun-repo": "0.1.0",
-    "ts-node": "9.1.1",
-    "typescript": "4.2.3"
+    "text-runner": "7.0.0",
+    "textrun-make": "0.2.1",
+    "textrun-repo": "0.2.1",
+    "typescript": "5.8.2"
   }
 }
