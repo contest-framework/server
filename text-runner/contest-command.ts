@@ -20,7 +20,7 @@ async function getExistingCommands(): Promise<string[]> {
   const { stdout, stderr } = await asyncExec(path.join(dirname, "..", "target", "debug", "contest") + " help")
   const output = stdout.trim() + stderr.trim()
   let inSubcommandsSection = false
-  const result = []
+  const result: string[] = []
   const firstWordRE = /^\s*(\w+)/ // extracts the first word in the given string
   const lines = output.split(os.EOL)
   for (const line of lines) {
