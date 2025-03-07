@@ -2,6 +2,7 @@ import * as childProcess from "child_process"
 import * as os from "os"
 import * as path from "path"
 import * as tr from "text-runner"
+import * as url from "url"
 import * as util from "util"
 const asyncExec = util.promisify(childProcess.exec)
 
@@ -15,7 +16,8 @@ export async function contestCommand(action: tr.actions.Args) {
 }
 
 async function getExistingCommands(): Promise<string[]> {
-  const { stdout, stderr } = await asyncExec(path.join(__dirname, "..", "target", "debug", "contest") + " help")
+  const dirname = url.fileURLToPath(new URL(".", import.meta.url))
+  const { stdout, stderr } = await asyncExec(path.join(dirname, "..", "target", "debug", "contest") + " help")
   const output = stdout.trim() + stderr.trim()
   let inSubcommandsSection = false
   const result = []
