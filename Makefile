@@ -31,7 +31,7 @@ lint: tools/rta@${RUN_THAT_APP_VERSION}  # runs all linters
 setup:  # prepares this codebase for development
 	rustup toolchain add nightly
 	rustup component add rustfmt --toolchain nightly
-	(cd tools && npm install)
+	npm install
 
 test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
@@ -40,7 +40,7 @@ test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
 	tools/rta dprint check
-	${CURDIR}/tools/node_modules/.bin/text-runner
+	npm exec -- text-runner
 
 unit:  # runs the unit tests
 	cargo test
