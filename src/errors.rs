@@ -1,5 +1,7 @@
 //! error types used in this app
 
+use big_s::S;
+
 /// The possible errors that the user can cause and needs to be notified about.
 #[derive(Debug, Eq, PartialEq)]
 pub enum UserError {
@@ -50,51 +52,51 @@ impl UserError {
       UserError::ConfigInvalidGlob { pattern, err } => (format!("Invalid glob pattern: {pattern}"), err.into()),
       UserError::FifoAlreadyExists { path } => (
         format!("A fifo pipe \"{path}\" already exists."),
-        "This could mean a Contest instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Contest again.".into(),
+        S("This could mean a Contest instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Contest again."),
       ),
       UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), String::new()),
       UserError::FifoCannotDelete { err, path } => (format!("Cannot delete pipe at {path}: {err}"), String::new()),
-      UserError::FifoCannotRead { err } => (format!("Cannot read from pipe: {err}"), "This is an internal error".into()),
-      UserError::FifoCannotOpen { err } => (format!("Cannot open pipe: {err}"), "This is an internal error".into()),
+      UserError::FifoCannotRead { err } => (format!("Cannot read from pipe: {err}"), S("This is an internal error")),
+      UserError::FifoCannotOpen { err } => (format!("Cannot open pipe: {err}"), S("This is an internal error")),
       UserError::FileNameNotAvailable => (
-        "Filename is not known".into(),
-        r#"To use the filename in a variable, you need to choose either the "testFile" or "testFileLine" action type that provides this data."#.into(),
+        S("Filename is not known"),
+        S(r#"To use the filename in a variable, you need to choose either the "testFile" or "testFileLine" action type that provides this data."#),
       ),
-      UserError::FilesIsEmpty => (r#"The "files" field in your config file is empty"#.into(), String::new()),
+      UserError::FilesIsEmpty => (S(r#"The "files" field in your config file is empty"#), String::new()),
       UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), err.to_string()),
       UserError::InvalidTrigger { source: line, err } => (format!("cannot parse command received from client: {line}"), err.to_owned()),
       UserError::LineIsNotANumber { line } => (format!("the provided line ({line})is not a number"), String::new()),
       UserError::LineNotAvailable => (
-        "Line not available".into(),
-        r#"To use the current line in a variable, you need to use the "testFileLine" action type that provides this data."#.into(),
+        S("Line not available"),
+        S(r#"To use the current line in a variable, you need to use the "testFileLine" action type that provides this data."#),
       ),
-      UserError::MissingFilesInPattern => (r#"the pattern in the config file is missing the "files" field."#.into(), String::new()),
-      UserError::MissingFileInTrigger => (r#"the trigger received from the client is missing the "file" field."#.into(), String::new()),
-      UserError::MissingFileAndLineInTrigger => (r#"the trigger received from the client is missing the "file" and "line" fields."#.into(), String::new()),
-      UserError::MissingFilesInTestFile => (r#"missing "files" entry in "testFile" action"#.into(), String::new()),
-      UserError::MissingLineInTrigger => (r#"the trigger received from the client is missing the "line" field."#.into(), String::new()),
-      UserError::MissingRunInTrigger => (r#"missing "run" entry in "customCommand" trigger"#.into(), String::new()),
-      UserError::NoCommandToRepeat {} => ("No command to repeat found".into(), "You must submit a test command first before you can repeat it.".into()),
+      UserError::MissingFilesInPattern => (S(r#"the pattern in the config file is missing the "files" field."#), String::new()),
+      UserError::MissingFileInTrigger => (S(r#"the trigger received from the client is missing the "file" field."#), String::new()),
+      UserError::MissingFileAndLineInTrigger => (S(r#"the trigger received from the client is missing the "file" and "line" fields."#), String::new()),
+      UserError::MissingFilesInTestFile => (S(r#"missing "files" entry in "testFile" action"#), String::new()),
+      UserError::MissingLineInTrigger => (S(r#"the trigger received from the client is missing the "line" field."#), String::new()),
+      UserError::MissingRunInTrigger => (S(r#"missing "run" entry in "customCommand" trigger"#), String::new()),
+      UserError::NoCommandToRepeat {} => (S("No command to repeat found"), S("You must submit a test command first before you can repeat it.")),
       UserError::RunCommandNotFound { command } => (
         format!("test command to run not found: {command}"),
-        "Please verify that the command is in the path or fix your config file.".into(),
+        S("Please verify that the command is in the path or fix your config file."),
       ),
-      UserError::RunCommandIsEmpty => (r#"the "run" field in your configuration file is empty"#.into(), String::new()),
+      UserError::RunCommandIsEmpty => (S(r#"the "run" field in your configuration file is empty"#), String::new()),
       UserError::TriggerTooManyCaptures { count, regex, line } => (
         format!("found {count} captures using regex \"{regex}\" on line: {line}"),
-        "filters in the Contest configuration file can only contain one capture group".into(),
+        S("filters in the Contest configuration file can only contain one capture group"),
       ),
       UserError::TriggerRegexNotFound { regex, filename, line } => (
         format!("did not find pattern {regex} in file {filename} at line {line}"),
-        "This is defined in file .testconfig.json.".into(),
+        S("This is defined in file .testconfig.json."),
       ),
       UserError::UnknownActionType { action_type } => (
         format!("unknown action type: {action_type}"),
-        r#"Valid types are "testAll", "testFile", and "testFileLine"."#.into(),
+        S(r#"Valid types are "testAll", "testFile", and "testFileLine"."#),
       ),
       UserError::UnknownTrigger { source } => (
         format!("cannot determine command for trigger: {source}"),
-        "Please make sure that this action is listed in your configuration file".into(),
+        S("Please make sure that this action is listed in your configuration file"),
       ),
     }
   }
