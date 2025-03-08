@@ -11,11 +11,11 @@ pub const FILE_NAME: &str = ".contest.tmp";
 
 /// A FIFO pipe
 #[derive(Debug)]
-pub struct Pipe {
+pub struct Fifo {
   pub filepath: PathBuf,
 }
 
-impl Pipe {
+impl Fifo {
   // creates the FIFO on the filesystem
   pub fn create(&self) -> Result<()> {
     match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
@@ -51,13 +51,13 @@ impl Pipe {
 
 /// constructs a fifo pipe in the current directory
 #[must_use]
-pub fn in_dir(dirpath: &Path) -> Pipe {
-  Pipe {
+pub fn in_dir(dirpath: &Path) -> Fifo {
+  Fifo {
     filepath: dirpath.join(FILE_NAME),
   }
 }
 
-pub fn listen(pipe: Pipe, sender: channel::Sender) {
+pub fn listen(pipe: Fifo, sender: channel::Sender) {
   thread::spawn(move || {
     loop {
       let reader = pipe.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
