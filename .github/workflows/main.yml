@@ -20,6 +20,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: "contest"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - run: make setup
       - run: ls -la
       - run: make test
