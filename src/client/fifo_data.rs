@@ -1,4 +1,3 @@
-use super::Trigger;
 use crate::{Result, UserError};
 use serde::Deserialize;
 
@@ -20,32 +19,6 @@ impl FifoTrigger {
     })?;
     result.validate(line)?;
     Ok(result)
-  }
-
-  pub fn into_trigger(self) -> Result<Trigger> {
-    match self.command.to_ascii_lowercase().as_str() {
-      "testall" => Ok(Trigger::TestAll),
-      "repeattest" => Ok(Trigger::RepeatLastTest),
-      "customcommand" => match self.run {
-        Some(run) => Ok(Trigger::CustomCommand { run }),
-        None => Err(UserError::MissingRunInTrigger),
-      },
-      "testfile" => match self.file {
-        Some(file) => Ok(Trigger::TestFile { file }),
-        None => Err(UserError::MissingFileInTrigger),
-      },
-      "testfileline" => {
-        let Some(file) = self.file else {
-          return Err(UserError::MissingFileInTrigger);
-        };
-        let Some(line) = self.line else {
-          return Err(UserError::MissingLineInTrigger);
-        };
-        Ok(Trigger::TestFileLine { file, line })
-      }
-      "quit" => Ok(Trigger::Quit),
-      _ => Err(UserError::UnknownTrigger { source: self.command }),
-    }
   }
 
   pub fn validate(&self, source: &str) -> Result<()> {
@@ -232,131 +205,6 @@ mod tests {
         }
         Err(_) => Err(S("unexpected UserError")),
         Ok(_) => Err(S("this should not have worked")),
-      }
-    }
-  }
-
-  mod into_trigger {
-    use crate::client::{FifoTrigger, Trigger};
-    use big_s::S;
-
-    #[test]
-    fn test_all() {
-      let fifo_data = FifoTrigger {
-        command: S("testAll"),
-        ..FifoTrigger::default()
-      };
-      let have = fifo_data.into_trigger().unwrap();
-      let want = Trigger::TestAll;
-      assert_eq!(have, want);
-    }
-
-    #[test]
-    fn repeat_test() {
-      let fifo_data = FifoTrigger {
-        command: S("repeatTest"),
-        ..FifoTrigger::default()
-      };
-      let have = fifo_data.into_trigger().unwrap();
-      let want = Trigger::RepeatLastTest;
-      assert_eq!(have, want);
-    }
-
-    mod custom_command {
-      use crate::client::{FifoTrigger, Trigger};
-      use big_s::S;
-
-      #[test]
-      fn valid() {
-        let fifo_data = FifoTrigger {
-          command: S("customCommand"),
-          run: Some(S("echo hello")),
-          ..FifoTrigger::default()
-        };
-        let have = fifo_data.into_trigger().unwrap();
-        let want = Trigger::CustomCommand { run: S("echo hello") };
-        assert_eq!(have, want);
-      }
-
-      #[test]
-      fn missing_run() {
-        let fifo_data = FifoTrigger {
-          command: S("customCommand"),
-          run: None,
-          ..FifoTrigger::default()
-        };
-        let have = fifo_data.into_trigger();
-        assert!(have.is_err());
-      }
-    }
-
-    mod test_file {
-      use crate::client::{FifoTrigger, Trigger};
-      use big_s::S;
-
-      #[test]
-      fn valid() {
-        let fifo_data = FifoTrigger {
-          command: S("testFile"),
-          file: Some(S("file.rs")),
-          ..FifoTrigger::default()
-        };
-        let have = fifo_data.into_trigger().unwrap();
-        let want = Trigger::TestFile { file: S("file.rs") };
-        assert_eq!(have, want);
-      }
-
-      #[test]
-      fn missing_file() {
-        let fifo_data = FifoTrigger {
-          command: S("testFile"),
-          file: None,
-          ..FifoTrigger::default()
-        };
-        let have = fifo_data.into_trigger();
-        assert!(have.is_err());
-      }
-    }
-
-    mod test_function {
-      use crate::client::{FifoTrigger, Trigger};
-      use big_s::S;
-
-      #[test]
-      fn valid() {
-        let fifo_data = FifoTrigger {
-          command: S("testFileLine"),
-          file: Some(S("file.rs")),
-          line: Some(2),
-          ..FifoTrigger::default()
-        };
-        let have = fifo_data.into_trigger().unwrap();
-        let want = Trigger::TestFileLine { file: S("file.rs"), line: 2 };
-        assert_eq!(have, want);
-      }
-
-      #[test]
-      fn missing_file() {
-        let fifo_data = FifoTrigger {
-          command: S("testFileLine"),
-          file: None,
-          line: Some(2),
-          ..FifoTrigger::default()
-        };
-        let have = fifo_data.into_trigger();
-        assert!(have.is_err());
-      }
-
-      #[test]
-      fn missing_line() {
-        let fifo_data = FifoTrigger {
-          command: S("testFileLine"),
-          file: Some(S("file.rs")),
-          line: None,
-          ..FifoTrigger::default()
-        };
-        let have = fifo_data.into_trigger();
-        assert!(have.is_err());
       }
     }
   }
