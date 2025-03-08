@@ -42,8 +42,8 @@ impl TryFrom<FifoTrigger> for Trigger {
       },
       "testfileline" => match (fifo.file, fifo.line) {
         (Some(file), Some(line)) => Ok(Trigger::TestFileLine { file, line }),
-        (Some(_), None) => Err(UserError::MissingLineInTrigger),
         (None, Some(_)) => Err(UserError::MissingFileInTrigger),
+        (Some(_), None) => Err(UserError::MissingLineInTrigger),
         (None, None) => Err(UserError::MissingFileAndLineInTrigger),
       },
       _ => Err(UserError::UnknownTrigger { source: fifo.command }),
