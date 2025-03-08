@@ -23,7 +23,7 @@ fn main_with_result() -> Result<()> {
       println!("running trigger: {trigger}");
       let config = config::file::read()?;
       let mut last_command: Option<String> = None;
-      run_with_decoration(&trigger, &config, &mut last_command)
+      run_with_decoration(&trigger, &config, false, &mut last_command)
     }
     Command::Setup => config::file::create(),
   }
