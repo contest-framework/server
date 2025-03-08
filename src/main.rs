@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand};
+use contest::cli::Command;
 use contest::{Result, cli, client, config, listen, run_with_decoration};
 use std::env;
 use std::process::ExitCode;
@@ -18,7 +18,7 @@ fn main() -> ExitCode {
 }
 
 fn main_with_result() -> Result<()> {
-  match Cli::parse().command.unwrap_or(Command::Start) {
+  match Command::parse() {
     Command::Start => listen(false),
     Command::Debug => listen(true),
     Command::Run { trigger } => {
@@ -29,26 +29,4 @@ fn main_with_result() -> Result<()> {
     }
     Command::Setup => config::file::create(),
   }
-}
-
-#[derive(Parser)]
-#[command(version, about)]
-struct Cli {
-  #[command(subcommand)]
-  command: Option<Command>,
-}
-
-#[derive(Subcommand)]
-enum Command {
-  /// Print the received triggers from the pipe without running them
-  Debug,
-  /// Run the given client-side trigger and exit
-  Run {
-    /// the client-side trigger to execute
-    trigger: String,
-  },
-  /// Create an example configuration file
-  Setup,
-  /// Execute the received triggers from the pipe
-  Start,
 }
