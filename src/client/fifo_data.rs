@@ -29,6 +29,7 @@ impl FifoTrigger {
       "customcommand" => self.into_custom_command(),
       "testfile" => self.into_testfile(),
       "testfileline" => self.into_testfileline(),
+      "quit" => Ok(Trigger::Quit),
       _ => Err(UserError::UnknownTrigger { source: self.command }),
     }
   }

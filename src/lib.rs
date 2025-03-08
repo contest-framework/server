@@ -73,6 +73,7 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, last_comm
 
 fn run_command(text: &str, configuration: &config::Configuration, last_command: &mut Option<String>) -> Result<bool> {
   let trigger = Trigger::parse(text)?;
+  if trigger == Trigger::Quit {}
   let command = match configuration.get_command(&trigger, last_command) {
     Err(err) => match err {
       UserError::NoCommandToRepeat => {
