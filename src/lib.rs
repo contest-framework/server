@@ -35,10 +35,7 @@ pub fn listen(debug: bool) -> Result<()> {
   }
   for signal in receiver {
     match signal {
-      channel::Signal::ReceivedLine(line) if debug => println!("received from client: {line}"),
-      channel::Signal::ReceivedLine(line) => {
-        run_with_decoration(&line, &config, &mut last_command)?;
-      }
+      channel::Signal::ReceivedLine(line) => run_with_decoration(&line, &config, debug, &mut last_command)?,
       channel::Signal::Exit => {
         println!("\nSee you later!");
         return Ok(());
@@ -48,7 +45,11 @@ pub fn listen(debug: bool) -> Result<()> {
   Ok(())
 }
 
-pub fn run_with_decoration(text: &str, config: &config::Configuration, last_command: &mut Option<String>) -> Result<()> {
+pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bool, last_command: &mut Option<String>) -> Result<()> {
+  if debug {
+    println!("received from client: {text}");
+    return Ok(());
+  }
   for _ in 0..config.options.before_run.newlines {
     println!();
   }
