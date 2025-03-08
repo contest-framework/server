@@ -21,4 +21,5 @@ jobs:
         with:
           shared-key: "contest"
       - run: make setup
+      - run: ls -la
       - run: make test
