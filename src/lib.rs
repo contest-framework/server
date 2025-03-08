@@ -26,7 +26,7 @@ pub fn listen(debug: bool) -> Result<()> {
   let current_dir = env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory { err: err.to_string() })?;
   let pipe = client::fifo::in_dir(&current_dir);
   pipe.create()?;
-  fifo::listen(pipe, sender);
+  pipe.listen(sender);
   let mut last_command: Option<String> = None;
   if debug {
     println!("Contest is online in debug mode, Ctrl-C to exit");

@@ -30,6 +30,22 @@ impl Fifo {
     }
   }
 
+  pub fn listen(self, sender: channel::Sender) {
+    thread::spawn(move || {
+      loop {
+        let reader = self.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
+        for line in reader.lines() {
+          match line {
+            Ok(text) => sender
+              .send(Signal::ReceivedLine(text))
+              .unwrap_or_else(|err| println!("communication channel failure: {err}")),
+            Err(err) => cli::exit(&err.to_string()),
+          };
+        }
+      }
+    });
+  }
+
   pub fn delete(&self) -> Result<()> {
     fs::remove_file(&self.filepath).map_err(|e| UserError::FifoCannotDelete {
       err: e.to_string(),
@@ -55,22 +71,6 @@ pub fn in_dir(dirpath: &Path) -> Fifo {
   Fifo {
     filepath: dirpath.join(FILE_NAME),
   }
-}
-
-pub fn listen(pipe: Fifo, sender: channel::Sender) {
-  thread::spawn(move || {
-    loop {
-      let reader = pipe.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
-      for line in reader.lines() {
-        match line {
-          Ok(text) => sender
-            .send(Signal::ReceivedLine(text))
-            .unwrap_or_else(|err| println!("communication channel failure: {err}")),
-          Err(err) => cli::exit(&err.to_string()),
-        };
-      }
-    }
-  });
 }
 
 #[cfg(test)]
