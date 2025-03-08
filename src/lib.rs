@@ -7,7 +7,7 @@ pub mod scanner;
 mod subshell;
 pub mod template;
 
-use client::{Trigger, fifo};
+use client::{Fifo, Trigger, fifo};
 pub use errors::{Result, UserError};
 use std::env;
 use std::io::Write;
@@ -24,8 +24,8 @@ pub fn listen(debug: bool) -> Result<()> {
   let (sender, receiver) = channel::create(); // cross-thread communication channel
   cli::ctrl_c::handle(sender.clone());
   let current_dir = env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory { err: err.to_string() })?;
-  let pipe = client::fifo::in_dir(&current_dir);
-  pipe.listen(sender)?;
+  let fifo = Fifo::in_dir(&current_dir);
+  fifo.listen(sender)?;
   let mut last_command: Option<String> = None;
   if debug {
     println!("Contest is online in debug mode, Ctrl-C to exit");
