@@ -49,7 +49,7 @@ update: tools/rta@${RUN_THAT_APP_VERSION}  # updates the dependencies
 	cargo install cargo-edit
 	cargo upgrade
 	tools/rta --update
-	npx npm-check-updates -u && npm install
+	npm exec -- npm-check-updates -u && npm install
 
 # --- HELPER TARGETS --------------------------------------------------------------------------------------------------------------------------------
 
