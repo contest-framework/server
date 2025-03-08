@@ -11,30 +11,34 @@ pub const FILE_NAME: &str = ".contest.tmp";
 
 /// A FIFO pipe
 #[derive(Debug)]
-pub struct Pipe {
+pub struct Fifo {
   pub filepath: PathBuf,
 }
 
-impl Pipe {
-  // creates the FIFO on the filesystem
-  pub fn create(&self) -> Result<()> {
-    match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
-      Ok(()) => Ok(()),
-      Err(err) => match err.as_errno() {
-        Some(nix::errno::Errno::EEXIST) => Err(UserError::FifoAlreadyExists { path: self.path_str() }),
-        _ => Err(UserError::FifoCannotCreate {
-          path: self.filepath.to_string_lossy().to_string(),
-          err: err.to_string(),
-        }),
-      },
-    }
-  }
-
+impl Fifo {
   pub fn delete(&self) -> Result<()> {
     fs::remove_file(&self.filepath).map_err(|e| UserError::FifoCannotDelete {
       err: e.to_string(),
       path: self.filepath.to_string_lossy().to_string(),
     })
+  }
+
+  /// constructs a fifo pipe in the current directory
+  #[must_use]
+  pub fn in_dir(dirpath: &Path) -> Result<Fifo> {
+    let full_path = dirpath.join(FILE_NAME);
+    if let Err(err) = nix::unistd::mkfifo(&full_path, nix::sys::stat::Mode::S_IRWXU) {
+      return match err.as_errno() {
+        Some(nix::errno::Errno::EEXIST) => Err(UserError::FifoAlreadyExists {
+          path: full_path.to_string_lossy().to_string(),
+        }),
+        _ => Err(UserError::FifoCannotCreate {
+          path: full_path.to_string_lossy().to_string(),
+          err: err.to_string(),
+        }),
+      };
+    }
+    Ok(Fifo { filepath: full_path })
   }
 
   pub fn open(&self) -> Result<BufReader<File>> {
@@ -49,15 +53,14 @@ impl Pipe {
   }
 }
 
-/// constructs a fifo pipe in the current directory
-#[must_use]
-pub fn in_dir(dirpath: &Path) -> Pipe {
-  Pipe {
-    filepath: dirpath.join(FILE_NAME),
+impl Drop for Fifo {
+  fn drop(&mut self) {
+    println!("deleting FIFO from disk");
+    self.delete().unwrap()
   }
 }
 
-pub fn listen(pipe: Pipe, sender: channel::Sender) {
+pub fn listen(pipe: Fifo, sender: channel::Sender) {
   thread::spawn(move || {
     loop {
       let reader = pipe.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
@@ -76,43 +79,40 @@ pub fn listen(pipe: Pipe, sender: channel::Sender) {
 #[cfg(test)]
 mod tests {
   use crate::UserError;
-  use crate::client::fifo;
+  use crate::client::Fifo;
   use big_s::S;
   use std::{fs, io};
 
   #[test]
   fn pipe_create_does_not_exist() -> Result<(), io::Error> {
     let temp_path = tempfile::tempdir().unwrap().into_path();
-    let pipe = fifo::in_dir(&temp_path);
-    pipe.create().unwrap();
+    let fifo = Fifo::in_dir(&temp_path).unwrap();
     let mut files = vec![];
     for file in fs::read_dir(&temp_path)? {
       files.push(file?.path());
     }
-    let want = vec![pipe.filepath];
+    let want = vec![fifo.filepath.clone()];
     assert_eq!(want, files);
-    fs::remove_dir_all(&temp_path)?;
     Ok(())
   }
 
   #[test]
   fn pipe_create_exists() -> Result<(), String> {
     let temp_dir = tempfile::tempdir().unwrap();
-    let pipe = fifo::in_dir(temp_dir.path());
-    pipe.create().unwrap();
-    match pipe.create() {
+    let _fifo1 = Fifo::in_dir(temp_dir.path()).unwrap();
+    let fifo2 = Fifo::in_dir(temp_dir.path());
+    match fifo2 {
       Err(UserError::FifoAlreadyExists { path: _ }) => Ok(()),
       Err(err) => Err(err.messages().0),
-      Ok(()) => Err(S("should not create second pipe")),
+      Ok(_) => Err(S("should not create second pipe")),
     }
   }
 
   #[test]
   fn pipe_delete() -> Result<(), UserError> {
     let temp_dir = tempfile::tempdir().unwrap();
-    let pipe = fifo::in_dir(temp_dir.path());
-    pipe.create()?;
-    pipe.delete().unwrap();
+    let fifo = Fifo::in_dir(temp_dir.path())?;
+    fifo.delete().unwrap();
     let file_count = fs::read_dir(temp_dir.path()).unwrap().count();
     assert_eq!(0, file_count);
     Ok(())
