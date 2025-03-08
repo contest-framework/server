@@ -6,8 +6,10 @@ use std::process::ExitCode;
 fn main() -> ExitCode {
   let mut exit_code = ExitCode::SUCCESS;
   if let Err(err) = main_with_result() {
-    let (msg, guidance) = err.messages();
-    println!("\nError: {msg}\n\n{guidance}");
+    match err.messages() {
+      (msg, Some(guidance)) => println!("\nError: {msg}\n\n{guidance}"),
+      (msg, None) => println!("\nError: {msg}"),
+    }
     exit_code = ExitCode::FAILURE;
   }
   let current_dir = env::current_dir().unwrap_or_else(|err| cli::exit(&err.to_string()));
