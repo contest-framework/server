@@ -17,7 +17,7 @@ pub struct Fifo {
 
 impl Fifo {
   // creates the FIFO on the filesystem
-  pub fn create(&self) -> Result<()> {
+  fn create(&self) -> Result<()> {
     match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
       Ok(()) => Ok(()),
       Err(err) => match err.as_errno() {
@@ -30,7 +30,8 @@ impl Fifo {
     }
   }
 
-  pub fn listen(self, sender: channel::Sender) {
+  pub fn listen(self, sender: channel::Sender) -> Result<()> {
+    self.create()?;
     thread::spawn(move || {
       loop {
         let reader = self.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
@@ -44,6 +45,7 @@ impl Fifo {
         }
       }
     });
+    Ok(())
   }
 
   pub fn delete(&self) -> Result<()> {
