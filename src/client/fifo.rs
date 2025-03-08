@@ -24,7 +24,6 @@ impl Fifo {
   }
 
   /// constructs a fifo pipe in the current directory
-  #[must_use]
   pub fn in_dir(dirpath: &Path) -> Result<Fifo> {
     let full_path = dirpath.join(FILE_NAME);
     if let Err(err) = nix::unistd::mkfifo(&full_path, nix::sys::stat::Mode::S_IRWXU) {
@@ -56,7 +55,7 @@ impl Fifo {
 impl Drop for Fifo {
   fn drop(&mut self) {
     println!("deleting FIFO from disk");
-    self.delete().unwrap()
+    let _ = self.delete();
   }
 }
 
