@@ -13,6 +13,12 @@ pub enum Trigger {
   RepeatLastTest,
 }
 
+impl Trigger {
+  pub fn parse(line: &str) -> Result<Self> {
+    FifoTrigger::parse(line)?.into_trigger()
+  }
+}
+
 impl Display for Trigger {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
@@ -22,11 +28,5 @@ impl Display for Trigger {
       Trigger::CustomCommand { run } => write!(f, "customCommand {run}"),
       Trigger::RepeatLastTest => f.write_str("repeatTest"),
     }
-  }
-}
-
-impl Trigger {
-  pub fn parse(line: &str) -> Result<Self> {
-    FifoTrigger::parse(line)?.into_trigger()
   }
 }
