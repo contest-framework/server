@@ -1,9 +1,11 @@
 use crate::UserError;
 
 pub fn print_error(err: &UserError) {
-  let (msg, desc) = err.messages();
+  let (msg, guidance) = err.messages();
   println!("Error: {msg}");
-  println!("{desc}");
+  if let Some(guidance) = guidance {
+    println!("{guidance}");
+  }
 }
 
 #[must_use]
