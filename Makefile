@@ -1,5 +1,5 @@
 # dev tooling and versions
-RUN_THAT_APP_VERSION = 0.6.0
+RUN_THAT_APP_VERSION = 0.11.0
 
 build:  # performs a test build
 	cargo check
@@ -31,7 +31,7 @@ lint: tools/rta@${RUN_THAT_APP_VERSION}  # runs all linters
 setup:  # prepares this codebase for development
 	rustup toolchain add nightly
 	rustup component add rustfmt --toolchain nightly
-	(cd tools && npm install)
+	npm install
 
 test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	cargo build
@@ -40,7 +40,7 @@ test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
 	tools/rta dprint check
-	${CURDIR}/tools/node_modules/.bin/text-runner
+	npm exec -- text-runner
 
 unit:  # runs the unit tests
 	cargo test
@@ -49,7 +49,7 @@ update: tools/rta@${RUN_THAT_APP_VERSION}  # updates the dependencies
 	cargo install cargo-edit
 	cargo upgrade
 	tools/rta --update
-	(cd tools && npx npm-check-updates -u && npm install)
+	npx npm-check-updates -u && npm install
 
 # --- HELPER TARGETS --------------------------------------------------------------------------------------------------------------------------------
 

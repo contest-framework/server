@@ -25,7 +25,7 @@ cucumber = "0.21.1"
 futures = "0.3.31"
 pretty = { package = "pretty_assertions", version = "1.4.1" }
 tempfile = "3"
-tokio = { version = "1.43.0", features = ["fs", "io-util", "macros", "process", "rt"] }
+tokio = { version = "1.44.0", features = ["fs", "io-util", "macros", "process", "rt"] }
 
 [[test]]
 name = "cucumber" # this should be the same as the filename of your test target
