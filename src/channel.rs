@@ -2,7 +2,6 @@
 
 use std::sync::mpsc;
 
-// TODO: inline this type
 pub type Sender = mpsc::Sender<Signal>;
 
 /// Signals that can be sent over the channel.
