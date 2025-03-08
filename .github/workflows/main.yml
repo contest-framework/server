@@ -24,5 +24,4 @@ jobs:
         with:
           node-version: "22"
       - run: make setup
-      - run: ls -la
       - run: make test
