@@ -26,36 +26,26 @@ impl FifoTrigger {
     match self.command.to_ascii_lowercase().as_str() {
       "testall" => Ok(Trigger::TestAll),
       "repeattest" => Ok(Trigger::RepeatLastTest),
-      "customcommand" => self.into_custom_command(),
-      "testfile" => self.into_testfile(),
-      "testfileline" => self.into_testfileline(),
+      "customcommand" => match self.run {
+        Some(run) => Ok(Trigger::CustomCommand { run }),
+        None => Err(UserError::MissingRunInTrigger),
+      },
+      "testfile" => match self.file {
+        Some(file) => Ok(Trigger::TestFile { file }),
+        None => Err(UserError::MissingFileInTrigger),
+      },
+      "testfileline" => {
+        let Some(file) = self.file else {
+          return Err(UserError::MissingFileInTrigger);
+        };
+        let Some(line) = self.line else {
+          return Err(UserError::MissingLineInTrigger);
+        };
+        Ok(Trigger::TestFileLine { file, line })
+      }
       "quit" => Ok(Trigger::Quit),
       _ => Err(UserError::UnknownTrigger { source: self.command }),
     }
-  }
-
-  fn into_custom_command(self) -> Result<Trigger> {
-    match self.run {
-      Some(run) => Ok(Trigger::CustomCommand { run }),
-      None => Err(UserError::MissingRunInTrigger),
-    }
-  }
-
-  fn into_testfile(self) -> Result<Trigger> {
-    match self.file {
-      Some(file) => Ok(Trigger::TestFile { file }),
-      None => Err(UserError::MissingFileInTrigger),
-    }
-  }
-
-  fn into_testfileline(self) -> Result<Trigger> {
-    let Some(file) = self.file else {
-      return Err(UserError::MissingFileInTrigger);
-    };
-    let Some(line) = self.line else {
-      return Err(UserError::MissingLineInTrigger);
-    };
-    Ok(Trigger::TestFileLine { file, line })
   }
 
   pub fn validate(&self, source: &str) -> Result<()> {
