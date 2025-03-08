@@ -51,6 +51,7 @@ impl TryFrom<FifoTrigger> for Trigger {
         };
         Ok(Trigger::TestFileLine { file, line })
       }
+      "quit" => Ok(Trigger::Quit),
       _ => Err(UserError::UnknownTrigger { source: fifo.command }),
     }
   }
