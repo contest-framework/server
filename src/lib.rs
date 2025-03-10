@@ -7,7 +7,7 @@ pub mod scanner;
 mod subshell;
 pub mod template;
 
-use client::{Trigger, fifo};
+use client::{Fifo, Trigger, fifo};
 use config::Configuration;
 pub use errors::{Result, UserError};
 use std::env;
