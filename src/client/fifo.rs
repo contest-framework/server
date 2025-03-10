@@ -11,13 +11,13 @@ pub const FILE_NAME: &str = ".contest.tmp";
 
 /// A FIFO pipe
 #[derive(Debug)]
-pub struct Pipe {
+pub struct Fifo {
   pub filepath: PathBuf,
 }
 
-impl Pipe {
+impl Fifo {
   // creates the FIFO on the filesystem
-  pub fn create(&self) -> Result<()> {
+  fn create(&self) -> Result<()> {
     match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
       Ok(()) => Ok(()),
       Err(err) => match err.as_errno() {
@@ -28,6 +28,32 @@ impl Pipe {
         }),
       },
     }
+  }
+
+  /// constructs a fifo pipe in the current directory
+  #[must_use]
+  pub fn in_dir(dirpath: &Path) -> Self {
+    Fifo {
+      filepath: dirpath.join(FILE_NAME),
+    }
+  }
+
+  pub fn listen(self, sender: channel::Sender) -> Result<()> {
+    self.create()?;
+    thread::spawn(move || {
+      loop {
+        let reader = self.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
+        for line in reader.lines() {
+          match line {
+            Ok(text) => sender
+              .send(Signal::ReceivedLine(text))
+              .unwrap_or_else(|err| println!("communication channel failure: {err}")),
+            Err(err) => cli::exit(&err.to_string()),
+          };
+        }
+      }
+    });
+    Ok(())
   }
 
   pub fn delete(&self) -> Result<()> {
@@ -49,41 +75,17 @@ impl Pipe {
   }
 }
 
-/// constructs a fifo pipe in the current directory
-#[must_use]
-pub fn in_dir(dirpath: &Path) -> Pipe {
-  Pipe {
-    filepath: dirpath.join(FILE_NAME),
-  }
-}
-
-pub fn listen(pipe: Pipe, sender: channel::Sender) {
-  thread::spawn(move || {
-    loop {
-      let reader = pipe.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
-      for line in reader.lines() {
-        match line {
-          Ok(text) => sender
-            .send(Signal::ReceivedLine(text))
-            .unwrap_or_else(|err| println!("communication channel failure: {err}")),
-          Err(err) => cli::exit(&err.to_string()),
-        };
-      }
-    }
-  });
-}
-
 #[cfg(test)]
 mod tests {
   use crate::UserError;
-  use crate::client::fifo;
+  use crate::client::Fifo;
   use big_s::S;
   use std::{fs, io};
 
   #[test]
   fn pipe_create_does_not_exist() -> Result<(), io::Error> {
     let temp_path = tempfile::tempdir().unwrap().into_path();
-    let pipe = fifo::in_dir(&temp_path);
+    let pipe = Fifo::in_dir(&temp_path);
     pipe.create().unwrap();
     let mut files = vec![];
     for file in fs::read_dir(&temp_path)? {
@@ -98,7 +100,7 @@ mod tests {
   #[test]
   fn pipe_create_exists() -> Result<(), String> {
     let temp_dir = tempfile::tempdir().unwrap();
-    let pipe = fifo::in_dir(temp_dir.path());
+    let pipe = Fifo::in_dir(temp_dir.path());
     pipe.create().unwrap();
     match pipe.create() {
       Err(UserError::FifoAlreadyExists { path: _ }) => Ok(()),
@@ -110,7 +112,7 @@ mod tests {
   #[test]
   fn pipe_delete() -> Result<(), UserError> {
     let temp_dir = tempfile::tempdir().unwrap();
-    let pipe = fifo::in_dir(temp_dir.path());
+    let pipe = Fifo::in_dir(temp_dir.path());
     pipe.create()?;
     pipe.delete().unwrap();
     let file_count = fs::read_dir(temp_dir.path()).unwrap().count();

@@ -1,6 +1,7 @@
 use contest::cli::Command;
-use contest::{Result, cli, client, config, listen, run_with_decoration};
-use std::env;
+use contest::client::fifo;
+use contest::{Result, config, listen, run_with_decoration};
+use std::fs;
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
@@ -12,8 +13,7 @@ fn main() -> ExitCode {
     }
     exit_code = ExitCode::FAILURE;
   }
-  let current_dir = env::current_dir().unwrap_or_else(|err| cli::exit(&err.to_string()));
-  let _ = client::fifo::in_dir(&current_dir).delete();
+  let _ = fs::remove_file(fifo::FILE_NAME);
   exit_code
 }
 
