@@ -95,13 +95,13 @@ fn run_command(text: &str, configuration: &config::Configuration, last_command: 
   };
   last_command.replace(command.clone());
   match subshell::run(&command)? {
-    Outcome::TestPass() => {
+    Outcome::TestPass => {
       if configuration.options.after_run.print_result {
         println!("SUCCESS");
       }
       Ok(true)
     }
-    Outcome::TestFail() => {
+    Outcome::TestFail => {
       println!("FAILED");
       Ok(false)
     }
