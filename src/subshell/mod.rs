@@ -6,7 +6,6 @@ use std::process::Command;
 pub enum Outcome {
   TestPass(),
   TestFail(),
-  NotFound(String),
 }
 
 pub fn run(command: &str) -> Result<Outcome> {
@@ -15,15 +14,17 @@ pub fn run(command: &str) -> Result<Outcome> {
     source: command.to_owned(),
     err: err.to_string(),
   })?;
-  let (cmd, args) = words.split_at(1);
-  Ok(match Command::new(&cmd[0]).args(args).status() {
-    Err(_) => Outcome::NotFound(command.to_owned()),
+  let ([cmd, ..], args) = words.split_at(1) else {
+    return Err(UserError::RunCommandIsEmpty);
+  };
+  match Command::new(cmd).args(args).status() {
+    Err(_) => Err(UserError::RunCommandNotFound { command: cmd.to_string() }),
     Ok(exit_status) => {
       if exit_status.success() {
-        Outcome::TestPass()
+        Ok(Outcome::TestPass())
       } else {
-        Outcome::TestFail()
+        Ok(Outcome::TestFail())
       }
     }
-  })
+  }
 }
