@@ -54,7 +54,7 @@ pub async fn verify_prints_lines(world: &mut ContestWorld, want: &str) {
   let subprocess = world.subprocess.as_mut().unwrap();
   for want_line in want.lines() {
     let mut read_buf = String::new();
-    // keep reading lines from the subshell stdout until we find an empty one
+    // find the next non-empty line from the subshell stdout and compare it to want_line
     loop {
       subprocess.stdout.read_line(&mut read_buf).await.unwrap();
       let have_line = read_buf.trim();
