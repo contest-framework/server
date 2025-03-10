@@ -54,14 +54,14 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bo
   if config.options.before_run.clear_screen {
     print!("{esc}[2J{esc}[1;1H{esc}c", esc = 27 as char);
   }
-  let result = run_command(text, config, last_command)?;
+  let success = run_command(text, config, last_command)?;
   for _ in 0..config.options.after_run.newlines {
     println!();
   }
   let terminal_width = terminal_size().unwrap_or((Width(80), Height(20))).0;
   for _ in 0..config.options.after_run.indicator_lines {
     let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Auto);
-    let color = cli::error_color(result);
+    let color = cli::error_color(success);
     let _ = stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(color)));
     let text: String = "█".repeat(terminal_width.0 as usize);
     writeln!(&mut stdout, "{text}").unwrap();
