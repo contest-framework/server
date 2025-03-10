@@ -38,11 +38,13 @@ impl Fifo {
     }
   }
 
-  pub fn listen(self, sender: channel::Sender) -> Result<()> {
+  pub fn listen(&self, sender: channel::Sender) -> Result<()> {
     self.create()?;
+    let filepath = self.filepath.clone();
     thread::spawn(move || {
       loop {
-        let reader = self.open().unwrap_or_else(|err| cli::exit(&err.messages().0));
+        let file = File::open(&filepath).unwrap_or_else(|err| cli::exit(&err.to_string()));
+        let reader = BufReader::new(&file);
         for line in reader.lines() {
           match line {
             Ok(text) => sender
@@ -61,11 +63,6 @@ impl Fifo {
       err: e.to_string(),
       path: self.filepath.to_string_lossy().to_string(),
     })
-  }
-
-  pub fn open(&self) -> Result<BufReader<File>> {
-    let file = File::open(&self.filepath).map_err(|err| UserError::FifoCannotOpen { err: err.to_string() })?;
-    Ok(BufReader::new(file))
   }
 
   /// provides the path of this pipe as a string
