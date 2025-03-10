@@ -53,13 +53,16 @@ pub async fn verify_created_file(file_path: &Path, want: &str) {
 pub async fn verify_prints_lines(world: &mut ContestWorld, want: &str) {
   let subprocess = world.subprocess.as_mut().unwrap();
   for want_line in want.lines() {
-    let mut read_line = String::new();
-    let mut have_line = String::with_capacity(want_line.len());
-    while have_line.is_empty() {
-      subprocess.stdout.read_line(&mut read_line).await.unwrap();
-      read_line.trim().clone_into(&mut have_line);
+    let mut have_line = String::new();
+    loop {
+      subprocess.stdout.read_line(&mut have_line).await.unwrap();
+      let have_trimmed = have_line.trim();
+      if have_trimmed.is_empty() {
+        continue;
+      }
+      assert_eq!(have_trimmed, want_line);
+      break;
     }
-    assert_eq!(&have_line, want_line);
   }
 }
 
