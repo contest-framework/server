@@ -8,6 +8,7 @@ mod subshell;
 pub mod template;
 
 use client::{Trigger, fifo};
+use config::Configuration;
 pub use errors::{Result, UserError};
 use std::env;
 use std::io::Write;
@@ -15,8 +16,7 @@ use subshell::Outcome;
 use termcolor::WriteColor;
 use terminal_size::{Height, Width, terminal_size};
 
-pub fn listen(debug: bool) -> Result<()> {
-  let config = config::file::read()?;
+pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
   if debug {
     println!("using this configuration:");
     println!("{config}");
@@ -35,7 +35,7 @@ pub fn listen(debug: bool) -> Result<()> {
   }
   for signal in receiver {
     match signal {
-      channel::Signal::ReceivedLine(line) => run_with_decoration(&line, &config, debug, &mut last_command)?,
+      channel::Signal::ReceivedLine(line) => run_with_decoration(&line, config, debug, &mut last_command)?,
       channel::Signal::Exit => {
         println!("\nSee you later!");
         return Ok(());

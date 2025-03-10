@@ -18,12 +18,12 @@ fn main() -> ExitCode {
 }
 
 fn main_with_result() -> Result<()> {
+  let config = config::file::read()?;
   match Command::parse() {
-    Command::Start => listen(false),
-    Command::Debug => listen(true),
+    Command::Start => listen(&config, false),
+    Command::Debug => listen(&config, true),
     Command::Run { trigger } => {
       println!("running trigger: {trigger}");
-      let config = config::file::read()?;
       let mut last_command: Option<String> = None;
       run_with_decoration(&trigger, &config, false, &mut last_command)
     }
