@@ -49,19 +49,21 @@ pub async fn verify_created_file(file_path: &Path, want: &str) {
   pretty::assert_eq!(have.trim(), want.trim());
 }
 
-pub async fn verify_prints_lines(world: &mut ContestWorld, output: &str) {
+/// verifies parts of the output while the subprocess is running
+pub async fn verify_prints_lines(world: &mut ContestWorld, want: &str) {
   let subprocess = world.subprocess.as_mut().unwrap();
-  for want in output.lines() {
-    let mut output = String::new();
-    let mut have = String::with_capacity(want.len());
-    while have.is_empty() {
-      subprocess.stdout.read_line(&mut output).await.unwrap();
-      output.trim().clone_into(&mut have);
+  for want_line in want.lines() {
+    let mut read_line = String::new();
+    let mut have_line = String::with_capacity(want_line.len());
+    while have_line.is_empty() {
+      subprocess.stdout.read_line(&mut read_line).await.unwrap();
+      read_line.trim().clone_into(&mut have_line);
     }
-    assert_eq!(&have, want);
+    assert_eq!(&have_line, want_line);
   }
 }
 
+/// verifies the complete output after the process has finished
 pub async fn verify_prints_text(world: &mut ContestWorld, want: &str) {
   let subprocess = world.subprocess.as_mut().unwrap();
   let mut have = Vec::<u8>::with_capacity(want.len());
