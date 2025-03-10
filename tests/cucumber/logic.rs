@@ -53,9 +53,10 @@ pub async fn verify_created_file(file_path: &Path, want: &str) {
 pub async fn verify_prints_lines(world: &mut ContestWorld, want: &str) {
   let subprocess = world.subprocess.as_mut().unwrap();
   // only read lines from the subshell stdout if the test expects one
+  let mut buffer = String::new();
   for want_line in want.lines() {
+    buffer.clear(); // remove the content from the last loop iteration
     // find the next non-empty line from the subshell stdout and compare it to want_line
-    let mut buffer = String::new();
     loop {
       subprocess.stdout.read_line(&mut buffer).await.unwrap();
       let have_line = buffer.trim();
