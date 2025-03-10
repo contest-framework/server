@@ -105,6 +105,5 @@ fn run_command(text: &str, configuration: &config::Configuration, last_command: 
       println!("FAILED");
       Ok(false)
     }
-    Outcome::NotFound(command) => Err(UserError::RunCommandNotFound { command }),
   }
 }
