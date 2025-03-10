@@ -1,6 +1,7 @@
 use contest::cli::Command;
-use contest::{Result, cli, client, config, listen, run_with_decoration};
-use std::env;
+use contest::client::fifo;
+use contest::{Result, config, listen, run_with_decoration};
+use std::fs;
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
@@ -12,18 +13,17 @@ fn main() -> ExitCode {
     }
     exit_code = ExitCode::FAILURE;
   }
-  let current_dir = env::current_dir().unwrap_or_else(|err| cli::exit(&err.to_string()));
-  let _ = client::fifo::in_dir(&current_dir).delete();
+  let _ = fs::remove_file(fifo::FILE_NAME);
   exit_code
 }
 
 fn main_with_result() -> Result<()> {
+  let config = config::file::read()?;
   match Command::parse() {
-    Command::Start => listen(false),
-    Command::Debug => listen(true),
+    Command::Start => listen(&config, false),
+    Command::Debug => listen(&config, true),
     Command::Run { trigger } => {
       println!("running trigger: {trigger}");
-      let config = config::file::read()?;
       let mut last_command: Option<String> = None;
       run_with_decoration(&trigger, &config, false, &mut last_command)
     }

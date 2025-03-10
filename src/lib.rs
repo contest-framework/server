@@ -7,7 +7,8 @@ pub mod scanner;
 mod subshell;
 pub mod template;
 
-use client::{Trigger, fifo};
+use client::{Fifo, Trigger, fifo};
+use config::Configuration;
 pub use errors::{Result, UserError};
 use std::env;
 use std::io::Write;
@@ -15,8 +16,7 @@ use subshell::Outcome;
 use termcolor::WriteColor;
 use terminal_size::{Height, Width, terminal_size};
 
-pub fn listen(debug: bool) -> Result<()> {
-  let config = config::file::read()?;
+pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
   if debug {
     println!("using this configuration:");
     println!("{config}");
@@ -24,9 +24,7 @@ pub fn listen(debug: bool) -> Result<()> {
   let (sender, receiver) = channel::create(); // cross-thread communication channel
   cli::ctrl_c::handle(sender.clone());
   let current_dir = env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory { err: err.to_string() })?;
-  let pipe = client::fifo::in_dir(&current_dir);
-  pipe.create()?;
-  fifo::listen(pipe, sender);
+  Fifo::in_dir(&current_dir).listen(sender)?;
   let mut last_command: Option<String> = None;
   if debug {
     println!("Contest is online in debug mode, Ctrl-C to exit");
@@ -35,7 +33,7 @@ pub fn listen(debug: bool) -> Result<()> {
   }
   for signal in receiver {
     match signal {
-      channel::Signal::ReceivedLine(line) => run_with_decoration(&line, &config, debug, &mut last_command)?,
+      channel::Signal::ReceivedLine(line) => run_with_decoration(&line, config, debug, &mut last_command)?,
       channel::Signal::Exit => {
         println!("\nSee you later!");
         return Ok(());
