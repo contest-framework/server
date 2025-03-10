@@ -24,8 +24,7 @@ pub fn listen(debug: bool) -> Result<()> {
   let (sender, receiver) = channel::create(); // cross-thread communication channel
   cli::ctrl_c::handle(sender.clone());
   let current_dir = env::current_dir().map_err(|err| UserError::CannotDetermineCurrentDirectory { err: err.to_string() })?;
-  let fifo = Fifo::in_dir(&current_dir);
-  fifo.listen(sender)?;
+  Fifo::in_dir(&current_dir).listen(sender)?;
   let mut last_command: Option<String> = None;
   if debug {
     println!("Contest is online in debug mode, Ctrl-C to exit");
