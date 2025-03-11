@@ -34,12 +34,10 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
   for signal in receiver {
     match signal {
       channel::Signal::ReceivedLine(line) => run_with_decoration(&line, config, debug, &mut last_command)?,
-      channel::Signal::Exit => {
-        println!("\nSee you later!");
-        return Ok(());
-      }
+      channel::Signal::Exit => break,
     }
   }
+  println!("\nSee you later!");
   Ok(())
 }
 
