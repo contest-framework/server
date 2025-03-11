@@ -35,7 +35,7 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
     match signal {
       channel::Signal::ReceivedLine(line) => match run_with_decoration(&line, config, debug, &mut last_command)? {
         RunOutcome::ContinueTesting => continue,
-        RunOutcome::Exit => break,
+        RunOutcome::Quit => break,
       },
       channel::Signal::Exit => break,
     }
@@ -57,7 +57,7 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bo
   }
   let trigger = Trigger::try_from(text)?;
   if trigger == Trigger::Quit {
-    return Ok(RunOutcome::Exit);
+    return Ok(RunOutcome::Quit);
   }
   let success = run_command(&trigger, config, last_command)?;
   for _ in 0..config.options.after_run.newlines {
@@ -113,5 +113,5 @@ fn run_command(trigger: &Trigger, configuration: &config::Configuration, last_co
 #[derive(Debug, Eq, PartialEq)]
 pub enum RunOutcome {
   ContinueTesting,
-  Exit,
+  Quit,
 }
