@@ -4,7 +4,7 @@ use clap::{Parser, Subcommand};
 #[command(version, about)]
 struct Arguments {
   #[command(subcommand)]
-  pub command: Option<Command>,
+  command: Option<Command>,
 }
 
 #[derive(Subcommand)]

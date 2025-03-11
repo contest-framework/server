@@ -3,9 +3,9 @@ pub mod cli;
 pub mod client;
 pub mod config;
 mod errors;
-pub mod scanner;
+pub(crate) mod scanner;
 mod subshell;
-pub mod template;
+pub(crate) mod template;
 
 use client::{Fifo, Trigger, fifo};
 use config::Configuration;
