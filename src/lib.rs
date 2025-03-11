@@ -33,7 +33,11 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
   }
   for signal in receiver {
     match signal {
-      channel::Signal::ReceivedLine(line) => run_with_decoration(&line, config, debug, &mut last_command)?,
+      channel::Signal::ReceivedLine(line) => {
+        if run_with_decoration(&line, config, debug, &mut last_command)? == RunOutcome::Exit {
+          break;
+        }
+      }
       channel::Signal::Exit => {
         println!("\nSee you later!");
         return Ok(());
@@ -43,10 +47,10 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
   Ok(())
 }
 
-pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bool, last_command: &mut Option<String>) -> Result<()> {
+pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bool, last_command: &mut Option<String>) -> Result<RunOutcome> {
   if debug {
     println!("received from client: {text}");
-    return Ok(());
+    return Ok(RunOutcome::Exit);
   }
   for _ in 0..config.options.before_run.newlines {
     println!();
@@ -54,7 +58,11 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bo
   if config.options.before_run.clear_screen {
     print!("{esc}[2J{esc}[1;1H{esc}c", esc = 27 as char);
   }
-  let success = run_command(text, config, last_command)?;
+  let trigger = Trigger::try_from(text)?;
+  if trigger == Trigger::Quit {
+    return Ok(RunOutcome::ContinueTesting);
+  }
+  let success = run_command(&trigger, config, last_command)?;
   for _ in 0..config.options.after_run.newlines {
     println!();
   }
@@ -67,15 +75,11 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bo
     writeln!(&mut stdout, "{text}").unwrap();
     let _ = stdout.reset(); // we really don't care about being unable to reset colors here
   }
-  Ok(())
+  Ok(RunOutcome::ContinueTesting)
 }
 
-fn run_command(text: &str, configuration: &config::Configuration, last_command: &mut Option<String>) -> Result<subshell::Outcome> {
-  let trigger = Trigger::try_from(text)?;
-  if trigger == Trigger::Quit {
-    // TODO
-  }
-  let command = match configuration.get_command(&trigger, last_command) {
+fn run_command(trigger: &Trigger, configuration: &config::Configuration, last_command: &mut Option<String>) -> Result<subshell::Outcome> {
+  let command = match configuration.get_command(trigger, last_command) {
     Err(err) => match err {
       UserError::NoCommandToRepeat => {
         // repeat non-existing command --> don't stop, just print an error message and keep going
@@ -107,4 +111,10 @@ fn run_command(text: &str, configuration: &config::Configuration, last_command: 
     Outcome::TestFail => println!("FAILED"),
   }
   Ok(result)
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum RunOutcome {
+  ContinueTesting,
+  Exit,
 }
