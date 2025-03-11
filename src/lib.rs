@@ -38,12 +38,10 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
           break;
         }
       }
-      channel::Signal::Exit => {
-        println!("\nSee you later!");
-        return Ok(());
-      }
+      channel::Signal::Exit => break,
     }
   }
+  println!("\nSee you later!");
   Ok(())
 }
 
