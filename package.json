@@ -2,7 +2,7 @@
   "description": "Provides Node-based development tools",
   "private": true,
   "devDependencies": {
-    "@types/node": "22.13.9",
+    "@types/node": "22.13.10",
     "npm-check-updates": "17.1.15",
     "text-runner": "7.1.0",
     "textrun-make": "0.3.0",
