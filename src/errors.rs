@@ -72,9 +72,9 @@ impl UserError {
       ),
       UserError::MissingFilesInPattern => (S(r#"the pattern in the config file is missing the "files" field."#), None),
       UserError::MissingFileInTrigger { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "file" field"#)),
-      UserError::MissingFileAndLineInTrigger { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "file" and "line" fields."#)),
+      UserError::MissingFileAndLineInTrigger { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "file" and "line" fields"#)),
       UserError::MissingFilesInTestFile { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "files" field"#)),
-      UserError::MissingLineInTrigger { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "line" field."#)),
+      UserError::MissingLineInTrigger { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "line" field"#)),
       UserError::MissingRunInTrigger { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "run" field"#)),
       UserError::NoCommandToRepeat {} => (S("No command to repeat found"), Some("You must submit a test command first before you can repeat it.")),
       UserError::RunCommandNotFound { command } => (

@@ -50,6 +50,6 @@ Feature: define a custom variable with a part of the filename
     When receiving the command '{ "command": "testFile" }'
     Then it prints
       """
-      Error: cannot parse command received from client: { "command": "testFile" }
-      trigger "testFile" is missing field "file".
+      Error: invalid trigger received: { "command": "testFile" }
+      missing "file" field
       """
