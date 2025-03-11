@@ -12,6 +12,6 @@ pub enum Signal {
   Exit,
 }
 
-pub fn create() -> (mpsc::Sender<Signal>, mpsc::Receiver<Signal>) {
+pub(crate) fn create() -> (mpsc::Sender<Signal>, mpsc::Receiver<Signal>) {
   mpsc::channel::<Signal>()
 }
