@@ -27,9 +27,9 @@ Feature: test only a specific function
     When receiving the command '{ "command": "testFileLine", "file": "foo.ts" }'
     Then it fails with this output
       """
-Error: cannot parse command received from client: { "command": "testFileLine", "file": "foo.ts" }
+Error: invalid trigger received: { "command": "testFileLine", "file": "foo.ts" }
 
-trigger "testFileLine" is missing field "line"
+missing "line" field
       """
 
   Scenario: receiving a mismatching file
