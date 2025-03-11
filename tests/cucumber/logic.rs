@@ -52,7 +52,7 @@ pub async fn verify_created_file(file_path: &Path, want: &str) {
 /// verifies parts of the output while the subprocess is running
 pub async fn verify_prints_lines(world: &mut ContestWorld, want: &str) {
   let subprocess = world.subprocess.as_mut().unwrap();
-  // only read lines from the subshell stdout if the test expects one
+  // only read as many lines from the subshell stdout as the test expects
   let mut buffer = String::new();
   for want_line in want.lines() {
     buffer.clear(); // remove the content from the last loop iteration
