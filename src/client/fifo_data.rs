@@ -2,7 +2,7 @@ use crate::{Result, UserError};
 use serde::Deserialize;
 
 /// The `Trigger` data as it comes in through the FIFO.
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Default, Eq, PartialEq)]
 pub struct FifoTrigger {
   pub data: FifoTriggerData,
   pub original_line: String,
@@ -38,7 +38,6 @@ mod tests {
   mod parse {
     use super::super::FifoTrigger;
     use crate::UserError;
-    use crate::client::Fifo;
     use crate::client::fifo_data::FifoTriggerData;
     use big_s::S;
 
@@ -92,8 +91,8 @@ mod tests {
     }
 
     mod test_file {
+      use crate::client::FifoTrigger;
       use crate::client::fifo_data::FifoTriggerData;
-      use crate::client::{Fifo, FifoTrigger};
       use big_s::S;
 
       #[test]
@@ -128,8 +127,8 @@ mod tests {
     }
 
     mod test_function {
+      use crate::client::FifoTrigger;
       use crate::client::fifo_data::FifoTriggerData;
-      use crate::client::{Fifo, FifoTrigger};
       use big_s::S;
 
       #[test]

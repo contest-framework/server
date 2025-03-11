@@ -28,7 +28,7 @@ pub enum UserError {
   MissingFileAndLineInTrigger,
   MissingFilesInTestFile,
   MissingLineInTrigger,
-  MissingRunInTrigger,
+  MissingRunInTrigger { line: String },
   NoCommandToRepeat,
   RunCommandNotFound { command: String },
   RunCommandIsEmpty,
@@ -75,7 +75,7 @@ impl UserError {
       UserError::MissingFileAndLineInTrigger => (S(r#"the trigger received from the client is missing the "file" and "line" fields."#), None),
       UserError::MissingFilesInTestFile => (S(r#"missing "files" entry in "testFile" action"#), None),
       UserError::MissingLineInTrigger => (S(r#"the trigger received from the client is missing the "line" field."#), None),
-      UserError::MissingRunInTrigger => (S(r#"missing "run" entry in "customCommand" trigger"#), None),
+      UserError::MissingRunInTrigger { line } => (format!(r#"missing "run" entry in "customCommand" trigger: {line}"#), None),
       UserError::NoCommandToRepeat {} => (S("No command to repeat found"), Some("You must submit a test command first before you can repeat it.")),
       UserError::RunCommandNotFound { command } => (
         format!("test command to run not found: {command}"),
