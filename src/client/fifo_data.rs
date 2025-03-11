@@ -17,63 +17,7 @@ impl FifoTrigger {
       source: line.to_owned(),
       err: err.to_string(),
     })?;
-    result.validate(line)?;
     Ok(result)
-  }
-
-  pub fn validate(&self, source: &str) -> Result<()> {
-    let command = self.command.to_ascii_lowercase();
-    if command == "testall" {
-      return Ok(());
-    }
-    if command == "customcommand" {
-      if self.run.is_some() {
-        return Ok(());
-      }
-      return Err(UserError::InvalidTrigger {
-        source: source.into(),
-        err: r#"trigger "customCommand" is missing field "run"."#.into(),
-      });
-    }
-    if command == "testfile" {
-      if self.file.is_some() {
-        return Ok(());
-      }
-      return Err(UserError::InvalidTrigger {
-        source: source.into(),
-        err: r#"trigger "testFile" is missing field "file"."#.into(),
-      });
-    }
-    if command == "testfileline" {
-      match (self.file.is_some(), self.line.is_some()) {
-        (true, true) => return Ok(()),
-        (true, false) => {
-          return Err(UserError::InvalidTrigger {
-            source: source.into(),
-            err: r#"trigger "testFileLine" is missing field "line""#.into(),
-          });
-        }
-        (false, true) => {
-          return Err(UserError::InvalidTrigger {
-            source: source.into(),
-            err: r#"trigger "testFileLine" is missing field "file""#.into(),
-          });
-        }
-        (false, false) => {
-          return Err(UserError::InvalidTrigger {
-            source: source.into(),
-            err: r#"trigger "testFileLine" is missing fields "file" and "line""#.into(),
-          });
-        }
-      }
-    }
-    if command == "repeattest" {
-      return Ok(());
-    }
-    Err(UserError::InvalidTrigger {
-      source: source.into(),
-      err: "unknown command".into(),
-    })
   }
 }
 
@@ -115,8 +59,12 @@ mod tests {
       #[test]
       fn no_run() {
         let give = r#"{ "command": "customCommand" }"#;
-        let have = FifoTrigger::parse(give);
-        assert!(have.is_err());
+        let have = FifoTrigger::parse(give).unwrap();
+        let want = FifoTrigger {
+          command: S("customCommand"),
+          ..FifoTrigger::default()
+        };
+        assert_eq!(have, want);
       }
     }
 
@@ -139,8 +87,13 @@ mod tests {
       #[test]
       fn no_filename() {
         let give = r#"{ "command": "testFile" }"#;
-        let have = FifoTrigger::parse(give);
-        assert!(have.is_err());
+        let have = FifoTrigger::parse(give).unwrap();
+        let want = FifoTrigger {
+          command: S("testFile"),
+          file: None,
+          ..FifoTrigger::default()
+        };
+        assert_eq!(have, want);
       }
     }
 
@@ -164,15 +117,27 @@ mod tests {
       #[test]
       fn no_file() {
         let give = r#"{ "command": "testFileLine", "line": 12 }"#;
-        let have = FifoTrigger::parse(give);
-        assert!(have.is_err());
+        let have = FifoTrigger::parse(give).unwrap();
+        let want = FifoTrigger {
+          command: S("testFileLine"),
+          file: None,
+          line: Some(12),
+          ..FifoTrigger::default()
+        };
+        assert_eq!(have, want);
       }
 
       #[test]
       fn no_line() {
         let give = r#"{ "command": "testFileLine", "file": "foo.rs" }"#;
-        let have = FifoTrigger::parse(give);
-        assert!(have.is_err());
+        let have = FifoTrigger::parse(give).unwrap();
+        let want = FifoTrigger {
+          command: S("testFileLine"),
+          file: Some(S("foo.rs")),
+          line: None,
+          ..FifoTrigger::default()
+        };
+        assert_eq!(have, want);
       }
     }
 
