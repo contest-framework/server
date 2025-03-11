@@ -1,5 +1,10 @@
 # Contest Server Changelog
 
+#### 0.3.0
+
+- The new "quit" command ends the server remotely. This is useful if the
+  terminal locks up.
+
 #### 0.2.0
 
 - expects the `line` field to be a number now
