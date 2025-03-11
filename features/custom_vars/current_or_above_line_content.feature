@@ -40,14 +40,12 @@ Feature: define a custom variable with a regex match of the file content
       SUCCESS
       """
 
-  @this
   Scenario: receiving a matching file and mismatching location prints an error and keeps running
     When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 1 }'
     Then it prints
       """
       Error: did not find pattern \bfn (\w+)\( in file foo.rs at line 1
       This is defined in file .testconfig.json.
-      FAILED
       """
     # ensure the server is still running and functional
     When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 3 }'

@@ -55,16 +55,6 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bo
     print!("{esc}[2J{esc}[1;1H{esc}c", esc = 27 as char);
   }
   let success = run_command(text, config, last_command)?;
-  match &success {
-    Outcome::TestPass => {
-      if config.options.after_run.print_result {
-        println!("SUCCESS");
-      }
-    }
-    Outcome::TestFail => {
-      println!("FAILED");
-    }
-  }
   for _ in 0..config.options.after_run.newlines {
     println!();
   }
@@ -104,5 +94,16 @@ fn run_command(text: &str, configuration: &config::Configuration, last_command: 
     Ok(command) => command,
   };
   last_command.replace(command.clone());
-  subshell::run(&command)
+  let result = subshell::run(&command)?;
+  match &result {
+    Outcome::TestPass => {
+      if configuration.options.after_run.print_result {
+        println!("SUCCESS");
+      }
+    }
+    Outcome::TestFail => {
+      println!("FAILED");
+    }
+  }
+  Ok(result)
 }
