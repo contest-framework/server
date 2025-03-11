@@ -57,7 +57,7 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bo
   }
   let trigger = Trigger::try_from(text)?;
   if trigger == Trigger::Quit {
-    return Ok(RunOutcome::ContinueTesting);
+    return Ok(RunOutcome::Exit);
   }
   let success = run_command(&trigger, config, last_command)?;
   for _ in 0..config.options.after_run.newlines {
