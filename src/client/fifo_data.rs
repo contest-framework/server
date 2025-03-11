@@ -70,6 +70,9 @@ impl FifoTrigger {
     if command == "repeattest" {
       return Ok(());
     }
+    if command == "quit" {
+      return Ok(());
+    }
     Err(UserError::InvalidTrigger {
       source: source.into(),
       err: "unknown command".into(),
