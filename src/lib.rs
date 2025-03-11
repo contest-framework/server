@@ -50,7 +50,7 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
 pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bool, last_command: &mut Option<String>) -> Result<RunOutcome> {
   if debug {
     println!("received from client: {text}");
-    return Ok(RunOutcome::Exit);
+    return Ok(RunOutcome::ContinueTesting);
   }
   for _ in 0..config.options.before_run.newlines {
     println!();
