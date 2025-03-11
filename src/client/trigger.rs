@@ -54,10 +54,10 @@ impl TryFrom<FifoTrigger> for Trigger {
   }
 }
 
-impl TryFrom<&str> for Trigger {
+impl TryFrom<String> for Trigger {
   type Error = UserError;
 
-  fn try_from(value: &str) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: String) -> std::result::Result<Self, Self::Error> {
     Trigger::try_from(FifoTrigger::parse(value)?)
   }
 }
