@@ -25,7 +25,7 @@ fn main_with_result() -> Result<()> {
     Command::Run { trigger } => {
       println!("running trigger: {trigger}");
       let mut last_command: Option<String> = None;
-      let _ = run_with_decoration(&trigger, &config, false, &mut last_command)?;
+      let _ = run_with_decoration(trigger, &config, false, &mut last_command)?;
       Ok(())
     }
     Command::Setup => config::file::create(),

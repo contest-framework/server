@@ -33,7 +33,7 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
   }
   for signal in receiver {
     match signal {
-      channel::Signal::ReceivedLine(line) => match run_with_decoration(&line, config, debug, &mut last_command)? {
+      channel::Signal::ReceivedLine(line) => match run_with_decoration(line, config, debug, &mut last_command)? {
         RunOutcome::ContinueTesting => continue,
         RunOutcome::Quit => break,
       },
@@ -44,7 +44,7 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
   Ok(())
 }
 
-pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bool, last_command: &mut Option<String>) -> Result<RunOutcome> {
+pub fn run_with_decoration(text: String, config: &config::Configuration, debug: bool, last_command: &mut Option<String>) -> Result<RunOutcome> {
   if debug {
     println!("received from client: {text}");
     return Ok(RunOutcome::ContinueTesting);
