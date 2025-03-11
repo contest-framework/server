@@ -101,9 +101,7 @@ fn run_command(text: &str, configuration: &config::Configuration, last_command: 
         println!("SUCCESS");
       }
     }
-    Outcome::TestFail => {
-      println!("FAILED");
-    }
+    Outcome::TestFail => println!("FAILED"),
   }
   Ok(result)
 }
