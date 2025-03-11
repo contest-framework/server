@@ -11,6 +11,7 @@ pub enum Trigger {
   TestFileLine { file: String, line: usize },
   CustomCommand { run: String },
   RepeatLastTest,
+  Quit,
 }
 
 impl Display for Trigger {
@@ -21,6 +22,7 @@ impl Display for Trigger {
       Trigger::TestFileLine { file, line } => write!(f, "testFileLine {file}:{line}"),
       Trigger::CustomCommand { run } => write!(f, "customCommand {run}"),
       Trigger::RepeatLastTest => f.write_str("repeatTest"),
+      Trigger::Quit => f.write_str("quit"),
     }
   }
 }
@@ -46,6 +48,7 @@ impl TryFrom<FifoTrigger> for Trigger {
         (Some(_), None) => Err(UserError::MissingLineInTrigger),
         (None, None) => Err(UserError::MissingFileAndLineInTrigger),
       },
+      "quit" => Ok(Trigger::Quit),
       _ => Err(UserError::UnknownTrigger { source: fifo.command }),
     }
   }
