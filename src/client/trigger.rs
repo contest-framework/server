@@ -36,17 +36,17 @@ impl TryFrom<FifoTrigger> for Trigger {
       "repeattest" => Ok(Trigger::RepeatLastTest),
       "customcommand" => match fifo.data.run {
         Some(run) => Ok(Trigger::CustomCommand { run }),
-        None => Err(UserError::MissingRunInTrigger { line: fifo.original_line }),
+        None => Err(UserError::MissingRunInTrigger { original: fifo.original_line }),
       },
       "testfile" => match fifo.data.file {
         Some(file) => Ok(Trigger::TestFile { file }),
-        None => Err(UserError::MissingFileInTrigger),
+        None => Err(UserError::MissingFileInTrigger { original: fifo.original_line }),
       },
       "testfileline" => match (fifo.data.file, fifo.data.line) {
         (Some(file), Some(line)) => Ok(Trigger::TestFileLine { file, line }),
-        (None, Some(_)) => Err(UserError::MissingFileInTrigger),
-        (Some(_), None) => Err(UserError::MissingLineInTrigger),
-        (None, None) => Err(UserError::MissingFileAndLineInTrigger),
+        (None, Some(_)) => Err(UserError::MissingFileInTrigger { original: fifo.original_line }),
+        (Some(_), None) => Err(UserError::MissingLineInTrigger { original: fifo.original_line }),
+        (None, None) => Err(UserError::MissingFileAndLineInTrigger { original: fifo.original_line }),
       },
       "quit" => Ok(Trigger::Quit),
       _ => Err(UserError::UnknownTrigger { source: fifo.data.command }),
