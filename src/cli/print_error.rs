@@ -1,4 +1,4 @@
-use crate::UserError;
+use crate::{UserError, subshell};
 
 pub fn print_error(err: &UserError) {
   let (msg, guidance) = err.messages();
@@ -9,6 +9,9 @@ pub fn print_error(err: &UserError) {
 }
 
 #[must_use]
-pub fn error_color(success: bool) -> termcolor::Color {
-  if success { termcolor::Color::Green } else { termcolor::Color::Red }
+pub fn error_color(success: &subshell::Outcome) -> termcolor::Color {
+  match success {
+    subshell::Outcome::TestPass => termcolor::Color::Red,
+    subshell::Outcome::TestFail => termcolor::Color::Green,
+  }
 }

@@ -61,7 +61,7 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bo
   let terminal_width = terminal_size().unwrap_or((Width(80), Height(20))).0;
   for _ in 0..config.options.after_run.indicator_lines {
     let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Auto);
-    let color = cli::error_color(success);
+    let color = cli::error_color(&success);
     let _ = stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(color)));
     let text: String = "█".repeat(terminal_width.0 as usize);
     writeln!(&mut stdout, "{text}").unwrap();
@@ -70,7 +70,7 @@ pub fn run_with_decoration(text: &str, config: &config::Configuration, debug: bo
   Ok(())
 }
 
-fn run_command(text: &str, configuration: &config::Configuration, last_command: &mut Option<String>) -> Result<bool> {
+fn run_command(text: &str, configuration: &config::Configuration, last_command: &mut Option<String>) -> Result<subshell::Outcome> {
   let trigger = Trigger::try_from(text)?;
   if trigger == Trigger::Quit {
     // TODO
@@ -80,33 +80,31 @@ fn run_command(text: &str, configuration: &config::Configuration, last_command: 
       UserError::NoCommandToRepeat => {
         // repeat non-existing command --> don't stop, just print an error message and keep going
         cli::print_error(&err);
-        return Ok(false);
+        return Ok(subshell::Outcome::TestFail);
       }
       UserError::TriggerRegexNotFound { regex: _, filename: _, line: _ } => {
         // user triggered a command in a place where it doesn't match all regexes --> let them know and go to the correct location
         cli::print_error(&err);
-        return Ok(false);
+        return Ok(subshell::Outcome::TestFail);
       }
       UserError::UnknownTrigger { source: _ } => {
         // user sent a trigger from the wrong file --> let them know and send one from the correct file
         cli::print_error(&err);
-        return Ok(false);
+        return Ok(subshell::Outcome::TestFail);
       }
       _ => return Err(err),
     },
     Ok(command) => command,
   };
   last_command.replace(command.clone());
-  match subshell::run(&command)? {
+  let result = subshell::run(&command)?;
+  match &result {
     Outcome::TestPass => {
       if configuration.options.after_run.print_result {
         println!("SUCCESS");
       }
-      Ok(true)
     }
-    Outcome::TestFail => {
-      println!("FAILED");
-      Ok(false)
-    }
+    Outcome::TestFail => println!("FAILED"),
   }
+  Ok(result)
 }
