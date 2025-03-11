@@ -11,7 +11,7 @@ pub fn print_error(err: &UserError) {
 #[must_use]
 pub fn error_color(success: &subshell::Outcome) -> termcolor::Color {
   match success {
-    subshell::Outcome::TestPass => termcolor::Color::Red,
-    subshell::Outcome::TestFail => termcolor::Color::Green,
+    subshell::Outcome::TestPass => termcolor::Color::Green,
+    subshell::Outcome::TestFail => termcolor::Color::Red,
   }
 }
