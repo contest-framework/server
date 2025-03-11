@@ -33,11 +33,10 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
   }
   for signal in receiver {
     match signal {
-      channel::Signal::ReceivedLine(line) => {
-        if run_with_decoration(&line, config, debug, &mut last_command)? == RunOutcome::Exit {
-          break;
-        }
-      }
+      channel::Signal::ReceivedLine(line) => match run_with_decoration(&line, config, debug, &mut last_command)? {
+        RunOutcome::ContinueTesting => continue,
+        RunOutcome::Exit => break,
+      },
       channel::Signal::Exit => break,
     }
   }
