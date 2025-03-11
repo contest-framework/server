@@ -55,6 +55,13 @@ async fn client_sends_command(world: &mut ContestWorld, command: String) {
   logic::send_command(command, world.dir.as_ref()).await;
 }
 
+#[then(expr = "the server stops running")]
+async fn server_no_longer_running(world: &mut ContestWorld) {
+  let subprocess = world.subprocess.as_mut().unwrap();
+  let exit_status = subprocess.cmd.wait().await.unwrap();
+  assert!(exit_status.success());
+}
+
 #[given(expr = "Contest is running")]
 async fn contest_is_running(world: &mut ContestWorld) {
   logic::start_contest(world, &vec![]).await;
