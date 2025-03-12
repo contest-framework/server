@@ -1,5 +1,5 @@
 use super::{FileAfterRun, FileBeforeRun};
-use crate::config::Options;
+use crate::config::{AfterRun, Options};
 use serde::Deserialize;
 
 /// low-level, unvalidated `Options` data exactly how it is stored in the config file
@@ -14,7 +14,7 @@ impl FileOptions {
   pub fn into_domain(self) -> Options {
     Options {
       before_run: self.before_run.unwrap_or_default().into_domain(),
-      after_run: self.after_run.unwrap_or_default().into_domain(),
+      after_run: AfterRun::from(self.after_run.unwrap_or_default()),
     }
   }
 }
