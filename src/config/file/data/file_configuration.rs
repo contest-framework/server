@@ -14,7 +14,8 @@ impl FileConfiguration {
   pub fn into_domain(self) -> Result<Configuration> {
     let mut actions: Vec<Action> = Vec::with_capacity(self.actions.len());
     for json_action in self.actions {
-      actions.push(json_action.into_domain()?);
+      let action = Action::try_from(json_action)?;
+      actions.push(action);
     }
     Ok(Configuration {
       actions,

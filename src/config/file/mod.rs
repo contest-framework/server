@@ -1,7 +1,7 @@
 //! program configuration persisted in the config file
 
 mod create;
-mod data;
+pub mod data;
 mod read;
 
 pub use create::create;
