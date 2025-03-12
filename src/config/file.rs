@@ -1,3 +1,5 @@
+//! data structures as they are in the file
+
 use crate::config::VarSource;
 use serde::Deserialize;
 
