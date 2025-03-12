@@ -14,5 +14,5 @@ pub fn read() -> Result<Configuration> {
     Err(err) => return Err(UserError::ConfigFileError { err: err.to_string() }),
   };
   let file_data: FileConfiguration = json5::from_str(&file_content).map_err(|err| UserError::ConfigFileInvalidContent { err: err.to_string() })?;
-  file_data.into_domain()
+  Configuration::try_from(file_data)
 }

@@ -1,5 +1,6 @@
 use super::{Action, Options};
 use crate::client::Trigger;
+use crate::config::file::data::FileConfiguration;
 use crate::{Result, UserError, template};
 use ahash::AHashMap;
 use prettytable::Table;
@@ -48,6 +49,22 @@ impl Display for Configuration {
   }
 }
 
+impl TryFrom<FileConfiguration> for Configuration {
+  type Error = UserError;
+
+  fn try_from(value: FileConfiguration) -> std::result::Result<Self, Self::Error> {
+    let mut actions: Vec<Action> = Vec::with_capacity(value.actions.len());
+    for json_action in value.actions {
+      let action = Action::try_from(json_action)?;
+      actions.push(action);
+    }
+    Ok(Configuration {
+      actions,
+      options: value.options.unwrap_or_default().into_domain(),
+    })
+  }
+}
+
 /// replaces all placeholders in the given run string
 fn format_run(action: &Action, trigger: &Trigger) -> Result<String> {
   let mut values: AHashMap<&str, String> = AHashMap::new();
@@ -66,6 +83,37 @@ fn format_run(action: &Action, trigger: &Trigger) -> Result<String> {
 
 #[cfg(test)]
 mod tests {
+
+  mod try_from {
+    use crate::config::file::data::{FileAction, FileConfiguration};
+    use crate::config::{Action, Configuration, Options, Pattern};
+    use big_s::S;
+
+    #[test]
+    fn simple() {
+      let file_config = FileConfiguration {
+        actions: vec![FileAction {
+          r#type: S("testFile"),
+          files: Some(S("*.rs")),
+          run: S("make test"),
+          vars: None,
+        }],
+        options: None,
+      };
+      let have = Configuration::try_from(file_config).unwrap();
+      let want = Configuration {
+        actions: vec![Action {
+          pattern: Pattern::TestFile {
+            files: glob::Pattern::new("*.rs").unwrap(),
+          },
+          run: S("make test"),
+          vars: vec![],
+        }],
+        options: Options::default(),
+      };
+      assert_eq!(have, want);
+    }
+  }
 
   #[cfg(test)]
   mod get_command {
