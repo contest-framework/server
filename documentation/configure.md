@@ -2,7 +2,7 @@
 
 Run <code type="contest-command">contest setup</code> in the root directory of
 your codebase to generate Contest's configuration file
-(<code type="repo/existing-file">.contest.json5</code>). This file tells the
+(<code type="repo/existing-file">.contest.json</code>). This file tells the
 Contest server which actions it should perform when it receives messages from a
 Contest client.
 
@@ -14,25 +14,27 @@ The `run` block defines the console command to run. You can insert values
 received in the `trigger` block via placeholders in the
 [mustache](https://mustache.github.io) syntax.
 
-Here is an example **.contest.json** file for JavaScript developers who use
-[Mocha](https://mochajs.org) for unit testing:
+Here is an example **.contest.json** file:
 
 ```json
 {
   "actions": [
     {
+      "comment": "run all tests",
       "type": "testAll",
-      "run": "mocha"
+      "run": "make test"
     },
     {
-      "type": "testFileLine",
-      "filename": "**/*.js",
+      "comment": "JavaScript unit tests",
+      "type": "testFile",
+      "filename": "**/*.test.js",
       "line": "*",
-      "run": "mocha {{filename}}:{{line}}"
+      "run": "node --test {{filename}}"
     }
   ]
 }
 ```
 
-You can also use the filename `.contest.json5` if you want to use comments in
-the JSON.
+You can use the `comment` field for human-readable comments to organize your
+tests. Contest also allows JavaScript comments (starting with `//`) in the JSON
+file.

@@ -10,7 +10,6 @@ use std::{fs, io};
 
 /// filename of the Contest config file
 const JSON_PATH: &str = ".contest.json";
-const JSON5_PATH: &str = ".contest.json5";
 
 #[derive(Debug, Default, PartialEq)]
 pub struct Configuration {
@@ -75,7 +74,7 @@ impl Configuration {
   pub fn read() -> Result<Configuration> {
     let file_content = match fs::read_to_string(JSON_PATH) {
       Ok(file) => file,
-      Err(err) if err.kind() == io::ErrorKind::NotFound => match fs::read_to_string(JSON5_PATH) {
+      Err(err) if err.kind() == io::ErrorKind::NotFound => match fs::read_to_string(JSON_PATH) {
         Ok(file) => file,
         Err(err) if err.kind() == io::ErrorKind::NotFound => return Ok(Configuration::default()),
         Err(err) => return Err(UserError::ConfigFileError { err: err.to_string() }),
@@ -151,6 +150,7 @@ mod tests {
           files: Some(S("*.rs")),
           run: S("make test"),
           vars: None,
+          comment: None,
         }],
         options: None,
       };
