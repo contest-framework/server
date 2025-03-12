@@ -21,7 +21,7 @@ pub struct Configuration {
 impl Configuration {
   // creates an example config file on disk
   pub fn create() -> Result<()> {
-    const EXAMPLE_CONTENT: &str = r#"{
+    let example_content = r#"{
   "actions": [
     {
       "type": "testAll",
@@ -51,7 +51,7 @@ impl Configuration {
     }
   }
 }"#;
-    fs::write(JSON_PATH, EXAMPLE_CONTENT).map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
+    fs::write(JSON_PATH, example_content).map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
   }
 
   pub fn get_command(&self, trigger: &Trigger, last_command: &mut Option<String>) -> Result<String> {
