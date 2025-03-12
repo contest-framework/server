@@ -73,7 +73,7 @@ async fn main() {
   ContestWorld::cucumber()
     .fail_fast()
     .fail_on_skipped()
-    // .max_concurrent_scenarios(Some(2))
+    .max_concurrent_scenarios(Some(1))
     .run_and_exit("features/")
     .await;
 }
