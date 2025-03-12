@@ -1,7 +1,7 @@
 use std::fs;
 
-fn main() {
-  println!("JSON Schema export");
+#[test]
+fn export_json_schema() {
   let data = "Some data!";
   fs::write("schema.json", data).unwrap();
 }
