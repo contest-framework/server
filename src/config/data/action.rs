@@ -1,6 +1,6 @@
 use super::{Pattern, Var};
 use crate::UserError;
-use crate::config::file::data::FileAction;
+use crate::config::file::FileAction;
 
 /// Actions are executed when receiving a command.
 #[derive(Debug, PartialEq)]
@@ -100,7 +100,7 @@ mod tests {
 
     mod test_file {
       use super::super::super::FileAction;
-      use crate::config::file::data::FileVar;
+      use crate::config::file::FileVar;
       use crate::config::{Action, Pattern, Var, VarSource};
       use big_s::S;
 
@@ -189,7 +189,7 @@ mod tests {
 
     mod test_function {
       use super::super::super::FileAction;
-      use crate::config::file::data::FileVar;
+      use crate::config::file::FileVar;
       use crate::config::{Action, Pattern, Var, VarSource};
       use big_s::S;
 

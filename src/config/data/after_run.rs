@@ -1,4 +1,4 @@
-use crate::config::file::data::FileAfterRun;
+use crate::config::file::FileAfterRun;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct AfterRun {

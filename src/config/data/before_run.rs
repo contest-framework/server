@@ -1,4 +1,4 @@
-use crate::config::file::data::FileBeforeRun;
+use crate::config::file::FileBeforeRun;
 
 #[derive(Debug, Default, Eq, PartialEq)]
 pub struct BeforeRun {

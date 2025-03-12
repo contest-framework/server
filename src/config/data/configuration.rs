@@ -1,6 +1,6 @@
 use super::{Action, Options};
 use crate::client::Trigger;
-use crate::config::file::data::FileConfiguration;
+use crate::config::file::FileConfiguration;
 use crate::{Result, UserError, template};
 use ahash::AHashMap;
 use prettytable::Table;
@@ -139,7 +139,7 @@ fn format_run(action: &Action, trigger: &Trigger) -> Result<String> {
 mod tests {
 
   mod try_from {
-    use crate::config::file::data::{FileAction, FileConfiguration};
+    use crate::config::file::{FileAction, FileConfiguration};
     use crate::config::{Action, Configuration, Options, Pattern};
     use big_s::S;
 

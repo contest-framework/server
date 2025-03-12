@@ -1,5 +1,5 @@
 use super::{AfterRun, BeforeRun};
-use crate::config::file::data::FileOptions;
+use crate::config::file::FileOptions;
 
 #[derive(Debug, Default, Eq, PartialEq)]
 pub struct Options {
@@ -21,7 +21,7 @@ mod tests {
 
   mod into_domain {
     use super::super::FileOptions;
-    use crate::config::file::data::{FileAfterRun, FileBeforeRun};
+    use crate::config::file::{FileAfterRun, FileBeforeRun};
     use crate::config::{AfterRun, BeforeRun, Options};
 
     #[test]
