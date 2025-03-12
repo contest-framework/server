@@ -1,7 +1,7 @@
 Feature: configuring textual output of the test result
 
   Scenario: default value
-    Given file ".testconfig.json" with content
+    Given file ".contest.json" with content
       """
       {
         "actions": [
@@ -22,7 +22,7 @@ Feature: configuring textual output of the test result
       """
 
   Scenario: disable the textual output
-    Given file ".testconfig.json" with content
+    Given file ".contest.json" with content
       """
       {
         "actions": [
@@ -53,7 +53,7 @@ Feature: configuring textual output of the test result
       """
 
   Scenario: enable the textual output
-    Given file ".testconfig.json" with content
+    Given file ".contest.json" with content
       """
       {
         "actions": [

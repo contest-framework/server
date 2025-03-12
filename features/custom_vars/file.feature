@@ -1,7 +1,7 @@
 Feature: define a custom variable with a part of the filename
 
   Background:
-    Given file ".testconfig.json" with content
+    Given file ".contest.json" with content
       """
       {
         "actions": [

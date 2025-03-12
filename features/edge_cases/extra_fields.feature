@@ -1,7 +1,7 @@
 Feature: client sends unknown fields in the command
 
   Background:
-    Given file ".testconfig.json" with content
+    Given file ".contest.json" with content
       """
       {
         "actions": [
