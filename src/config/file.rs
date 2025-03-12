@@ -23,6 +23,7 @@ pub struct FileAction {
   pub run: String,
   /// define additional variables to use in the "run" string
   pub vars: Option<Vec<FileVar>>,
+  pub comment: Option<String>,
 }
 
 /// an additional variable that gets derived from the file content

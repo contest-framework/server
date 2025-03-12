@@ -23,7 +23,7 @@ Feature: comments in the configuration file
       """
 
   Scenario: JSON5 file extension
-    Given file ".contest.json5" with content
+    Given file ".contest.json" with content
       """
       {
         "actions": [

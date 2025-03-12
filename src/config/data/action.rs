@@ -75,6 +75,7 @@ mod tests {
           files: None,
           run: S("make test"),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action).unwrap();
         let want = Action {
@@ -92,6 +93,7 @@ mod tests {
           files: None,
           run: S(""),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action);
         assert!(have.is_err());
@@ -111,6 +113,7 @@ mod tests {
           files: Some(S("**/*.rs")),
           run: S("cargo test"),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action).unwrap();
         let want = Action {
@@ -134,6 +137,7 @@ mod tests {
             source: VarSource::File,
             filter: S("^fn (.*) \\{"),
           }]),
+          comment: None,
         };
         let have = Action::try_from(file_action).unwrap();
         let want = Action {
@@ -157,6 +161,7 @@ mod tests {
           files: None,
           run: S("make test"),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action);
         assert!(have.is_err());
@@ -169,6 +174,7 @@ mod tests {
           files: Some(S("")),
           run: S("make test"),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action);
         assert!(have.is_err());
@@ -181,6 +187,7 @@ mod tests {
           files: Some(S("**/*.rs")),
           run: S(""),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action);
         assert!(have.is_err());
@@ -200,6 +207,7 @@ mod tests {
           files: Some(S("**/*.rs")),
           run: S("cargo test"),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action).unwrap();
         let want = Action {
@@ -223,6 +231,7 @@ mod tests {
             source: VarSource::File,
             filter: S("^fn (.*) \\{"),
           }]),
+          comment: None,
         };
         let have = Action::try_from(file_action).unwrap();
         let want = Action {
@@ -246,6 +255,7 @@ mod tests {
           files: None,
           run: S("make test"),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action);
         assert!(have.is_err());
@@ -258,6 +268,7 @@ mod tests {
           files: Some(S("")),
           run: S("make test"),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action);
         assert!(have.is_err());
@@ -270,6 +281,7 @@ mod tests {
           files: Some(S("**/*.rs")),
           run: S(""),
           vars: None,
+          comment: None,
         };
         let have = Action::try_from(file_action);
         assert!(have.is_err());
