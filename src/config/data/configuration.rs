@@ -29,12 +29,12 @@ impl Configuration {
     },
     {
       "type": "testFile",
-      "file": "\\.ext$",
+      "file": "**/*.ext",
       "run": "echo testing file {{file}}"
     },
     {
       "type": "testFileLine",
-      "file": "\\.ext$",
+      "file": "**/*.ext",
       "run": "echo testing file {{file}} at line {{line}}"
     }
   ],
