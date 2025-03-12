@@ -1,10 +1,16 @@
 use super::{Action, Options};
 use crate::client::Trigger;
+use crate::config::file::FileConfiguration;
 use crate::{Result, UserError, template};
 use ahash::AHashMap;
 use prettytable::Table;
 use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
 use std::fmt::{self, Display};
+use std::{fs, io};
+
+/// filename of the Contest config file
+const JSON_PATH: &str = ".testconfig.json";
+const JSON5_PATH: &str = ".testconfig.json5";
 
 #[derive(Debug, Default, PartialEq)]
 pub struct Configuration {
@@ -13,6 +19,41 @@ pub struct Configuration {
 }
 
 impl Configuration {
+  // creates an example config file on disk
+  pub fn create() -> Result<()> {
+    let example_content = r#"{
+  "actions": [
+    {
+      "type": "testAll",
+      "run": "echo test all files"
+    },
+    {
+      "type": "testFile",
+      "file": "\\.ext$",
+      "run": "echo testing file {{file}}"
+    },
+    {
+      "type": "testFileLine",
+      "file": "\\.ext$",
+      "run": "echo testing file {{file}} at line {{line}}"
+    }
+  ],
+  "options": {
+    "beforeRun": {
+      "clearScreen": false,
+      "newlines": 2
+    },
+    "afterRun": {
+      "newlines": 1,
+      "indicatorLines": 2,
+      "indicatorBackground": true,
+      "printResult": true
+    }
+  }
+}"#;
+    fs::write(JSON_PATH, example_content).map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
+  }
+
   pub fn get_command(&self, trigger: &Trigger, last_command: &mut Option<String>) -> Result<String> {
     if trigger == &Trigger::RepeatLastTest {
       match last_command {
@@ -30,6 +71,20 @@ impl Configuration {
     }
     Err(UserError::UnknownTrigger { source: trigger.to_string() })
   }
+
+  pub fn read() -> Result<Configuration> {
+    let file_content = match fs::read_to_string(JSON_PATH) {
+      Ok(file) => file,
+      Err(err) if err.kind() == io::ErrorKind::NotFound => match fs::read_to_string(JSON5_PATH) {
+        Ok(file) => file,
+        Err(err) if err.kind() == io::ErrorKind::NotFound => return Ok(Configuration::default()),
+        Err(err) => return Err(UserError::ConfigFileError { err: err.to_string() }),
+      },
+      Err(err) => return Err(UserError::ConfigFileError { err: err.to_string() }),
+    };
+    let file_data: FileConfiguration = json5::from_str(&file_content).map_err(|err| UserError::ConfigFileInvalidContent { err: err.to_string() })?;
+    Configuration::try_from(file_data)
+  }
 }
 
 #[allow(clippy::str_to_string, clippy::string_to_string)]
@@ -45,6 +100,22 @@ impl Display for Configuration {
     f.write_str("Options:")?;
     f.write_fmt(format_args!("- beforeRun.clearScreen: {}\n", self.options.before_run.clear_screen))?;
     Ok(())
+  }
+}
+
+impl TryFrom<FileConfiguration> for Configuration {
+  type Error = UserError;
+
+  fn try_from(value: FileConfiguration) -> std::result::Result<Self, Self::Error> {
+    let mut actions: Vec<Action> = Vec::with_capacity(value.actions.len());
+    for json_action in value.actions {
+      let action = Action::try_from(json_action)?;
+      actions.push(action);
+    }
+    Ok(Configuration {
+      actions,
+      options: Options::from(value.options.unwrap_or_default()),
+    })
   }
 }
 
@@ -66,6 +137,37 @@ fn format_run(action: &Action, trigger: &Trigger) -> Result<String> {
 
 #[cfg(test)]
 mod tests {
+
+  mod try_from {
+    use crate::config::file::{FileAction, FileConfiguration};
+    use crate::config::{Action, Configuration, Options, Pattern};
+    use big_s::S;
+
+    #[test]
+    fn simple() {
+      let file_config = FileConfiguration {
+        actions: vec![FileAction {
+          r#type: S("testFile"),
+          files: Some(S("*.rs")),
+          run: S("make test"),
+          vars: None,
+        }],
+        options: None,
+      };
+      let have = Configuration::try_from(file_config).unwrap();
+      let want = Configuration {
+        actions: vec![Action {
+          pattern: Pattern::TestFile {
+            files: glob::Pattern::new("*.rs").unwrap(),
+          },
+          run: S("make test"),
+          vars: vec![],
+        }],
+        options: Options::default(),
+      };
+      assert_eq!(have, want);
+    }
+  }
 
   #[cfg(test)]
   mod get_command {

@@ -1,4 +1,5 @@
 use super::VarSource;
+use crate::config::file::FileVar;
 use crate::{Result, UserError, scanner};
 use ahash::AHashMap;
 use regex::Regex;
@@ -42,6 +43,22 @@ impl Var {
 impl PartialEq for Var {
   fn eq(&self, other: &Self) -> bool {
     self.name == other.name && self.source == other.source && self.filter.to_string() == other.filter.to_string()
+  }
+}
+
+impl TryFrom<FileVar> for Var {
+  type Error = UserError;
+
+  fn try_from(value: FileVar) -> std::result::Result<Self, Self::Error> {
+    let filter = regex::Regex::new(&value.filter).map_err(|err| UserError::InvalidRegex {
+      regex: value.filter,
+      err: err.to_string(),
+    })?;
+    Ok(Var {
+      name: value.name,
+      source: value.source,
+      filter,
+    })
   }
 }
 
