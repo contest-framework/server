@@ -36,4 +36,4 @@ Here is an example **.contest.json** file for JavaScript developers who use
 }
 ```
 
-Contest tolerates comments in the JSON file.
+Contest allows comments in the JSON file.
