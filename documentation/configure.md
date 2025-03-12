@@ -2,7 +2,7 @@
 
 Run <code type="contest-command">contest setup</code> in the root directory of
 your codebase to generate Contest's configuration file
-(<code type="repo/existing-file">.testconfig.json5</code>). This file tells the
+(<code type="repo/existing-file">contest.json5</code>). This file tells the
 Contest server which actions it should perform when it receives messages from a
 Contest client.
 
@@ -14,7 +14,7 @@ The `run` block defines the console command to run. You can insert values
 received in the `trigger` block via placeholders in the
 [mustache](https://mustache.github.io) syntax.
 
-Here is an example **.testconfig.json** file for JavaScript developers who use
+Here is an example **contest.json** file for JavaScript developers who use
 [Mocha](https://mochajs.org) for unit testing:
 
 ```json
@@ -34,5 +34,5 @@ Here is an example **.testconfig.json** file for JavaScript developers who use
 }
 ```
 
-You can also use the filename `.testconfig.json5` if you want to use comments in
-the JSON.
+You can also use the filename `contest.json5` if you want to use comments in the
+JSON.
