@@ -1,6 +1,5 @@
-use crate::config::file::data::FileOptions;
-
 use super::{AfterRun, BeforeRun};
+use crate::config::file::data::FileOptions;
 
 #[derive(Debug, Default, Eq, PartialEq)]
 pub struct Options {
