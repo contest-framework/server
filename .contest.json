@@ -1,6 +1,5 @@
 {
   "actions": [
-
     // all tests
     {
       "type": "testAll",
@@ -45,7 +44,7 @@
         }
       ],
       "run": "cargo test --test=cucumber -- --name='{{ scenario_name }}'"
-     },
+    }
   ],
   "options": {
     "beforeRun": {
