@@ -4,7 +4,7 @@ Feature: display the installed version
     When I run "contest <ARG>"
     Then it exits with this output
       """
-      contest 0.3.0
+      contest 0.3.1
       """
 
     Examples:
