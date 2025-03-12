@@ -88,7 +88,7 @@ impl UserError {
       ),
       UserError::TriggerRegexNotFound { regex, filename, line } => (
         format!("did not find pattern {regex} in file {filename} at line {line}"),
-        Some("This is defined in file contest.json."),
+        Some("This is defined in file .contest.json."),
       ),
       UserError::UnknownActionType { action_type } => (
         format!("unknown action type: {action_type}"),

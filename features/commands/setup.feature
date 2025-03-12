@@ -3,7 +3,7 @@ Feature: create example config file as part of setup
   Scenario:
     When I run "contest setup"
     Then it exits with no output
-    And it creates file "contest.json" with content
+    And it creates file ".contest.json" with content
       """
       {
         "actions": [
