@@ -9,7 +9,7 @@ Feature: display help
       Usage: contest [COMMAND]
 
       Commands:
-        debug  Just print the received triggers from the pipe
+        debug  Print the received triggers from the pipe
         run    Run the given client-side trigger and exit
         setup  Create an example configuration file
         start  Execute the received triggers from the pipe
