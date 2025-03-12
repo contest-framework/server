@@ -1,15 +1,13 @@
 Feature: display the installed version
 
-  Scenario: short version
-    When I run "contest -V"
+  Scenario Outline:
+    When I run "contest <ARG>"
     Then it exits with this output
       """
       contest 0.3.1
       """
 
-  Scenario: long version
-    When I run "contest --version"
-    Then it exits with this output
-      """
-      contest 0.3.1
-      """
+    Examples:
+      | ARG       |
+      | -V        |
+      | --version |
