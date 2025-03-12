@@ -31,7 +31,7 @@ mod tests {
         before_run: None,
         after_run: None,
       };
-      let have = Options::try_from(file_options).unwrap();
+      let have = Options::from(file_options);
       let want = Options {
         before_run: BeforeRun { clear_screen: false, newlines: 0 },
         after_run: AfterRun {
@@ -56,7 +56,7 @@ mod tests {
           print_result: Some(false),
         }),
       };
-      let have = Options::try_from(file_options).unwrap();
+      let have = Options::from(file_options);
       let want = Options {
         before_run: BeforeRun { clear_screen: true, newlines: 2 },
         after_run: AfterRun {

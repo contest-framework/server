@@ -9,7 +9,7 @@ struct Arguments {
 
 #[derive(Subcommand)]
 pub enum Command {
-  /// Print the received triggers from the pipe without running them
+  /// Just print the received triggers from the pipe
   Debug,
   /// Run the given client-side trigger and exit
   Run {
