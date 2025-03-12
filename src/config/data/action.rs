@@ -21,7 +21,7 @@ impl TryFrom<FileAction> for Action {
       return Err(UserError::RunCommandIsEmpty);
     }
     for file_var in file_vars {
-      vars.push(file_var.into_domain()?);
+      vars.push(Var::try_from(file_var)?);
     }
     if &action_type == "testall" {
       return Ok(Action {
