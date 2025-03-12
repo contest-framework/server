@@ -8,7 +8,7 @@
   ],
   "properties": {
     "actions": {
-      "description": "tell Contest how to test your files",
+      "description": "define the tests that Contest will run for you",
       "type": "array",
       "items": {
         "$ref": "#/definitions/FileAction"
@@ -35,6 +35,13 @@
         "type"
       ],
       "properties": {
+        "comment": {
+          "description": "human-readable description of this action",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "files": {
           "description": "the files for which this command applies as a glob expression",
           "type": [

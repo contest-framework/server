@@ -23,6 +23,7 @@ pub struct FileAction {
   pub run: String,
   /// define additional variables to use in the "run" string
   pub vars: Option<Vec<FileVar>>,
+  /// human-readable description of this action
   pub comment: Option<String>,
 }
 
