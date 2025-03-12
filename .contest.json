@@ -1,13 +1,13 @@
 {
   "actions": [
-    // all tests
     {
+      "comment": "all tests",
       "type": "testAll",
       "run": "make test"
     },
 
-    // Rust unit tests
     {
+      "comment": "Rust unit tests",
       "type": "testFile",
       "files": "**/*.rs",
       "vars": [
@@ -32,8 +32,8 @@
       "run": "cargo test {{test_name}}"
     },
 
-    // Cucumber specs
     {
+      "comment": "end-to-end tests",
       "type": "testFileLine",
       "files": "**/*.feature",
       "vars": [

@@ -17,6 +17,7 @@ pub struct FileAction {
   pub files: Option<String>,
   pub run: String,
   pub vars: Option<Vec<FileVar>>,
+  pub comment: Option<String>,
 }
 
 /// low-level, unvalidated `Var` data exactly how it is stored in the config file

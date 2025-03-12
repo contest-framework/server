@@ -150,6 +150,7 @@ mod tests {
           files: Some(S("*.rs")),
           run: S("make test"),
           vars: None,
+          comment: None,
         }],
         options: None,
       };
