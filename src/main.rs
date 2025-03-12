@@ -1,6 +1,7 @@
 use contest::cli::Command;
 use contest::client::fifo;
-use contest::{Result, config, listen, run_with_decoration};
+use contest::config::Configuration;
+use contest::{Result, listen, run_with_decoration};
 use std::fs;
 use std::process::ExitCode;
 
@@ -18,7 +19,7 @@ fn main() -> ExitCode {
 }
 
 fn main_with_result() -> Result<()> {
-  let config = config::file::read()?;
+  let config = Configuration::read()?;
   match Command::parse() {
     Command::Start => listen(&config, false),
     Command::Debug => listen(&config, true),
@@ -28,6 +29,6 @@ fn main_with_result() -> Result<()> {
       let _ = run_with_decoration(trigger, &config, false, &mut last_command)?;
       Ok(())
     }
-    Command::Setup => config::file::create(),
+    Command::Setup => Configuration::create(),
   }
 }

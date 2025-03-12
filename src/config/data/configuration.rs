@@ -6,6 +6,11 @@ use ahash::AHashMap;
 use prettytable::Table;
 use prettytable::format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR;
 use std::fmt::{self, Display};
+use std::{fs, io};
+
+/// filename of the Contest config file
+const JSON_PATH: &str = ".testconfig.json";
+const JSON5_PATH: &str = ".testconfig.json5";
 
 #[derive(Debug, Default, PartialEq)]
 pub struct Configuration {
@@ -14,6 +19,41 @@ pub struct Configuration {
 }
 
 impl Configuration {
+  // creates an example config file on disk
+  pub fn create() -> Result<()> {
+    const EXAMPLE_CONTENT: &str = r#"{
+  "actions": [
+    {
+      "type": "testAll",
+      "run": "echo test all files"
+    },
+    {
+      "type": "testFile",
+      "file": "\\.rs$",
+      "run": "echo testing file {{file}}"
+    },
+    {
+      "type": "testFileLine",
+      "file": "\\.ext$",
+      "run": "echo testing file {{file}} at line {{line}}"
+    }
+  ],
+  "options": {
+    "beforeRun": {
+      "clearScreen": false,
+      "newlines": 2
+    },
+    "afterRun": {
+      "newlines": 1,
+      "indicatorLines": 2,
+      "indicatorBackground": true,
+      "printResult": true
+    }
+  }
+}"#;
+    fs::write(JSON_PATH, EXAMPLE_CONTENT).map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
+  }
+
   pub fn get_command(&self, trigger: &Trigger, last_command: &mut Option<String>) -> Result<String> {
     if trigger == &Trigger::RepeatLastTest {
       match last_command {
@@ -30,6 +70,20 @@ impl Configuration {
       }
     }
     Err(UserError::UnknownTrigger { source: trigger.to_string() })
+  }
+
+  pub fn read() -> Result<Configuration> {
+    let file_content = match fs::read_to_string(JSON_PATH) {
+      Ok(file) => file,
+      Err(err) if err.kind() == io::ErrorKind::NotFound => match fs::read_to_string(JSON5_PATH) {
+        Ok(file) => file,
+        Err(err) if err.kind() == io::ErrorKind::NotFound => return Ok(Configuration::default()),
+        Err(err) => return Err(UserError::ConfigFileError { err: err.to_string() }),
+      },
+      Err(err) => return Err(UserError::ConfigFileError { err: err.to_string() }),
+    };
+    let file_data: FileConfiguration = json5::from_str(&file_content).map_err(|err| UserError::ConfigFileInvalidContent { err: err.to_string() })?;
+    Configuration::try_from(file_data)
   }
 }
 
