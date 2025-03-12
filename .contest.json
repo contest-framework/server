@@ -1,5 +1,13 @@
 {
+  "$schema": "https://raw.githubusercontent.com/contest-framework/server/refs/heads/kg-json-schema/schema.json",
   "actions": [
+
+
+    {
+      "run": "tehue",
+      "files": ""
+    },
+
 
     // all tests
     {

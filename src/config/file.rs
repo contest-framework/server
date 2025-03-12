@@ -7,7 +7,7 @@ use serde::Deserialize;
 /// configuration data for <https://github.com/contest-framework/server>
 #[derive(Deserialize, JsonSchema)]
 pub struct FileConfiguration {
-  /// tell Contest how to test your files
+  /// define the tests that Contest will run for you
   pub actions: Vec<FileAction>,
   /// configure the layout and behavior
   pub options: Option<FileOptions>,
