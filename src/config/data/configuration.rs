@@ -97,7 +97,7 @@ impl Display for Configuration {
       table.add_row(prettytable::row![action.pattern, action.run]);
     }
     table.printstd();
-    f.write_str("Options:")?;
+    f.write_str("Options:\n")?;
     f.write_fmt(format_args!("- beforeRun.clearScreen: {}\n", self.options.before_run.clear_screen))?;
     Ok(())
   }
