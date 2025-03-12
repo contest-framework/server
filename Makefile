@@ -38,7 +38,6 @@ test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	make --no-print-dir lint
 	cargo test
 	make --no-print-dir cuke
-	cargo +nightly fix --allow-dirty
 	cargo +nightly fmt -- --check
 	tools/rta dprint fmt
 	npm exec -- text-runner
