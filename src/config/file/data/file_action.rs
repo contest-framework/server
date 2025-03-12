@@ -9,6 +9,3 @@ pub struct FileAction {
   pub run: String,
   pub vars: Option<Vec<FileVar>>,
 }
-
-#[cfg(test)]
-mod tests {}
