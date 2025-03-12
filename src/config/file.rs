@@ -4,27 +4,35 @@ use crate::config::VarSource;
 use schemars::JsonSchema;
 use serde::Deserialize;
 
-/// low-level, unvalidated `Configuration` data exactly how it is stored in the config file
+/// configuration data for <https://github.com/contest-framework/server>
 #[derive(Deserialize, JsonSchema)]
 pub struct FileConfiguration {
+  /// tell Contest how to test your files
   pub actions: Vec<FileAction>,
+  /// configure the layout and behavior
   pub options: Option<FileOptions>,
 }
 
-/// low-level, unvalidated `Action` data exactly how it is stored in the config file
+/// a particular test
 #[derive(Deserialize, JsonSchema)]
 pub struct FileAction {
   pub r#type: String,
+  /// the files for which this command applies as a glob expression
   pub files: Option<String>,
+  /// the command to run
   pub run: String,
+  /// define additional variables to use in the "run" string
   pub vars: Option<Vec<FileVar>>,
 }
 
-/// low-level, unvalidated `Var` data exactly how it is stored in the config file
+/// an additional variable that gets derived from the file content
 #[derive(Deserialize, Debug, Eq, JsonSchema, PartialEq)]
 pub struct FileVar {
+  /// name of the variable, available as "{{ name }}" later
   pub name: String,
+  /// the location in the file
   pub source: VarSource,
+  /// how the variable gets computed
   pub filter: String,
 }
 

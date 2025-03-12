@@ -1,7 +1,10 @@
+use contest::config::file::FileConfiguration;
+use schemars::schema_for;
 use std::fs;
 
 #[test]
 fn export_json_schema() {
-  let data = "Some data!";
-  fs::write("schema.json", data).unwrap();
+  let schema = schema_for!(FileConfiguration);
+  let text = serde_json::to_string_pretty(&schema).unwrap();
+  fs::write("schema.json", text).unwrap();
 }
