@@ -1,5 +1,10 @@
 # Contest Server Changelog
 
+#### 0.3.1
+
+- the generated example configuration now uses globs instead of regular
+  expressions
+
 #### 0.3.0
 
 - The new "quit" command ends the server remotely. This is useful if the
