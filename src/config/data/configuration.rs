@@ -29,7 +29,7 @@ impl Configuration {
     },
     {
       "type": "testFile",
-      "file": "\\.rs$",
+      "file": "\\.ext$",
       "run": "echo testing file {{file}}"
     },
     {

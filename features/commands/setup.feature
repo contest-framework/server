@@ -13,7 +13,7 @@ Feature: create example config file as part of setup
           },
           {
             "type": "testFile",
-            "file": "\\.rs$",
+            "file": "\\.ext$",
             "run": "echo testing file {{file}}"
           },
           {
