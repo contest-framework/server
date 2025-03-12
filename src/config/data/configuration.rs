@@ -60,7 +60,7 @@ impl TryFrom<FileConfiguration> for Configuration {
     }
     Ok(Configuration {
       actions,
-      options: value.options.unwrap_or_default().into_domain(),
+      options: Options::from(value.options.unwrap_or_default()),
     })
   }
 }

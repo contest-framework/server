@@ -7,7 +7,6 @@ mod read;
 pub use create::create;
 use data::FileConfiguration;
 #[cfg(test)]
-use data::{FileAfterRun, FileBeforeRun};
 pub use read::read;
 
 /// filename of the Contest config file
