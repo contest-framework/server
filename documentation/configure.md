@@ -14,8 +14,7 @@ The `run` block defines the console command to run. You can insert values
 received in the `trigger` block via placeholders in the
 [mustache](https://mustache.github.io) syntax.
 
-Here is an example **.contest.json** file for JavaScript developers who use
-[Mocha](https://mochajs.org) for unit testing:
+Here is an example **.contest.json** file:
 
 ```json
 {
@@ -23,17 +22,19 @@ Here is an example **.contest.json** file for JavaScript developers who use
     {
       "comment": "run all tests",
       "type": "testAll",
-      "run": "mocha"
+      "run": "make test"
     },
     {
-      "comment": "run a specific unit test file",
-      "type": "testFileLine",
-      "filename": "**/*.js",
+      "comment": "JavaScript unit tests",
+      "type": "testFile",
+      "filename": "**/*.test.js",
       "line": "*",
-      "run": "mocha {{filename}}:{{line}}"
+      "run": "node --test {{filename}}"
     }
   ]
 }
 ```
 
-Contest allows comments in the JSON file.
+You can use the `comment` field for human-readable comments to organize your
+tests. Contest also allows JavaScript comments (starting with `//`) in the JSON
+file.
