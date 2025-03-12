@@ -25,3 +25,5 @@ jobs:
           node-version: "22"
       - run: make setup
       - run: make test
+      - name: Indicate formatting issues
+        run: git diff HEAD --exit-code --color
