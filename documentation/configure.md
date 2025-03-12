@@ -21,10 +21,12 @@ Here is an example **.contest.json** file for JavaScript developers who use
 {
   "actions": [
     {
+      "comment": "run all tests",
       "type": "testAll",
       "run": "mocha"
     },
     {
+      "comment": "run a specific unit test file",
       "type": "testFileLine",
       "filename": "**/*.js",
       "line": "*",
@@ -33,6 +35,3 @@ Here is an example **.contest.json** file for JavaScript developers who use
   ]
 }
 ```
-
-You can also use the filename `.contest.json` if you want to use comments in the
-JSON.
