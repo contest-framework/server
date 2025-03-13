@@ -139,7 +139,7 @@ fn format_run(action: &Action, trigger: &Trigger) -> Result<String> {
 mod tests {
 
   mod try_from {
-    use crate::config::file::{FileAction, FileConfiguration};
+    use crate::config::file::{ActionType, FileAction, FileConfiguration};
     use crate::config::{Action, Configuration, Options, Pattern};
     use big_s::S;
 
@@ -147,7 +147,7 @@ mod tests {
     fn simple() {
       let file_config = FileConfiguration {
         actions: vec![FileAction {
-          r#type: S("testFile"),
+          r#type: ActionType::TestFile,
           files: Some(S("*.rs")),
           run: S("make test"),
           vars: None,

@@ -27,6 +27,14 @@
     }
   },
   "definitions": {
+    "ActionType": {
+      "type": "string",
+      "enum": [
+        "testAll",
+        "testFile",
+        "testFileLine"
+      ]
+    },
     "FileAction": {
       "description": "a particular test",
       "type": "object",
@@ -54,7 +62,7 @@
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "$ref": "#/definitions/ActionType"
         },
         "vars": {
           "description": "define additional variables to use in the \"run\" string",

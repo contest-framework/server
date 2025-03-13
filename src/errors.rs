@@ -2,6 +2,8 @@
 
 use big_s::S;
 
+use crate::config::file::ActionType;
+
 /// The possible errors that the user can cause and needs to be notified about.
 #[derive(Debug, Eq, PartialEq)]
 pub enum UserError {
@@ -34,7 +36,7 @@ pub enum UserError {
   RunCommandIsEmpty,
   TriggerTooManyCaptures { count: usize, regex: String, line: String },
   TriggerRegexNotFound { regex: String, filename: String, line: usize },
-  UnknownActionType { action_type: String },
+  UnknownActionType { action_type: ActionType },
   UnknownTrigger { source: String },
 }
 
