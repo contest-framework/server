@@ -7,7 +7,7 @@ Feature: define a custom variable with a regex match of the file content
         "actions": [
           {
             "desc": "tests the function that the cursor is in right now",
-            "type": "testFileLine",
+            "type": "test-file-line",
             "files": "**/*.rs",
             "vars": [
               {
@@ -32,7 +32,7 @@ Feature: define a custom variable with a regex match of the file content
     And Contest is running
 
   Scenario: receiving a matching file and location
-    When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 5 }'
+    When receiving the command '{ "command": "test-file-line", "file": "foo.rs", "line": 5 }'
     Then it prints
       """
       executing: echo cargo test my_func
@@ -41,14 +41,14 @@ Feature: define a custom variable with a regex match of the file content
       """
 
   Scenario: receiving a matching file and mismatching location prints an error and keeps running
-    When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 1 }'
+    When receiving the command '{ "command": "test-file-line", "file": "foo.rs", "line": 1 }'
     Then it prints
       """
       Error: did not find pattern \bfn (\w+)\( in file foo.rs at line 1
       This is defined in file .contest.json.
       """
     # ensure the server is still running and functional
-    When receiving the command '{ "command": "testFileLine", "file": "foo.rs", "line": 3 }'
+    When receiving the command '{ "command": "test-file-line", "file": "foo.rs", "line": 3 }'
     Then it prints
       """
       executing: echo cargo test my_func
@@ -56,10 +56,10 @@ Feature: define a custom variable with a regex match of the file content
       """
 
   Scenario: receiving a matching file and no location
-    When receiving the command '{ "command": "testFileLine", "file": "foo.rs" }'
+    When receiving the command '{ "command": "test-file-line", "file": "foo.rs" }'
     Then it fails with this output
       """
-Error: invalid trigger received: { "command": "testFileLine", "file": "foo.rs" }
+Error: invalid trigger received: { "command": "test-file-line", "file": "foo.rs" }
 
 missing "line" field
       """

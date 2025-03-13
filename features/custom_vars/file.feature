@@ -7,7 +7,7 @@ Feature: define a custom variable with a part of the filename
         "actions": [
           {
             "desc": "run all tests for a TS source file",
-            "type": "testFile",
+            "type": "test-file",
             "files": "**/*.ts",
             "vars": [
               {
@@ -24,7 +24,7 @@ Feature: define a custom variable with a part of the filename
     And Contest is running
 
   Scenario: receiving a matching file
-    When receiving the command '{ "command": "testFile", "file": "my_file.ts" }'
+    When receiving the command '{ "command": "test-file", "file": "my_file.ts" }'
     Then it prints
       """
       executing: echo testing my_file.test.ts
@@ -32,14 +32,14 @@ Feature: define a custom variable with a part of the filename
       """
 
   Scenario: receiving a mismatching file prints an error and keeps running
-    When receiving the command '{ "command": "testFile", "file": "my_file.go" }'
+    When receiving the command '{ "command": "test-file", "file": "my_file.go" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: testFile my_file.go
+      Error: cannot determine command for trigger: test-file my_file.go
       Please make sure that this action is listed in your configuration file
       """
     # ensure the server is still running and functional
-    When receiving the command '{ "command": "testFile", "file": "my_file.ts" }'
+    When receiving the command '{ "command": "test-file", "file": "my_file.ts" }'
     Then it prints
       """
       executing: echo testing my_file.test.ts
@@ -47,9 +47,9 @@ Feature: define a custom variable with a part of the filename
       """
 
   Scenario: receiving no file
-    When receiving the command '{ "command": "testFile" }'
+    When receiving the command '{ "command": "test-file" }'
     Then it prints
       """
-      Error: invalid trigger received: { "command": "testFile" }
+      Error: invalid trigger received: { "command": "test-file" }
       missing "file" field
       """

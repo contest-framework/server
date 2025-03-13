@@ -10,6 +10,7 @@ pub struct FifoTrigger {
 
 #[derive(Deserialize, Debug, Default, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
+#[serde(rename_all = "kebab-case")]
 pub struct FifoTriggerData {
   pub command: String,
   pub file: Option<String>,
@@ -43,11 +44,11 @@ mod tests {
 
     #[test]
     fn test_all() {
-      let give = S(r#"{ "command": "testAll" }"#);
+      let give = S(r#"{ "command": "test-all" }"#);
       let have = FifoTrigger::parse(give.clone()).unwrap();
       let want = FifoTrigger {
         data: FifoTriggerData {
-          command: S("testAll"),
+          command: S("test-all"),
           ..FifoTriggerData::default()
         },
         original_line: give,
@@ -97,11 +98,11 @@ mod tests {
 
       #[test]
       fn valid() {
-        let give = S(r#"{ "command": "testFile", "file": "foo.rs" }"#);
+        let give = S(r#"{ "command": "test-file", "file": "foo.rs" }"#);
         let have = FifoTrigger::parse(give.clone()).unwrap();
         let want = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFile"),
+            command: S("test-file"),
             file: Some(S("foo.rs")),
             ..FifoTriggerData::default()
           },
@@ -112,11 +113,11 @@ mod tests {
 
       #[test]
       fn no_filename() {
-        let give = S(r#"{ "command": "testFile" }"#);
+        let give = S(r#"{ "command": "test-file" }"#);
         let have = FifoTrigger::parse(give.clone()).unwrap();
         let want = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFile"),
+            command: S("test-file"),
             file: None,
             ..FifoTriggerData::default()
           },
@@ -133,11 +134,11 @@ mod tests {
 
       #[test]
       fn valid() {
-        let give = S(r#"{ "command": "testFileLine", "file": "foo.rs", "line": 12 }"#);
+        let give = S(r#"{ "command": "test-file-line", "file": "foo.rs", "line": 12 }"#);
         let have = FifoTrigger::parse(give.clone()).unwrap();
         let want = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFileLine"),
+            command: S("test-file-line"),
             file: Some(S("foo.rs")),
             line: Some(12),
             ..FifoTriggerData::default()
@@ -149,11 +150,11 @@ mod tests {
 
       #[test]
       fn no_file() {
-        let give = S(r#"{ "command": "testFileLine", "line": 12 }"#);
+        let give = S(r#"{ "command": "test-file-line", "line": 12 }"#);
         let have = FifoTrigger::parse(give.clone()).unwrap();
         let want = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFileLine"),
+            command: S("test-file-line"),
             file: None,
             line: Some(12),
             ..FifoTriggerData::default()
@@ -165,11 +166,11 @@ mod tests {
 
       #[test]
       fn no_line() {
-        let give = S(r#"{ "command": "testFileLine", "file": "foo.rs" }"#);
+        let give = S(r#"{ "command": "test-file-line", "file": "foo.rs" }"#);
         let have = FifoTrigger::parse(give.clone()).unwrap();
         let want = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFileLine"),
+            command: S("test-file-line"),
             file: Some(S("foo.rs")),
             line: None,
             ..FifoTriggerData::default()
@@ -196,7 +197,7 @@ mod tests {
 
     #[test]
     fn unknown_fields() {
-      let give = S(r#"{ "command": "testFile", "file": "foo.rs", "other": 12 }"#);
+      let give = S(r#"{ "command": "test-file", "file": "foo.rs", "other": 12 }"#);
       let have = FifoTrigger::parse(give);
       assert!(have.is_err());
     }

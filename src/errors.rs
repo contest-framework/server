@@ -61,7 +61,7 @@ impl UserError {
       UserError::FifoCannotOpen { err } => (format!("Cannot open pipe: {err}"), Some("This is an internal error")),
       UserError::FileNameNotAvailable => (
         S("Filename is not known"),
-        Some(r#"To use the filename in a variable, you need to choose either the "testFile" or "testFileLine" action type that provides this data."#),
+        Some(r#"To use the filename in a variable, you need to choose either the "test-file" or "test-file-line" action type that provides this data."#),
       ),
       UserError::FilesIsEmpty => (S(r#"The "files" field in your config file is empty"#), None),
       UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), Some(err)),
@@ -69,7 +69,7 @@ impl UserError {
       UserError::LineIsNotANumber { line } => (format!("the provided line ({line})is not a number"), None),
       UserError::LineNotAvailable => (
         S("Line not available"),
-        Some(r#"To use the current line in a variable, you need to use the "testFileLine" action type that provides this data."#),
+        Some(r#"To use the current line in a variable, you need to use the "test-file-line" action type that provides this data."#),
       ),
       UserError::MissingFilesInPattern => (S(r#"the pattern in the config file is missing the "files" field."#), None),
       UserError::MissingFileInTrigger { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "file" field"#)),
@@ -93,7 +93,7 @@ impl UserError {
       ),
       UserError::UnknownActionType { action_type } => (
         format!("unknown action type: {action_type}"),
-        Some(r#"Valid types are "test-all", "testFile", and "testFileLine"."#),
+        Some(r#"Valid types are "test-all", "test-file", and "test-file-line"."#),
       ),
       UserError::UnknownTrigger { source } => (
         format!("cannot determine command for trigger: {source}"),

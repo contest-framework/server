@@ -13,12 +13,12 @@ Feature: create example config file as part of setup
             "run": "echo test all files"
           },
           {
-            "type": "testFile",
+            "type": "test-file",
             "file": "**/*.ext",
             "run": "echo testing file {{file}}"
           },
           {
-            "type": "testFileLine",
+            "type": "test-file-line",
             "file": "**/*.ext",
             "run": "echo testing file {{file}} at line {{line}}"
           }

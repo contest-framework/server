@@ -18,8 +18,8 @@ impl Display for Trigger {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
       Trigger::TestAll => f.write_str("test-all"),
-      Trigger::TestFile { file } => write!(f, "testFile {file}"),
-      Trigger::TestFileLine { file, line } => write!(f, "testFileLine {file}:{line}"),
+      Trigger::TestFile { file } => write!(f, "test-file {file}"),
+      Trigger::TestFileLine { file, line } => write!(f, "test-file-line {file}:{line}"),
       Trigger::CustomCommand { run } => write!(f, "customCommand {run}"),
       Trigger::RepeatLastTest => f.write_str("repeatTest"),
       Trigger::Quit => f.write_str("quit"),
@@ -32,7 +32,7 @@ impl TryFrom<FifoTrigger> for Trigger {
 
   fn try_from(fifo: FifoTrigger) -> std::result::Result<Self, Self::Error> {
     match fifo.data.command.to_ascii_lowercase().as_str() {
-      "testall" => Ok(Trigger::TestAll),
+      "test-all" => Ok(Trigger::TestAll),
       "repeattest" => Ok(Trigger::RepeatLastTest),
       "customcommand" => match fifo.data.run {
         Some(run) => Ok(Trigger::CustomCommand { run }),
@@ -74,7 +74,7 @@ mod tests {
     fn test_all() {
       let fifo_trigger = FifoTrigger {
         data: FifoTriggerData {
-          command: S("testAll"),
+          command: S("test-all"),
           ..FifoTriggerData::default()
         },
         ..FifoTrigger::default()
@@ -142,7 +142,7 @@ mod tests {
       fn valid() {
         let fifo_data = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFile"),
+            command: S("test-file"),
             file: Some(S("file.rs")),
             ..FifoTriggerData::default()
           },
@@ -157,7 +157,7 @@ mod tests {
       fn missing_file() {
         let fifo_data = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFile"),
+            command: S("test-file"),
             file: None,
             ..FifoTriggerData::default()
           },
@@ -177,7 +177,7 @@ mod tests {
       fn valid() {
         let fifo_data = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFileLine"),
+            command: S("test-file-line"),
             file: Some(S("file.rs")),
             line: Some(2),
             ..FifoTriggerData::default()
@@ -193,7 +193,7 @@ mod tests {
       fn missing_file() {
         let fifo_data = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFileLine"),
+            command: S("test-file-line"),
             file: None,
             line: Some(2),
             ..FifoTriggerData::default()
@@ -208,7 +208,7 @@ mod tests {
       fn missing_line() {
         let fifo_data = FifoTrigger {
           data: FifoTriggerData {
-            command: S("testFileLine"),
+            command: S("test-file-line"),
             file: Some(S("file.rs")),
             line: None,
             ..FifoTriggerData::default()

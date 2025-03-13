@@ -6,7 +6,7 @@ Feature: run all tests in a file
       {
         "actions": [
           {
-            "type": "testFile",
+            "type": "test-file",
             "files": "**/*.test.ts",
             "run": "echo testing file {{file}}"
           }
@@ -16,7 +16,7 @@ Feature: run all tests in a file
     And Contest is running
 
   Scenario: receiving a matching file
-    When receiving the command '{ "command": "testFile", "file": "test/chars.test.ts" }'
+    When receiving the command '{ "command": "test-file", "file": "test/chars.test.ts" }'
     Then it prints
       """
       executing: echo testing file test/chars.test.ts
@@ -24,14 +24,14 @@ Feature: run all tests in a file
       """
 
   Scenario: receiving a file that doesn't match an existing rule
-    When receiving the command '{ "command": "testFile", "file": "foo.go" }'
+    When receiving the command '{ "command": "test-file", "file": "foo.go" }'
     Then it prints
       """
-      Error: cannot determine command for trigger: testFile foo.go
+      Error: cannot determine command for trigger: test-file foo.go
       Please make sure that this action is listed in your configuration file
       """
     # ensure the server is still running and functional
-    When receiving the command '{ "command": "testFile", "file": "test/chars.test.ts" }'
+    When receiving the command '{ "command": "test-file", "file": "test/chars.test.ts" }'
     Then it prints
       """
       executing: echo testing file test/chars.test.ts
