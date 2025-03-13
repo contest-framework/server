@@ -93,7 +93,7 @@ impl UserError {
       ),
       UserError::UnknownActionType { action_type } => (
         format!("unknown action type: {action_type}"),
-        Some(r#"Valid types are "testAll", "testFile", and "testFileLine"."#),
+        Some(r#"Valid types are "test-all", "testFile", and "testFileLine"."#),
       ),
       UserError::UnknownTrigger { source } => (
         format!("cannot determine command for trigger: {source}"),

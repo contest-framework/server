@@ -7,14 +7,14 @@ Feature: comments in the configuration file
         "actions": [
           // run all tests
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ]
       }
       """
     And Contest is running
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       executing: echo running all tests
@@ -29,14 +29,14 @@ Feature: comments in the configuration file
         "actions": [
           // run all tests
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ]
       }
       """
     And Contest is running
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       executing: echo running all tests

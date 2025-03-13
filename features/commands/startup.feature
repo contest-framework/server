@@ -6,7 +6,7 @@ Feature: Starting Contest
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ]

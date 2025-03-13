@@ -6,7 +6,7 @@ Feature: run in debug mode
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ]
@@ -27,13 +27,13 @@ Feature: run in debug mode
       """
 
   Scenario: receiving a valid command
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
-      received from client: { "command": "testAll" }
+      received from client: { "command": "test-all" }
       """
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
-      received from client: { "command": "testAll" }
+      received from client: { "command": "test-all" }
       """

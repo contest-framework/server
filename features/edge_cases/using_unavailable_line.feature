@@ -1,12 +1,12 @@
 Feature: using unavailable line
 
-  Scenario: in a "testAll" command
+  Scenario: in a "test-all" command
     Given file ".contest.json" with content
       """
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests",
             "vars": [
               {
@@ -20,7 +20,7 @@ Feature: using unavailable line
       }
       """
     And Contest is running
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       Error: Filename is not known

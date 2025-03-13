@@ -29,7 +29,7 @@ pub struct FileAction {
 }
 
 #[derive(Debug, Deserialize, Eq, JsonSchema, PartialEq)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "kebab-case")]
 pub enum ActionType {
   TestAll,
   TestFile,

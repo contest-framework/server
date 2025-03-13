@@ -6,7 +6,7 @@ Feature: using unavailable filename
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests",
             "vars": [
               {
@@ -23,7 +23,7 @@ Feature: using unavailable filename
 
 
   Scenario: receiving a valid command
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       Error: Filename is not known

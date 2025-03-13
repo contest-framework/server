@@ -3,7 +3,7 @@
   "actions": [
     {
       "comment": "all tests",
-      "type": "testAll",
+      "type": "test-all",
       "run": "make test"
     },
 

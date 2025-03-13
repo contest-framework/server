@@ -17,7 +17,7 @@ pub enum Trigger {
 impl Display for Trigger {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
-      Trigger::TestAll => f.write_str("testAll"),
+      Trigger::TestAll => f.write_str("test-all"),
       Trigger::TestFile { file } => write!(f, "testFile {file}"),
       Trigger::TestFileLine { file, line } => write!(f, "testFileLine {file}:{line}"),
       Trigger::CustomCommand { run } => write!(f, "customCommand {run}"),

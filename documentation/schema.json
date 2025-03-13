@@ -30,9 +30,9 @@
     "ActionType": {
       "type": "string",
       "enum": [
-        "testAll",
-        "testFile",
-        "testFileLine"
+        "test-all",
+        "test-file",
+        "test-file-line"
       ]
     },
     "FileAction": {
