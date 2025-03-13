@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/contest-framework/server/refs/heads/main/documentation/schema.json",
   "actions": [
     {
       "comment": "all tests",

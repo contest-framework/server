@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FileConfiguration",
+  "description": "configuration data for <https://github.com/contest-framework/server>",
+  "type": "object",
+  "required": [
+    "actions"
+  ],
+  "properties": {
+    "actions": {
+      "description": "define the tests that Contest will run for you",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/FileAction"
+      }
+    },
+    "options": {
+      "description": "configure the layout and behavior",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/FileOptions"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "FileAction": {
+      "description": "a particular test",
+      "type": "object",
+      "required": [
+        "run",
+        "type"
+      ],
+      "properties": {
+        "comment": {
+          "description": "human-readable description of this action",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "files": {
+          "description": "the files for which this command applies as a glob expression",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "run": {
+          "description": "the command to run",
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "vars": {
+          "description": "define additional variables to use in the \"run\" string",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/FileVar"
+          }
+        }
+      }
+    },
+    "FileAfterRun": {
+      "type": "object",
+      "properties": {
+        "indicatorLines": {
+          "description": "how many indicator lines (red or green) to print after a test run",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint8",
+          "minimum": 0.0
+        },
+        "newlines": {
+          "description": "how many newlines to print after a test run",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint8",
+          "minimum": 0.0
+        },
+        "printResult": {
+          "description": "whether to print \"SUCCESS\" or \"FAILED\" after a test run",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "FileBeforeRun": {
+      "type": "object",
+      "properties": {
+        "clearScreen": {
+          "description": "whether to clear the screen before a test run",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "newlines": {
+          "description": "how many newlines to print before a test run",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint8",
+          "minimum": 0.0
+        }
+      }
+    },
+    "FileOptions": {
+      "type": "object",
+      "properties": {
+        "afterRun": {
+          "description": "configure behavior after Contest runs a test",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/FileAfterRun"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "beforeRun": {
+          "description": "configure behavior before Contest runs a test",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/FileBeforeRun"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "FileVar": {
+      "description": "an additional variable that gets derived from the file content",
+      "type": "object",
+      "required": [
+        "filter",
+        "name",
+        "source"
+      ],
+      "properties": {
+        "filter": {
+          "description": "how the variable gets computed",
+          "type": "string"
+        },
+        "name": {
+          "description": "name of the variable, available as \"{{ name }}\" later",
+          "type": "string"
+        },
+        "source": {
+          "description": "the location in the file",
+          "allOf": [
+            {
+              "$ref": "#/definitions/VarSource"
+            }
+          ]
+        }
+      }
+    },
+    "VarSource": {
+      "type": "string",
+      "enum": [
+        "file",
+        "line",
+        "currentOrAboveLineContent"
+      ]
+    }
+  }
+}
