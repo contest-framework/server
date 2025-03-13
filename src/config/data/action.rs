@@ -1,6 +1,6 @@
 use super::{Pattern, Var};
 use crate::UserError;
-use crate::config::file::FileAction;
+use crate::config::file::{ActionType, FileAction};
 
 /// Actions are executed when receiving a command.
 #[derive(Debug, PartialEq)]
@@ -14,7 +14,6 @@ impl TryFrom<FileAction> for Action {
   type Error = UserError;
 
   fn try_from(value: FileAction) -> Result<Self, Self::Error> {
-    let action_type = value.r#type.to_ascii_lowercase();
     let file_vars = value.vars.unwrap_or_default();
     let mut vars: Vec<Var> = Vec::with_capacity(file_vars.len());
     if value.run.is_empty() {
@@ -23,7 +22,7 @@ impl TryFrom<FileAction> for Action {
     for file_var in file_vars {
       vars.push(Var::try_from(file_var)?);
     }
-    if &action_type == "testall" {
+    if value.r#type == ActionType::TestAll {
       return Ok(Action {
         pattern: Pattern::TestAll,
         run: value.run,
@@ -40,21 +39,21 @@ impl TryFrom<FileAction> for Action {
       pattern: files,
       err: err.to_string(),
     })?;
-    if &action_type == "testfile" {
+    if value.r#type == ActionType::TestFile {
       return Ok(Action {
         pattern: Pattern::TestFile { files: pattern },
         run: value.run,
         vars,
       });
     }
-    if &action_type == "testfileline" {
+    if value.r#type == ActionType::TestFileLine {
       return Ok(Action {
         pattern: Pattern::TestFileLine { files: pattern },
         run: value.run,
         vars,
       });
     }
-    Err(UserError::UnknownActionType { action_type })
+    Err(UserError::UnknownActionType { action_type: value.r#type })
   }
 }
 
@@ -65,13 +64,14 @@ mod tests {
 
     mod test_all {
       use super::super::super::FileAction;
+      use crate::config::file::ActionType;
       use crate::config::{Action, Pattern};
       use big_s::S;
 
       #[test]
       fn valid() {
         let file_action = FileAction {
-          r#type: S("testAll"),
+          r#type: ActionType::TestAll,
           files: None,
           run: S("make test"),
           vars: None,
@@ -89,7 +89,7 @@ mod tests {
       #[test]
       fn empty_run() {
         let file_action = FileAction {
-          r#type: S("testAll"),
+          r#type: ActionType::TestAll,
           files: None,
           run: S(""),
           vars: None,
@@ -102,14 +102,14 @@ mod tests {
 
     mod test_file {
       use super::super::super::FileAction;
-      use crate::config::file::FileVar;
+      use crate::config::file::{ActionType, FileVar};
       use crate::config::{Action, Pattern, Var, VarSource};
       use big_s::S;
 
       #[test]
       fn valid_simple() {
         let file_action = FileAction {
-          r#type: S("testFile"),
+          r#type: ActionType::TestFile,
           files: Some(S("**/*.rs")),
           run: S("cargo test"),
           vars: None,
@@ -129,7 +129,7 @@ mod tests {
       #[test]
       fn valid_with_vars() {
         let file_action = FileAction {
-          r#type: S("testFile"),
+          r#type: ActionType::TestFile,
           files: Some(S("**/*.rs")),
           run: S("cargo test {{ my_var }}"),
           vars: Some(vec![FileVar {
@@ -157,7 +157,7 @@ mod tests {
       #[test]
       fn missing_files() {
         let file_action = FileAction {
-          r#type: S("testFile"),
+          r#type: ActionType::TestFile,
           files: None,
           run: S("make test"),
           vars: None,
@@ -170,7 +170,7 @@ mod tests {
       #[test]
       fn empty_files() {
         let file_action = FileAction {
-          r#type: S("testFile"),
+          r#type: ActionType::TestFile,
           files: Some(S("")),
           run: S("make test"),
           vars: None,
@@ -183,7 +183,7 @@ mod tests {
       #[test]
       fn empty_run() {
         let file_action = FileAction {
-          r#type: S("testFile"),
+          r#type: ActionType::TestFile,
           files: Some(S("**/*.rs")),
           run: S(""),
           vars: None,
@@ -196,14 +196,14 @@ mod tests {
 
     mod test_function {
       use super::super::super::FileAction;
-      use crate::config::file::FileVar;
+      use crate::config::file::{ActionType, FileVar};
       use crate::config::{Action, Pattern, Var, VarSource};
       use big_s::S;
 
       #[test]
       fn valid_simple() {
         let file_action = FileAction {
-          r#type: S("testFileLine"),
+          r#type: ActionType::TestFileLine,
           files: Some(S("**/*.rs")),
           run: S("cargo test"),
           vars: None,
@@ -223,7 +223,7 @@ mod tests {
       #[test]
       fn valid_with_vars() {
         let file_action = FileAction {
-          r#type: S("testFileLine"),
+          r#type: ActionType::TestFileLine,
           files: Some(S("**/*.rs")),
           run: S("cargo test {{ my_var }}"),
           vars: Some(vec![FileVar {
@@ -251,7 +251,7 @@ mod tests {
       #[test]
       fn missing_files() {
         let file_action = FileAction {
-          r#type: S("testFileLine"),
+          r#type: ActionType::TestFileLine,
           files: None,
           run: S("make test"),
           vars: None,
@@ -264,7 +264,7 @@ mod tests {
       #[test]
       fn empty_files() {
         let file_action = FileAction {
-          r#type: S("testFileLine"),
+          r#type: ActionType::TestFileLine,
           files: Some(S("")),
           run: S("make test"),
           vars: None,
@@ -277,7 +277,7 @@ mod tests {
       #[test]
       fn empty_run() {
         let file_action = FileAction {
-          r#type: S("testFile"),
+          r#type: ActionType::TestFileLine,
           files: Some(S("**/*.rs")),
           run: S(""),
           vars: None,

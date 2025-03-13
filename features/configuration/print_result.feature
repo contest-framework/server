@@ -6,14 +6,14 @@ Feature: configuring textual output of the test result
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ]
       }
       """
     And Contest is running
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       executing: echo running all tests
@@ -27,7 +27,7 @@ Feature: configuring textual output of the test result
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ],
@@ -39,13 +39,13 @@ Feature: configuring textual output of the test result
       }
       """
     And Contest is running
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       executing: echo running all tests
       running all tests
       """
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       executing: echo running all tests
@@ -58,7 +58,7 @@ Feature: configuring textual output of the test result
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ],
@@ -70,7 +70,7 @@ Feature: configuring textual output of the test result
       }
       """
     And Contest is running
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       executing: echo running all tests

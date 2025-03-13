@@ -21,12 +21,12 @@ Here is an example **.contest.json** file:
   "actions": [
     {
       "comment": "run all tests",
-      "type": "testAll",
+      "type": "test-all",
       "run": "make test"
     },
     {
       "comment": "JavaScript unit tests",
-      "type": "testFile",
+      "type": "test-file",
       "filename": "**/*.test.js",
       "line": "*",
       "run": "node --test {{filename}}"

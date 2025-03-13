@@ -6,7 +6,7 @@ Feature: run all tests
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ]
@@ -15,7 +15,7 @@ Feature: run all tests
     And Contest is running
 
   Scenario: receiving a valid command
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       executing: echo running all tests

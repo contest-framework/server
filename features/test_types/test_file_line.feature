@@ -6,7 +6,7 @@ Feature: test only a specific function
       {
         "actions": [
           {
-            "type": "testFileLine",
+            "type": "test-file-line",
             "files": "**/*.ts",
             "run": "echo testing file {{file}}:{{line}}"
           }
@@ -16,7 +16,7 @@ Feature: test only a specific function
     And Contest is running
 
   Scenario: receiving a matching file and location
-    When receiving the command '{ "command": "testFileLine", "file": "foo.ts", "line": 23 }'
+    When receiving the command '{ "command": "test-file-line", "file": "foo.ts", "line": 23 }'
     Then it prints
       """
       executing: echo testing file foo.ts:23
@@ -24,23 +24,23 @@ Feature: test only a specific function
       """
 
   Scenario: receiving a matching file and no location
-    When receiving the command '{ "command": "testFileLine", "file": "foo.ts" }'
+    When receiving the command '{ "command": "test-file-line", "file": "foo.ts" }'
     Then it fails with this output
       """
-Error: invalid trigger received: { "command": "testFileLine", "file": "foo.ts" }
+Error: invalid trigger received: { "command": "test-file-line", "file": "foo.ts" }
 
 missing "line" field
       """
 
   Scenario: receiving a mismatching file
-    When receiving the command '{ "command": "testFileLine", "file": "foo.go", "line": 23 }'
+    When receiving the command '{ "command": "test-file-line", "file": "foo.go", "line": 23 }'
     Then it prints
       """
-      Error: cannot determine command for trigger: testFileLine foo.go:23
+      Error: cannot determine command for trigger: test-file-line foo.go:23
       Please make sure that this action is listed in your configuration file
       """
     # ensure the server is still running and functional
-    When receiving the command '{ "command": "testFileLine", "file": "foo.ts", "line": 23 }'
+    When receiving the command '{ "command": "test-file-line", "file": "foo.ts", "line": 23 }'
     Then it prints
       """
       executing: echo testing file foo.ts:23
