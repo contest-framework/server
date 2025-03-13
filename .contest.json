@@ -3,13 +3,13 @@
   "actions": [
     {
       "comment": "all tests",
-      "type": "testAll",
+      "type": "test-all",
       "run": "make test"
     },
 
     {
       "comment": "Rust unit tests",
-      "type": "testFile",
+      "type": "test-file",
       "files": "**/*.rs",
       "vars": [
         {
@@ -21,7 +21,7 @@
       "run": "cargo test {{file_without_ext}}"
     },
     {
-      "type": "testFileLine",
+      "type": "test-file-line",
       "files": "**/*.rs",
       "vars": [
         {
@@ -35,7 +35,7 @@
 
     {
       "comment": "end-to-end tests",
-      "type": "testFileLine",
+      "type": "test-file-line",
       "files": "**/*.feature",
       "vars": [
         {

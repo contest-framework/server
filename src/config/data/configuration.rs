@@ -24,16 +24,16 @@ impl Configuration {
   "$schema": "https://raw.githubusercontent.com/contest-framework/server/refs/heads/main/documentation/schema.json",
   "actions": [
     {
-      "type": "testAll",
+      "type": "test-all",
       "run": "echo test all files"
     },
     {
-      "type": "testFile",
+      "type": "test-file",
       "file": "**/*.ext",
       "run": "echo testing file {{file}}"
     },
     {
-      "type": "testFileLine",
+      "type": "test-file-line",
       "file": "**/*.ext",
       "run": "echo testing file {{file}} at line {{line}}"
     }
@@ -141,7 +141,7 @@ fn format_run(action: &Action, trigger: &Trigger) -> Result<String> {
 mod tests {
 
   mod try_from {
-    use crate::config::file::{FileAction, FileConfiguration};
+    use crate::config::file::{ActionType, FileAction, FileConfiguration};
     use crate::config::{Action, Configuration, Options, Pattern};
     use big_s::S;
 
@@ -149,7 +149,7 @@ mod tests {
     fn simple() {
       let file_config = FileConfiguration {
         actions: vec![FileAction {
-          r#type: S("testFile"),
+          r#type: ActionType::TestFile,
           files: Some(S("*.rs")),
           run: S("make test"),
           vars: None,

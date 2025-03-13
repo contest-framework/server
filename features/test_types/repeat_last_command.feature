@@ -6,7 +6,7 @@ Feature: repeat the last command
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ]
@@ -15,7 +15,7 @@ Feature: repeat the last command
     And Contest is running
 
   Scenario: repeating the last command
-    When receiving the command '{ "command": "testAll" }'
+    When receiving the command '{ "command": "test-all" }'
     Then it prints
       """
       executing: echo running all tests

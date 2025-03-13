@@ -6,7 +6,7 @@ Feature: run all tests
       {
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo running all tests"
           }
         ]

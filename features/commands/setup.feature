@@ -12,16 +12,16 @@ Feature: create example config file as part of setup
         "$schema": "https://raw.githubusercontent.com/contest-framework/server/refs/heads/main/documentation/schema.json",
         "actions": [
           {
-            "type": "testAll",
+            "type": "test-all",
             "run": "echo test all files"
           },
           {
-            "type": "testFile",
+            "type": "test-file",
             "file": "**/*.ext",
             "run": "echo testing file {{file}}"
           },
           {
-            "type": "testFileLine",
+            "type": "test-file-line",
             "file": "**/*.ext",
             "run": "echo testing file {{file}} at line {{line}}"
           }
