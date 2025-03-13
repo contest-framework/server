@@ -6,6 +6,7 @@ Feature: create example config file as part of setup
     And it creates file ".contest.json" with content
       """
       {
+        "$schema": "https://raw.githubusercontent.com/contest-framework/server/refs/heads/main/schema.json",
         "actions": [
           {
             "type": "testAll",

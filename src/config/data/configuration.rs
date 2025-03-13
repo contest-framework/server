@@ -21,6 +21,7 @@ impl Configuration {
   // creates an example config file on disk
   pub fn create() -> Result<()> {
     let example_content = r#"{
+  "$schema": "https://raw.githubusercontent.com/contest-framework/server/refs/heads/main/schema.json",
   "actions": [
     {
       "type": "testAll",
