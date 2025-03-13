@@ -39,9 +39,9 @@ pub enum ActionType {
 impl Display for ActionType {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     f.write_str(match self {
-      ActionType::TestAll => "test all",
-      ActionType::TestFile => "test file",
-      ActionType::TestFileLine => "test file at line",
+      ActionType::TestAll => "test-all",
+      ActionType::TestFile => "test-file",
+      ActionType::TestFileLine => "test-file-line",
     })
   }
 }
