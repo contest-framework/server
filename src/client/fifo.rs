@@ -20,8 +20,8 @@ impl Fifo {
   fn create(&self) -> Result<()> {
     match nix::unistd::mkfifo(&self.filepath, nix::sys::stat::Mode::S_IRWXU) {
       Ok(()) => Ok(()),
-      Err(err) => match err.as_errno() {
-        Some(nix::errno::Errno::EEXIST) => Err(UserError::FifoAlreadyExists { path: self.path_str() }),
+      Err(err) => match err {
+        nix::errno::Errno::EEXIST => Err(UserError::FifoAlreadyExists { path: self.path_str() }),
         _ => Err(UserError::FifoCannotCreate {
           path: self.filepath.to_string_lossy().to_string(),
           err: err.to_string(),
