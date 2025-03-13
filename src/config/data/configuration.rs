@@ -51,7 +51,9 @@ impl Configuration {
     }
   }
 }"#;
-    fs::write(JSON_PATH, example_content).map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })
+    fs::write(JSON_PATH, example_content).map_err(|e| UserError::CannotCreateConfigFile { err: e.to_string() })?;
+    println!("Created config file \"{JSON_PATH}\"");
+    Ok(())
   }
 
   pub fn get_command(&self, trigger: &Trigger, last_command: &mut Option<String>) -> Result<String> {

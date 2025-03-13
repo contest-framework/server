@@ -2,7 +2,10 @@ Feature: create example config file as part of setup
 
   Scenario:
     When I run "contest setup"
-    Then it exits with no output
+    Then it exits with this output
+      """
+      Created config file ".contest.json"
+      """
     And it creates file ".contest.json" with content
       """
       {
