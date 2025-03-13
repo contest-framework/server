@@ -6,5 +6,5 @@ use std::fs;
 fn export_json_schema() {
   let schema = schema_for!(FileConfiguration);
   let text = serde_json::to_string_pretty(&schema).unwrap();
-  fs::write("schema.json", text).unwrap();
+  fs::write("documentation/schema.json", text).unwrap();
 }
