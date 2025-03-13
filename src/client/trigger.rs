@@ -20,7 +20,7 @@ impl Display for Trigger {
       Trigger::TestAll => f.write_str("test-all"),
       Trigger::TestFile { file } => write!(f, "test-file {file}"),
       Trigger::TestFileLine { file, line } => write!(f, "test-file-line {file}:{line}"),
-      Trigger::CustomCommand { run } => write!(f, "customCommand {run}"),
+      Trigger::CustomCommand { run } => write!(f, "custom-command {run}"),
       Trigger::RepeatLastTest => f.write_str("repeatTest"),
       Trigger::Quit => f.write_str("quit"),
     }
@@ -34,15 +34,15 @@ impl TryFrom<FifoTrigger> for Trigger {
     match fifo.data.command.to_ascii_lowercase().as_str() {
       "test-all" => Ok(Trigger::TestAll),
       "repeattest" => Ok(Trigger::RepeatLastTest),
-      "customcommand" => match fifo.data.run {
+      "custom-command" => match fifo.data.run {
         Some(run) => Ok(Trigger::CustomCommand { run }),
         None => Err(UserError::MissingRunInTrigger { original: fifo.original_line }),
       },
-      "testfile" => match fifo.data.file {
+      "test-file" => match fifo.data.file {
         Some(file) => Ok(Trigger::TestFile { file }),
         None => Err(UserError::MissingFileInTrigger { original: fifo.original_line }),
       },
-      "testfileline" => match (fifo.data.file, fifo.data.line) {
+      "test-file-line" => match (fifo.data.file, fifo.data.line) {
         (Some(file), Some(line)) => Ok(Trigger::TestFileLine { file, line }),
         (None, Some(_)) => Err(UserError::MissingFileInTrigger { original: fifo.original_line }),
         (Some(_), None) => Err(UserError::MissingLineInTrigger { original: fifo.original_line }),
@@ -107,7 +107,7 @@ mod tests {
       fn valid() {
         let fifo_data = FifoTrigger {
           data: FifoTriggerData {
-            command: S("customCommand"),
+            command: S("custom-command"),
             run: Some(S("echo hello")),
             ..FifoTriggerData::default()
           },
@@ -122,7 +122,7 @@ mod tests {
       fn missing_run() {
         let fifo_data = FifoTrigger {
           data: FifoTriggerData {
-            command: S("customCommand"),
+            command: S("custom-command"),
             run: None,
             ..FifoTriggerData::default()
           },

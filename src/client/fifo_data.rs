@@ -63,11 +63,11 @@ mod tests {
 
       #[test]
       fn valid() {
-        let give = S(r#"{ "command": "customCommand", "run": "echo hello" }"#);
+        let give = S(r#"{ "command": "custom-command", "run": "echo hello" }"#);
         let have = FifoTrigger::parse(give.clone()).unwrap();
         let want = FifoTrigger {
           data: FifoTriggerData {
-            command: S("customCommand"),
+            command: S("custom-command"),
             run: Some(S("echo hello")),
             ..FifoTriggerData::default()
           },
@@ -78,11 +78,11 @@ mod tests {
 
       #[test]
       fn no_run() {
-        let give = S(r#"{ "command": "customCommand" }"#);
+        let give = S(r#"{ "command": "custom-command" }"#);
         let have = FifoTrigger::parse(give.clone()).unwrap();
         let want = FifoTrigger {
           data: FifoTriggerData {
-            command: S("customCommand"),
+            command: S("custom-command"),
             ..FifoTriggerData::default()
           },
           original_line: give,
