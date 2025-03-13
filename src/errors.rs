@@ -1,8 +1,7 @@
 //! error types used in this app
 
-use big_s::S;
-
 use crate::config::file::ActionType;
+use big_s::S;
 
 /// The possible errors that the user can cause and needs to be notified about.
 #[derive(Debug, Eq, PartialEq)]

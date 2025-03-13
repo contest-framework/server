@@ -1,10 +1,9 @@
 //! data structures as they are in the file
 
-use std::fmt::Display;
-
 use crate::config::VarSource;
 use schemars::JsonSchema;
 use serde::Deserialize;
+use std::fmt::Display;
 
 /// configuration data for <https://github.com/contest-framework/server>
 #[derive(Deserialize, JsonSchema)]
