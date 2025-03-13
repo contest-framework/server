@@ -69,10 +69,10 @@
       }
     },
     "FileAfterRun": {
-      "description": "low-level, unvalidated `AfterRun` data exactly how it is stored in the config file",
       "type": "object",
       "properties": {
         "indicatorLines": {
+          "description": "how many indicator lines (red or green) to print after a test run",
           "type": [
             "integer",
             "null"
@@ -81,6 +81,7 @@
           "minimum": 0.0
         },
         "newlines": {
+          "description": "how many newlines to print after a test run",
           "type": [
             "integer",
             "null"
@@ -89,6 +90,7 @@
           "minimum": 0.0
         },
         "printResult": {
+          "description": "whether to print \"SUCCESS\" or \"FAILED\" after a test run",
           "type": [
             "boolean",
             "null"
@@ -97,16 +99,17 @@
       }
     },
     "FileBeforeRun": {
-      "description": "low-level, unvalidated `BeforeRun` data exactly how it is stored in the config file",
       "type": "object",
       "properties": {
         "clearScreen": {
+          "description": "whether to clear the screen before a test run",
           "type": [
             "boolean",
             "null"
           ]
         },
         "newlines": {
+          "description": "how many newlines to print before a test run",
           "type": [
             "integer",
             "null"
@@ -117,10 +120,10 @@
       }
     },
     "FileOptions": {
-      "description": "low-level, unvalidated `Options` data exactly how it is stored in the config file",
       "type": "object",
       "properties": {
         "afterRun": {
+          "description": "configure behavior after Contest runs a test",
           "anyOf": [
             {
               "$ref": "#/definitions/FileAfterRun"
@@ -131,6 +134,7 @@
           ]
         },
         "beforeRun": {
+          "description": "configure behavior before Contest runs a test",
           "anyOf": [
             {
               "$ref": "#/definitions/FileBeforeRun"

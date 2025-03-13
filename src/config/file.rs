@@ -38,27 +38,31 @@ pub struct FileVar {
   pub filter: String,
 }
 
-/// low-level, unvalidated `Options` data exactly how it is stored in the config file
 #[derive(Default, Deserialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct FileOptions {
+  /// configure behavior before Contest runs a test
   pub before_run: Option<FileBeforeRun>,
+  /// configure behavior after Contest runs a test
   pub after_run: Option<FileAfterRun>,
 }
 
-/// low-level, unvalidated `BeforeRun` data exactly how it is stored in the config file
 #[derive(Default, Deserialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct FileBeforeRun {
+  /// whether to clear the screen before a test run
   pub clear_screen: Option<bool>,
+  /// how many newlines to print before a test run
   pub newlines: Option<u8>,
 }
 
-/// low-level, unvalidated `AfterRun` data exactly how it is stored in the config file
 #[derive(Default, Deserialize, Eq, JsonSchema, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FileAfterRun {
+  /// how many newlines to print after a test run
   pub newlines: Option<u8>,
+  /// how many indicator lines (red or green) to print after a test run
   pub indicator_lines: Option<u8>,
+  /// whether to print "SUCCESS" or "FAILED" after a test run
   pub print_result: Option<bool>,
 }
