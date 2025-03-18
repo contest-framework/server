@@ -99,13 +99,11 @@ fn run_command(trigger: &Trigger, configuration: &config::Configuration, last_co
   };
   last_command.replace(command.clone());
   let result = subshell::run(&command)?;
-  match &result {
-    Outcome::TestPass => {
-      if configuration.options.after_run.print_result {
-        println!("SUCCESS");
-      }
+  if configuration.options.after_run.print_result {
+    match &result {
+      Outcome::TestPass => println!("SUCCESS"),
+      Outcome::TestFail => println!("FAILED"),
     }
-    Outcome::TestFail => println!("FAILED"),
   }
   Ok(result)
 }
