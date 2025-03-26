@@ -10,6 +10,7 @@ use tokio::process::Command;
 pub async fn create_file(path: &Path, content: impl AsRef<str>) {
   let mut file = File::create(path).await.unwrap();
   file.write_all(content.as_ref().as_bytes()).await.unwrap();
+  file.flush().await.unwrap()
 }
 
 pub fn fifo_path(workspace: &Path) -> PathBuf {
