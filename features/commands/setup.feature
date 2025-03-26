@@ -28,14 +28,14 @@ Feature: create example config file as part of setup
         ],
         "options": {
           "beforeRun": {
-            "clearScreen": false,
-            "newlines": 2
+            "clearScreen": true,
+            "newlines": 0
           },
           "afterRun": {
             "newlines": 1,
-            "indicatorLines": 2,
+            "indicatorLines": 3,
             "indicatorBackground": true,
-            "printResult": true
+            "printResult": false
           }
         }
       }
