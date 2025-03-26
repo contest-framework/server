@@ -22,7 +22,7 @@ help:   # shows all available Make commands
 	cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v '.SILENT' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
 install:  # compiles and installs the binary on this computer
-	cargo install --path .
+	cargo install --locked --path .
 
 lint: tools/rta@${RUN_THAT_APP_VERSION}  # runs all linters
 	cargo clippy --all-targets --all-features
