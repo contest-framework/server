@@ -10,6 +10,9 @@ cuke:  # runs the end-to-end tests
 cukethis:  # runs only end-to-end tests with a @this tag
 	cargo test --test cucumber -- -t @this
 
+doc:  # verifies the documentation
+	tools/rta --optional node node_modules/.bin/text-runner
+
 docs:  # shows the RustDoc in a browser
 	cargo doc --open
 
@@ -40,7 +43,7 @@ test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
 	tools/rta dprint fmt
-	tools/rta --optional node node_modules/.bin/text-runner
+	make --no-print-dir doc
 
 unit:  # runs the unit tests
 	cargo test
