@@ -6,7 +6,6 @@
     "npm-check-updates": "17.1.16",
     "text-runner": "7.1.2",
     "textrun-make": "0.3.1",
-    "textrun-repo": "0.3.1",
-    "typescript": "5.8.2"
+    "textrun-repo": "0.3.1"
   }
 }

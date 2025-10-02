@@ -34,7 +34,7 @@ pub fn listen(config: &Configuration, debug: bool) -> Result<()> {
   for signal in receiver {
     match signal {
       channel::Signal::ReceivedLine(line) => match run_with_decoration(line, config, debug, &mut last_command)? {
-        RunOutcome::ContinueTesting => continue,
+        RunOutcome::ContinueTesting => {}
         RunOutcome::Quit => break,
       },
       channel::Signal::Exit => break,
@@ -69,7 +69,7 @@ pub fn run_with_decoration(text: String, config: &config::Configuration, debug: 
     let color = cli::error_color(&success);
     let _ = stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(color)));
     let text: String = "█".repeat(terminal_width.0 as usize);
-    writeln!(&mut stdout, "{text}").unwrap();
+    let _ = writeln!(&mut stdout, "{text}");
     let _ = stdout.reset(); // we really don't care about being unable to reset colors here
   }
   Ok(RunOutcome::ContinueTesting)

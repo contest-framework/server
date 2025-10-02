@@ -1,5 +1,5 @@
 # dev tooling and versions
-RUN_THAT_APP_VERSION = 0.11.0
+RUN_THAT_APP_VERSION = 0.18.0
 
 build:  # performs a test build
 	cargo check
@@ -9,6 +9,9 @@ cuke:  # runs the end-to-end tests
 
 cukethis:  # runs only end-to-end tests with a @this tag
 	cargo test --test cucumber -- -t @this
+
+doc: node_modules  # verifies the documentation
+	tools/rta --optional node node_modules/.bin/text-runner
 
 docs:  # shows the RustDoc in a browser
 	cargo doc --open
@@ -29,6 +32,7 @@ lint: tools/rta@${RUN_THAT_APP_VERSION}  # runs all linters
 	tools/rta actionlint
 
 setup:  # prepares this codebase for development
+	rustup component add clippy
 	rustup toolchain add nightly
 	rustup component add rustfmt --toolchain nightly
 	npm install
@@ -40,7 +44,7 @@ test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
 	tools/rta dprint fmt
-	npm exec -- text-runner
+	make --no-print-dir doc
 
 unit:  # runs the unit tests
 	cargo test
@@ -58,6 +62,10 @@ tools/rta@${RUN_THAT_APP_VERSION}:
 	@(cd tools && curl https://raw.githubusercontent.com/kevgo/run-that-app/main/download.sh | sh)
 	@mv tools/rta tools/rta@${RUN_THAT_APP_VERSION}
 	@ln -s rta@${RUN_THAT_APP_VERSION} tools/rta
+
+node_modules: package-lock.json tools/rta@${RUN_THAT_APP_VERSION}
+	tools/rta npm ci
+	touch node_modules  # update timestamp of the node_modules folder so that Make doesn't re-install it on every command
 
 .SILENT:
 .DEFAULT_GOAL := help

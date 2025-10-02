@@ -51,7 +51,7 @@ impl Fifo {
               .send(Signal::ReceivedLine(text))
               .unwrap_or_else(|err| println!("communication channel failure: {err}")),
             Err(err) => cli::exit(&err.to_string()),
-          };
+          }
         }
       }
     });

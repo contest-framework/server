@@ -77,7 +77,7 @@ impl UserError {
       UserError::MissingFilesInTestFile { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "files" field"#)),
       UserError::MissingLineInTrigger { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "line" field"#)),
       UserError::MissingRunInTrigger { original } => (format!("invalid trigger received: {original}"), Some(r#"missing "run" field"#)),
-      UserError::NoCommandToRepeat {} => (S("No command to repeat found"), Some("You must submit a test command first before you can repeat it.")),
+      UserError::NoCommandToRepeat => (S("No command to repeat found"), Some("You must submit a test command first before you can repeat it.")),
       UserError::RunCommandNotFound { command } => (
         format!("test command to run not found: {command}"),
         Some("Please verify that the command is in the path or fix your config file."),
