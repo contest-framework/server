@@ -18,7 +18,7 @@ pub fn run(command: &str) -> Result<Outcome> {
     return Err(UserError::RunCommandIsEmpty);
   };
   match Command::new(cmd).args(args).status() {
-    Err(_) => Err(UserError::RunCommandNotFound { command: cmd.to_string() }),
+    Err(_) => Err(UserError::RunCommandNotFound { command: cmd.clone() }),
     Ok(exit_status) => {
       if exit_status.success() {
         Ok(Outcome::TestPass)
