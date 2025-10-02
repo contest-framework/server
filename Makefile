@@ -1,5 +1,5 @@
 # dev tooling and versions
-RUN_THAT_APP_VERSION = 0.11.0
+RUN_THAT_APP_VERSION = 0.18.0
 
 build:  # performs a test build
 	cargo check
@@ -40,7 +40,7 @@ test: tools/rta@${RUN_THAT_APP_VERSION}  # runs all automated tests
 	make --no-print-dir cuke
 	cargo +nightly fmt -- --check
 	tools/rta dprint fmt
-	npm exec -- text-runner
+	tools/rta --optional node node_modules/.bin/text-runner
 
 unit:  # runs the unit tests
 	cargo test
