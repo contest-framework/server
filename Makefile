@@ -32,6 +32,7 @@ lint: tools/rta@${RUN_THAT_APP_VERSION}  # runs all linters
 	tools/rta actionlint
 
 setup:  # prepares this codebase for development
+	rustup component add clippy
 	rustup toolchain add nightly
 	rustup component add rustfmt --toolchain nightly
 	npm install
