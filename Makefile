@@ -10,7 +10,7 @@ cuke:  # runs the end-to-end tests
 cukethis:  # runs only end-to-end tests with a @this tag
 	cargo test --test cucumber -- -t @this
 
-doc:  # verifies the documentation
+doc: node_modules  # verifies the documentation
 	tools/rta --optional node node_modules/.bin/text-runner
 
 docs:  # shows the RustDoc in a browser
@@ -61,6 +61,10 @@ tools/rta@${RUN_THAT_APP_VERSION}:
 	@(cd tools && curl https://raw.githubusercontent.com/kevgo/run-that-app/main/download.sh | sh)
 	@mv tools/rta tools/rta@${RUN_THAT_APP_VERSION}
 	@ln -s rta@${RUN_THAT_APP_VERSION} tools/rta
+
+node_modules: package-lock.json tools/rta@${RUN_THAT_APP_VERSION}
+	tools/rta npm ci
+	touch node_modules  # update timestamp of the node_modules folder so that Make doesn't re-install it on every command
 
 .SILENT:
 .DEFAULT_GOAL := help
