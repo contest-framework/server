@@ -28,10 +28,10 @@ jobs:
         include:
           - filename: contest_linux_arm_64
             target: aarch64-unknown-linux-gnu
-            os: ubuntu-20.04
+            os: ubuntu-22.04
           - filename: contest_linux_intel_64
             target: x86_64-unknown-linux-gnu
-            os: ubuntu-20.04
+            os: ubuntu-22.04
           - filename: contest_macos_arm_64
             target: aarch64-apple-darwin
             os: macos-latest
