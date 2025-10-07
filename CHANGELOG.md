@@ -1,5 +1,14 @@
 # Contest Server Changelog
 
+#### 0.4.0
+
+- the config file is proper JSON now
+- renames the "setup" command to "init"
+- improve JSON-Schema for config file
+- better defaults for config settings
+- improve config file scaffold
+- improve printing of results
+
 #### 0.3.1
 
 - the generated example configuration now uses globs instead of regular
