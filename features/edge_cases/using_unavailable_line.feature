@@ -51,7 +51,7 @@ Feature: using unavailable line
     When receiving the command '{ "command": "test-file", "file": "test.rs" }'
     Then it fails with this output
       """
-Error: Line not available
+      Error: Line not available
 
-To use the current line in a variable, you need to use the "test-file-line" action type that provides this data.
+      To use the current line in a variable, you need to use the "test-file-line" action type that provides this data.
       """

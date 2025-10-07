@@ -20,6 +20,7 @@ fix: tools/rta@${RUN_THAT_APP_VERSION}  # auto-corrects all issues
 	tools/rta dprint fmt
 	cargo +nightly fmt
 	cargo +nightly fix --allow-dirty
+	tools/rta ghokin fmt replace features/
 
 help:   # shows all available Make commands
 	cat Makefile | grep '^[^ ]*:' | grep -v '.PHONY' | grep -v '.SILENT' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
