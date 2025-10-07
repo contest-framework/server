@@ -2,10 +2,10 @@
   "description": "Provides Node-based development tools",
   "private": true,
   "devDependencies": {
-    "@types/node": "22.13.13",
-    "npm-check-updates": "17.1.16",
-    "text-runner": "7.1.2",
-    "textrun-make": "0.3.1",
-    "textrun-repo": "0.3.1"
+    "@types/node": "24.7.0",
+    "npm-check-updates": "19.0.0",
+    "text-runner": "7.2.0",
+    "textrun-make": "0.4.0",
+    "textrun-repo": "0.4.0"
   }
 }
