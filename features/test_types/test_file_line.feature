@@ -27,9 +27,9 @@ Feature: test only a specific function
     When receiving the command '{ "command": "test-file-line", "file": "foo.ts" }'
     Then it fails with this output
       """
-Error: invalid trigger received: { "command": "test-file-line", "file": "foo.ts" }
+      Error: invalid trigger received: { "command": "test-file-line", "file": "foo.ts" }
 
-missing "line" field
+      missing "line" field
       """
 
   Scenario: receiving a mismatching file
