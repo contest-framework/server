@@ -29,6 +29,6 @@ fn main_with_result() -> Result<()> {
       let _ = run_with_decoration(trigger, &config, false, &mut last_command)?;
       Ok(())
     }
-    Command::Setup => Configuration::create(),
+    Command::Init => Configuration::create(),
   }
 }

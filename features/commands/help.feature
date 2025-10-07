@@ -11,7 +11,7 @@ Feature: display help
       Commands:
         debug  Print the received triggers from the pipe
         run    Run the given client-side trigger and exit
-        setup  Create an example configuration file
+        init   Create an example configuration file
         start  Execute the received triggers from the pipe
         help   Print this message or the help of the given subcommand(s)
 

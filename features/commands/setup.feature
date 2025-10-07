@@ -1,7 +1,7 @@
-Feature: create example config file as part of setup
+Feature: create example config file as part of init
 
   Scenario:
-    When I run "contest setup"
+    When I run "contest init"
     Then it exits with this output
       """
       Created config file ".contest.json"
