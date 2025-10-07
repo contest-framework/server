@@ -59,7 +59,7 @@ Feature: define a custom variable with a regex match of the file content
     When receiving the command '{ "command": "test-file-line", "file": "foo.rs" }'
     Then it fails with this output
       """
-Error: invalid trigger received: { "command": "test-file-line", "file": "foo.rs" }
+      Error: invalid trigger received: { "command": "test-file-line", "file": "foo.rs" }
 
-missing "line" field
+      missing "line" field
       """
