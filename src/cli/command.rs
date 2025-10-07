@@ -17,7 +17,7 @@ pub enum Command {
     trigger: String,
   },
   /// Create an example configuration file
-  Setup,
+  Init,
   /// Execute the received triggers from the pipe
   Start,
 }
