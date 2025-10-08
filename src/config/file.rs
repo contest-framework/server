@@ -2,12 +2,12 @@
 
 use crate::config::VarSource;
 use schemars::JsonSchema;
+use schemars::schema::{InstanceType, NumberValidation, SchemaObject};
 use serde::Deserialize;
 use std::fmt::Display;
 
 /// Schema helper for Option<usize> that generates standard JSON Schema integer without "format": "uint"
 fn option_usize_schema(_gen: &mut schemars::r#gen::SchemaGenerator) -> schemars::schema::Schema {
-  use schemars::schema::*;
   SchemaObject {
     instance_type: Some(vec![InstanceType::Integer, InstanceType::Null].into()),
     number: Some(Box::new(NumberValidation {
