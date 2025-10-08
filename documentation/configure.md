@@ -137,7 +137,7 @@ define your own.
 
 Running all unit tests in a Rust file is done via `cargo test <module name>`
 where `<module name>` is the filename without extension. Since Contest doesn't
-provide this, we create it ourselves:
+provide this value, we create it ourselves:
 
 ```json
 {
