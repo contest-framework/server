@@ -2,8 +2,8 @@ import Ajv from "ajv"
 import { readFile } from "node:fs/promises"
 import * as textRunner from "text-runner"
 
-export async function jsonSchema(action: textRunner.actions.Args) {
-  action.name("verify JSON schema")
+export async function verifyJSON(action: textRunner.actions.Args) {
+  action.name("verify JSON to conform to JSON-Schema")
 
   // Read and parse the schema file
   var schemaContent = await readFile("../documentation/schema.json", "utf-8")

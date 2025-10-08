@@ -19,7 +19,7 @@ which file is currently open in your editor.
 
 Example:
 
-<a type="json-schema">
+<a type="verify-json">
 
 ```json
 {
@@ -48,7 +48,7 @@ files end with `.test.js` and are run with: `mocha <file path>`.
 
 Here is how that configuration might look:
 
-<a type="json-schema">
+<a type="verify-json">
 
 ```json
 {
@@ -98,7 +98,7 @@ the cursor line number, allowing you to run a specific test within the file.
 
 Example:
 
-<a type="json-schema">
+<a type="verify-json">
 
 ```json
 {
@@ -124,7 +124,7 @@ typically mark it with `{ only: true }` and then run `node --test-only <file>`.
 
 You can still use the `test-file-line` action here:
 
-<a type="json-schema">
+<a type="verify-json">
 
 ```json
 {
@@ -155,7 +155,7 @@ Running all unit tests in a Rust file is done via `cargo test <module name>`
 where `<module name>` is the filename without extension. Since Contest doesn't
 provide this value, we create it ourselves:
 
-<a type="json-schema">
+<a type="verify-json">
 
 ```json
 {
@@ -198,7 +198,7 @@ To run a single Rust test, you'd do `cargo test <function name>` where
 `<function name>` is the name of the test function. Let's extract that name
 dynamically and call it `fn_name`:
 
-<a type="json-schema">
+<a type="verify-json">
 
 ```json
 {
