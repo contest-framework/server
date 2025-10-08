@@ -1,22 +1,23 @@
 # Contest Server Configuration
 
-Run <code type="subcommand">contest init</code> in the root directory of your
-codebase to generate Contest's configuration file
-(<code type="repo/existing-file">.contest.json</code>). This file tells the
-Contest server which actions it should perform when it receives messages from a
-Contest client.
+Run <code type="subcommand">contest init</code> in the root of your codebase to
+create Contest's configuration file,
+<code type="repo/existing-file">.contest.json</code>. This file tells the
+Contest server what to do when it receives messages from a Contest client.
 
-It consists of two main blocks:
+The configuration file has two main sections:
 
-- `actions` defines the activities that Contest executes for you
-- `options` contains configuration settings for Contest
+- `actions` defines what Contest should execute
+- `options` contains general configuration settings
 
-Let's look at the `actions` block first.
+Let's start at the `actions` section.
 
-## test-all action
+## "test-all" action
 
-The most simple action type is `test-all`. It executes the given command no
-matter which file is open in your editor. Here is an example:
+The simplest action type is `test-all`. It runs the given command regardless of
+which file is currently open in your editor.
+
+Example:
 
 ```json
 actions: [
@@ -27,20 +28,19 @@ actions: [
 ]
 ```
 
-When configured this way, when you choose `Contest: Test everything`, the
-Contest server executes `make test`.
+With this setup, when you trigger `Contest: Test everything` in your editor, the
+Contest server runs `make test`.
 
-## test-file action
+## "test-file" action
 
-The `test-file` action allows you to execute file-type specific tests.
+The `test-file` action lets you define how to test individual files, depending
+on their type.
 
-Assume we have a code base that contains Go and JavaScript. In Go, unit tests
-exist in files whose name ends in `_test.go`. We run them by executing
-`go test <file path>`. JavaScript unit tests exist in files whose name ends in
-`.test.js` and in our hypothetical codebase are run like this:
-`mocha <file path>`
+Imagine a project that includes both Go and JavaScript code. In Go, test files
+end with `_test.go` and are run with `go test <file path>`. In JavaScript, test
+files end with `.test.js` and are run with: `mocha <file path>`
 
-Here is the corresponding Contest configuration for this setup:
+Here how that configuration might look:
 
 ```json
 actions: [
@@ -60,26 +60,26 @@ actions: [
 ]
 ```
 
-- The `comment` field allows adding a human-friendly description of a block.
-  Contest ignores it.
-- The action `type` is now `test-file`, indicating that this action tests
-  individual files. This action type requires that you specify the files for
-  which this action applies in the `files` field.
-- The `files` field contains a glob pattern. If this glob pattern matches the
-  name of the file you have open in your editor, this action triggers.
-- The `run` field, as usual, contains the command to run. In this case, the
-  commend contains a placeholder`{{file}}` using
-  [mustache](https://mustache.github.io) syntax. Contest replaces it with the
-  built-in `file` variable, which contains the path of the file you have
+A few notes:
+
+- `comment` is an optional human-readable note, Contest ignores it.
+- `type: "test-file"` indicates that this action applies to specific files.
+- `files` defines a
+  [glob pattern](https://en.wikipedia.org/wiki/Glob_(programming)) to match file
+  paths. If the file you have open in your editor matches this pattern, Contest
+  runs the corresponding action.
+- `run` specifies the command to execute. You can use the `{{file}}`
+  placeholder, which Contest replaces with the path of the file you have
   currently open in your editor.
 
-With this configuration, if you have file `src/flux_test.go` open in your editor
-and trigger the `Contest: test this file` action in your editor, the Contest
-server will execute `go test src/flux_test.go`. But if you have file
-`scripts/flim.test.js` open and trigger the same action, the Contest server will
-execute `mocha scripts/flim.test.js`.
+With this setup:
 
-## test-file-line action
+- Opening `src/flux_test.go` in your editor and running
+  `Contest: test this file` executes `go test src/flux_test.go`.
+- Opening `scripts/flim.test.js` and running the same command executes
+  `mocha scripts/flim.test.js`.
+
+## "test-file-line" action
 
 The `test-file-line` action works similar to the `test-file` action, but the
 Contest client also sends the line that your cursor is currently at. This allows
