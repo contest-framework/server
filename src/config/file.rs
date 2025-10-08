@@ -72,16 +72,16 @@ pub struct FileBeforeRun {
   /// whether to clear the screen before a test run
   pub clear_screen: Option<bool>,
   /// how many newlines to print before a test run
-  pub newlines: Option<u8>,
+  pub newlines: Option<usize>,
 }
 
 #[derive(Default, Deserialize, Eq, JsonSchema, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct FileAfterRun {
   /// how many newlines to print after a test run
-  pub newlines: Option<u8>,
+  pub newlines: Option<usize>,
   /// how many indicator lines (red or green) to print after a test run
-  pub indicator_lines: Option<u8>,
+  pub indicator_lines: Option<usize>,
   /// whether to print "SUCCESS" or "FAILED" after a test run
   pub print_result: Option<bool>,
 }

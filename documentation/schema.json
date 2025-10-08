@@ -85,7 +85,7 @@
             "integer",
             "null"
           ],
-          "format": "uint8",
+          "format": "uint",
           "minimum": 0.0
         },
         "newlines": {
@@ -94,7 +94,7 @@
             "integer",
             "null"
           ],
-          "format": "uint8",
+          "format": "uint",
           "minimum": 0.0
         },
         "printResult": {
@@ -122,7 +122,7 @@
             "integer",
             "null"
           ],
-          "format": "uint8",
+          "format": "uint",
           "minimum": 0.0
         }
       }

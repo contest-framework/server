@@ -2,8 +2,8 @@ use crate::config::file::FileAfterRun;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct AfterRun {
-  pub newlines: u8,
-  pub indicator_lines: u8,
+  pub newlines: usize,
+  pub indicator_lines: usize,
   pub print_result: bool,
 }
 

@@ -19,6 +19,8 @@ which file is currently open in your editor.
 
 Example:
 
+<a type="json-schema">
+
 ```json
 {
   "actions": [
@@ -29,6 +31,8 @@ Example:
   ]
 }
 ```
+
+</a>
 
 With this setup, when you trigger `Contest: Test everything` in your editor, the
 Contest server runs `make test`.

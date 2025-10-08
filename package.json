@@ -3,6 +3,7 @@
   "private": true,
   "devDependencies": {
     "@types/node": "24.7.0",
+    "ajv": "8.17.1",
     "npm-check-updates": "19.0.0",
     "text-runner": "7.2.0",
     "textrun-make": "0.4.0",
