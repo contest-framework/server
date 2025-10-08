@@ -1,7 +1,7 @@
 Feature: define a custom variable with a regex match of the file content
 
   Background:
-    Given file ".contest.json" with content
+    Given file "contest.json" with content
       """
       {
         "actions": [
@@ -45,7 +45,7 @@ Feature: define a custom variable with a regex match of the file content
     Then it prints
       """
       Error: did not find pattern \bfn (\w+)\( in file foo.rs at line 1
-      This is defined in file .contest.json.
+      This is defined in file contest.json.
       """
     # ensure the server is still running and functional
     When receiving the command '{ "command": "test-file-line", "file": "foo.rs", "line": 3 }'

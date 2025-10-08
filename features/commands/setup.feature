@@ -4,9 +4,9 @@ Feature: create example config file as part of init
     When I run "contest init"
     Then it exits with this output
       """
-      Created config file ".contest.json"
+      Created config file "contest.json"
       """
-    And it creates file ".contest.json" with content
+    And it creates file "contest.json" with content
       """
       {
         "$schema": "https://raw.githubusercontent.com/contest-framework/server/refs/heads/main/documentation/schema.json",
