@@ -11,6 +11,8 @@ It consists of two main blocks:
 - `actions` defines the activities that Contest executes for you
 - `options` contains configuration settings for Contest
 
+Let's look at the `actions` block first.
+
 ## test-all action
 
 The most simple action type is `test-all`. It executes the given command no
@@ -25,31 +27,32 @@ actions: [
 ]
 ```
 
-When configured this way, if the Contest server receives the `test-all` command
-from a Contest client, it executes `make test`.
+When configured this way, when you choose `Contest: Test everything`, the
+Contest server executes `make test`.
 
 ## test-file action
 
-The `test-file` action allows you to execute tests specific to file types.
-Assuming we have a code base that contains Go and JavaScript.
+The `test-file` action allows you to execute file-type specific tests.
 
-In Go, unit tests exist in files whose name ends in `_test.go`. We run them by
-executing `go test <file path>`. JavaScript unit tests exist in files whose name
-ends in `.test.js` and are run like this: `mocha <file path>`
+Assume we have a code base that contains Go and JavaScript. In Go, unit tests
+exist in files whose name ends in `_test.go`. We run them by executing
+`go test <file path>`. JavaScript unit tests exist in files whose name ends in
+`.test.js` and in our hypothetical codebase are run like this:
+`mocha <file path>`
 
 Here is the corresponding Contest configuration for this setup:
 
 ```json
 actions: [
   {
-    "comment": "run the tests in the currently open Go test file",
+    "comment": "run all tests in the currently open Go test file",
     "type": "test-file",
     "files": "**/*_test.go",
     "run": "go test {{file}}"
   },
 
   {
-    "comment": "run the tests in the currently open JavaScript file",
+    "comment": "run all tests in the currently open JavaScript test file",
     "type": "test-file",
     "files": "**/*.test.js",
     "run": "mocha {{file}}"
@@ -57,26 +60,24 @@ actions: [
 ]
 ```
 
-Let's go through each field.
-
 - The `comment` field allows adding a human-friendly description of a block.
   Contest ignores it.
 - The action `type` is now `test-file`, indicating that this action tests
   individual files. This action type requires that you specify the files for
   which this action applies in the `files` field.
-- The `files` field contains a glob pattern that describes the files for which
-  this action triggers.
+- The `files` field contains a glob pattern. If this glob pattern matches the
+  name of the file you have open in your editor, this action triggers.
 - The `run` field, as usual, contains the command to run. In this case, the
   commend contains a placeholder`{{file}}` using
   [mustache](https://mustache.github.io) syntax. Contest replaces it with the
-  built-in `file` variable, which contains the file path received from the
-  Contest client.
+  built-in `file` variable, which contains the path of the file you have
+  currently open in your editor.
 
 With this configuration, if you have file `src/flux_test.go` open in your editor
 and trigger the `Contest: test this file` action in your editor, the Contest
 server will execute `go test src/flux_test.go`. But if you have file
-`scripts/flim.test.js` open and trigger the same action in your editor, the
-Contest server will execute `mocha scripts/flim.test.js`.
+`scripts/flim.test.js` open and trigger the same action, the Contest server will
+execute `mocha scripts/flim.test.js`.
 
 ## test-file-line action
 
