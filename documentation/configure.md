@@ -209,6 +209,6 @@ fn my_test() {
 }
 ```
 
-If in our editor the cursor is somewhere inside that function body, and we
+If in our editor the cursor is somewhere inside that function body, and you
 trigger `Contest: test this line in this file`, Contest will execute
 `cargo test my_test`.
