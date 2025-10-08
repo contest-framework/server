@@ -125,6 +125,8 @@ Now, to run a single test, you add `{ only: true }` to a test, trigger the
 If the built-in variables like `file` and `line` don't work, you can create your
 own variables.
 
+### refining existing variables
+
 For example, to run only the unit tests located in a Rust file, we would need to
 execute `cargo test {{module}}`. `module` is the name of the Rust module, which
 is the same as the filename without extension. Contest doesn't provide a
@@ -159,3 +161,18 @@ i.e. the basename of the path without the extension.
 
 Now, when the client sends the command `test-file` with `src/parser/lexer.rs`,
 Contest executes `cargo test lexer`.
+
+### extracting parts of the source code file content
+
+    {
+      "type": "test-file-line",
+      "files": "**/*.rs",
+      "vars": [
+        {
+          "name": "test_name",
+          "source": "currentOrAboveLineContent",
+          "filter": "\\bfn (\\w+)\\("
+        }
+      ],
+      "run": "cargo test {{test_name}}"
+    },
