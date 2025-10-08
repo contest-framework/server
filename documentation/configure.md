@@ -20,12 +20,14 @@ which file is currently open in your editor.
 Example:
 
 ```json
-actions: [
-  {
-    "type": "test-all",
-    "run": "make test"
-  }
-]
+{
+  "actions": [
+    {
+      "type": "test-all",
+      "run": "make test"
+    }
+  ]
+}
 ```
 
 With this setup, when you trigger `Contest: Test everything` in your editor, the
@@ -43,21 +45,23 @@ files end with `.test.js` and are run with: `mocha <file path>`
 Here how that configuration might look:
 
 ```json
-actions: [
-  {
-    "comment": "run all tests in the currently open Go test file",
-    "type": "test-file",
-    "files": "**/*_test.go",
-    "run": "go test {{file}}"
-  },
+{
+  "actions": [
+    {
+      "comment": "run all tests in the currently open Go test file",
+      "type": "test-file",
+      "files": "**/*_test.go",
+      "run": "go test {{file}}"
+    },
 
-  {
-    "comment": "run all tests in the currently open JavaScript test file",
-    "type": "test-file",
-    "files": "**/*.test.js",
-    "run": "mocha {{file}}"
-  }
-]
+    {
+      "comment": "run all tests in the currently open JavaScript test file",
+      "type": "test-file",
+      "files": "**/*.test.js",
+      "run": "mocha {{file}}"
+    }
+  ]
+}
 ```
 
 A few notes:
@@ -87,14 +91,16 @@ the cursor line number, allowing you to run a specific test within the file.
 Example:
 
 ```json
-actions: [
-  {
-    "comment": "run the JavaScript test at the cursor",
-    "type": "test-file-line",
-    "files": "**/*.test.js",
-    "run": "mocha {{file}}:{{line}}"
-  }
-]
+{
+  "actions": [
+    {
+      "comment": "run the JavaScript test at the cursor",
+      "type": "test-file-line",
+      "files": "**/*.test.js",
+      "run": "mocha {{file}}:{{line}}"
+    }
+  ]
+}
 ```
 
 If your cursor is on line 7 of `scripts/flim.test.js` and you trigger
@@ -107,14 +113,16 @@ typically mark it with `{ only: true }` and then run `node --test-only <file>`.
 You can still use the `test-file-line` action here:
 
 ```json
-actions: [
-  {
-    "comment": "run the JavaScript test at the cursor",
-    "type": "test-file-line",
-    "files": "**/*.test.js",
-    "run": "node --test-only {{file}}"
-  }
-]
+{
+  "actions": [
+    {
+      "comment": "run the JavaScript test at the cursor",
+      "type": "test-file-line",
+      "files": "**/*.test.js",
+      "run": "node --test-only {{file}}"
+    }
+  ]
+}
 ```
 
 Now, when you add `{ only: true}` to a test and trigger
@@ -132,21 +140,23 @@ where `<module name>` is the filename without extension. Since Contest doesn't
 provide this, we create it ourselves:
 
 ```json
-actions: [
-  {
-    "comment": "all unit tests in a Rust file",
-    "type": "test-file",
-    "files": "**/*.rs",
-    "run": "cargo test {{file_without_ext}}"
-    "vars": [
-      {
-        "name": "file_without_ext",
-        "source": "file",
-        "filter": "([^/]+)\\.rs$"
-      }
-    ],
-  },
-]
+{
+  "actions": [
+    {
+      "comment": "all unit tests in a Rust file",
+      "type": "test-file",
+      "files": "**/*.rs",
+      "run": "cargo test {{file_without_ext}}",
+      "vars": [
+        {
+          "name": "file_without_ext",
+          "source": "file",
+          "filter": "([^/]+)\\.rs$"
+        }
+      ]
+    }
+  ]
+}
 ```
 
 Here is what happens:
