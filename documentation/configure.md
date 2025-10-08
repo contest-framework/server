@@ -48,6 +48,8 @@ files end with `.test.js` and are run with: `mocha <file path>`.
 
 Here is how that configuration might look:
 
+<a type="json-schema">
+
 ```json
 {
   "actions": [
@@ -67,6 +69,8 @@ Here is how that configuration might look:
   ]
 }
 ```
+
+</a>
 
 A few notes:
 
@@ -94,6 +98,8 @@ the cursor line number, allowing you to run a specific test within the file.
 
 Example:
 
+<a type="json-schema">
+
 ```json
 {
   "actions": [
@@ -107,6 +113,8 @@ Example:
 }
 ```
 
+</a>
+
 If your cursor is on line 7 of `scripts/flim.test.js` and you trigger
 `Contest: test this line in this file`, Contest runs `mocha scripts/flim.js:7`.
 
@@ -115,6 +123,8 @@ runner doesn't support running tests by line number. To run a single test, you
 typically mark it with `{ only: true }` and then run `node --test-only <file>`.
 
 You can still use the `test-file-line` action here:
+
+<a type="json-schema">
 
 ```json
 {
@@ -129,6 +139,8 @@ You can still use the `test-file-line` action here:
 }
 ```
 
+</a>
+
 Now, when you add `{ only: true}` to a test and trigger
 `Contest: test this line in this file`, Contest runs only the marked test.
 
@@ -142,6 +154,8 @@ define your own.
 Running all unit tests in a Rust file is done via `cargo test <module name>`
 where `<module name>` is the filename without extension. Since Contest doesn't
 provide this value, we create it ourselves:
+
+<a type="json-schema">
 
 ```json
 {
@@ -163,6 +177,8 @@ provide this value, we create it ourselves:
 }
 ```
 
+</a>
+
 Here is what happens:
 
 - the `vars` block defines a new variable `file_without_ext`
@@ -182,20 +198,28 @@ To run a single Rust test, you'd do `cargo test <function name>` where
 `<function name>` is the name of the test function. Let's extract that name
 dynamically and call it `fn_name`:
 
+<a type="json-schema">
+
 ```json
 {
-  "type": "test-file-line",
-  "files": "**/*.rs",
-  "vars": [
+  "actions": [
     {
-      "name": "fn_name",
-      "source": "currentOrAboveLineContent",
-      "filter": "\\bfn (\\w+)\\("
+      "type": "test-file-line",
+      "files": "**/*.rs",
+      "vars": [
+        {
+          "name": "fn_name",
+          "source": "currentOrAboveLineContent",
+          "filter": "\\bfn (\\w+)\\("
+        }
+      ],
+      "run": "cargo test {{fn_name}}"
     }
-  ],
-  "run": "cargo test {{fn_name}}"
-},
+  ]
+}
 ```
+
+</a>
 
 Here is how it works:
 
