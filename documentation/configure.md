@@ -83,7 +83,7 @@ execute `mocha scripts/flim.test.js`.
 
 The `test-file-line` action works similar to the `test-file` action, but the
 Contest client also sends the line that your cursor is currently at. This allows
-you to execute one specific unit test.
+you to execute a single specific test.
 
 Here is how you would use this:
 
@@ -102,10 +102,11 @@ So if you have file `scripts/flim.test.js` open in your editor at line 7, and
 trigger the `Contest: test this line in this file` action, it executes
 `mocha scripts/flim.js:7`.
 
-You don't need to use the `{{line}}` variable. For example, Node's built-in test
-runner currently doesn't support line numbers. You could use the
-`test-file-line` action to run it with the `--test-only` flag. Here is an
-example:
+You don't need to use the `{{line}}` variable. For example, the built-in test
+runner for Node.js currently cannot look up tests by line numbers. To make it
+run a single test, you need to add `{ only: true }` to that test and then
+execute `node --test-only <file>`. You can still use the `test-file-line` action
+here:
 
 ```json
 actions: [
@@ -118,8 +119,9 @@ actions: [
 ]
 ```
 
-Now, to run a single test, you add `{ only: true }` to a test, trigger the
-`Contest: test this line in this file` and it executes only the marked test.
+Now, when you add `{ only: true}` to a test and trigger the
+`Contest: test this line in this file` action in your editor, it executes only
+the marked test.
 
 ## Custom variables
 
