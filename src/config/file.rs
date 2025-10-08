@@ -5,6 +5,20 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use std::fmt::Display;
 
+/// Schema helper for Option<usize> that generates standard JSON Schema integer without "format": "uint"
+fn option_usize_schema(_gen: &mut schemars::r#gen::SchemaGenerator) -> schemars::schema::Schema {
+  use schemars::schema::*;
+  SchemaObject {
+    instance_type: Some(vec![InstanceType::Integer, InstanceType::Null].into()),
+    number: Some(Box::new(NumberValidation {
+      minimum: Some(0.0),
+      ..Default::default()
+    })),
+    ..Default::default()
+  }
+  .into()
+}
+
 /// configuration data for <https://github.com/contest-framework/server>
 #[derive(Deserialize, JsonSchema)]
 pub struct FileConfiguration {
@@ -72,6 +86,7 @@ pub struct FileBeforeRun {
   /// whether to clear the screen before a test run
   pub clear_screen: Option<bool>,
   /// how many newlines to print before a test run
+  #[schemars(schema_with = "option_usize_schema", default)]
   pub newlines: Option<usize>,
 }
 
@@ -79,8 +94,10 @@ pub struct FileBeforeRun {
 #[serde(rename_all = "camelCase")]
 pub struct FileAfterRun {
   /// how many newlines to print after a test run
+  #[schemars(schema_with = "option_usize_schema", default)]
   pub newlines: Option<usize>,
   /// how many indicator lines (red or green) to print after a test run
+  #[schemars(schema_with = "option_usize_schema", default)]
   pub indicator_lines: Option<usize>,
   /// whether to print "SUCCESS" or "FAILED" after a test run
   pub print_result: Option<bool>,

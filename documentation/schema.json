@@ -81,20 +81,20 @@
       "properties": {
         "indicatorLines": {
           "description": "how many indicator lines (red or green) to print after a test run",
+          "default": null,
           "type": [
             "integer",
             "null"
           ],
-          "format": "uint",
           "minimum": 0.0
         },
         "newlines": {
           "description": "how many newlines to print after a test run",
+          "default": null,
           "type": [
             "integer",
             "null"
           ],
-          "format": "uint",
           "minimum": 0.0
         },
         "printResult": {
@@ -118,11 +118,11 @@
         },
         "newlines": {
           "description": "how many newlines to print before a test run",
+          "default": null,
           "type": [
             "integer",
             "null"
           ],
-          "format": "uint",
           "minimum": 0.0
         }
       }
