@@ -167,8 +167,8 @@ Here is what happens:
 - `filter` is a regex that extracts part of the source value, here everything
   after the last `/` and before `.rs`
 
-So, if the client sends `test-file` with `src/parser/lexer.rs`, Contest runs
-`cargo test lexer`.
+So, if you have `src/parser/lexer.rs` open and run `Contest: Test this file`,
+Contest runs `cargo test lexer`.
 
 ### extracting code from source files
 
