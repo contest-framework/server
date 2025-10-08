@@ -81,16 +81,15 @@ With this setup:
 
 ## "test-file-line" action
 
-The `test-file-line` action works similar to the `test-file` action, but the
-Contest client also sends the line that your cursor is currently at. This allows
-you to execute a single specific test.
+The `test-file-line` action works like `test-file`, but the client also sends
+the cursor line number, allowing you to run a specific test within the file.
 
-Here is how you would use this:
+Example:
 
 ```json
 actions: [
   {
-    "comment": "run the test at the given line in the currently open JavaScript file",
+    "comment": "run the JavaScript test at the cursor",
     "type": "test-file-line",
     "files": "**/*.test.js",
     "run": "mocha {{file}}:{{line}}"
@@ -98,30 +97,28 @@ actions: [
 ]
 ```
 
-So if you have file `scripts/flim.test.js` open in your editor at line 7, and
-trigger the `Contest: test this line in this file` action, it executes
-`mocha scripts/flim.js:7`.
+If your cursor is on line 7 of `scripts/flim.test.js` and you trigger
+`Contest: test this line in this file`, Contest runs `mocha scripts/flim.js:7`.
 
-You don't need to use the `{{line}}` variable. For example, the built-in test
-runner for Node.js currently cannot look up tests by line numbers. To make it
-run a single test, you need to add `{ only: true }` to that test and then
-execute `node --test-only <file>`. You can still use the `test-file-line` action
-here:
+You don't always need to use `{{line}}`. For example, Node's built-in test
+runner doesn't support running tests by line number. To run a single test, you
+typically mark it with `{ only: true }` and then run `node --test-only <file>`.
+
+You can still use the `test-file-line` action here:
 
 ```json
 actions: [
   {
-    "comment": "run the test at the given line in the currently open JavaScript file",
+    "comment": "run the JavaScript test at the cursor",
     "type": "test-file-line",
     "files": "**/*.test.js",
-    "run": "node --test --test-only {{file}}"
+    "run": "node --test-only {{file}}"
   }
 ]
 ```
 
-Now, when you add `{ only: true}` to a test and trigger the
-`Contest: test this line in this file` action in your editor, it executes only
-the marked test.
+Now, when you add `{ only: true}` to a test and trigger
+`Contest: test this line in this file`, Contest runs only the marked test.
 
 ## Custom variables
 
