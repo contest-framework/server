@@ -6,8 +6,8 @@ export async function verifyJSON(action: textRunner.actions.Args) {
   action.name("verify JSON to conform to JSON-Schema")
 
   // Read and parse the schema file
-  var schemaContent = await readFile("../documentation/schema.json", "utf-8")
-  const schema = JSON.parse(schemaContent)
+  var schemaText = await readFile("../documentation/schema.json", "utf-8")
+  const schema = JSON.parse(schemaText)
 
   // Parse the JSON text from the action region
   const jsonText = action.region.text()
