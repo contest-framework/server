@@ -1,5 +1,9 @@
 # Contest Server Changelog
 
+#### 0.5.0
+
+- rename config file from `.contest.json` to `contest.json` (no longer hidden)
+
 #### 0.4.0
 
 - the config file is proper JSON now
