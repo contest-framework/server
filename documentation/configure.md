@@ -125,23 +125,24 @@ the marked test.
 
 ## Custom variables
 
-If the built-in variables like `file` and `line` don't work, you can create your
-own variables.
+If the built-in variables like `file` and `line` are not enough, you can create
+your own variables.
 
-### refining existing variables
+### Refining existing variables
 
 To run all unit tests in a Rust file, we would need to execute
 `cargo test <module name>` where `<module name>` is the name of the Rust module,
-which is the same as the filename without extension. Contest doesn't provide a
-variable containing the filename without extension, so let's create one
-ourselves and call it `file_without_ext`:
+which is the filename without extension. Contest doesn't provide a variable
+containing the filename without extension, so let's create one ourselves and
+call it `file_without_ext`:
 
 ```json
 actions: [
   {
-    "comment": "Rust unit tests",
+    "comment": "all unit tests in a Rust file",
     "type": "test-file",
     "files": "**/*.rs",
+    "run": "cargo test {{file_without_ext}}"
     "vars": [
       {
         "name": "file_without_ext",
@@ -149,23 +150,22 @@ actions: [
         "filter": "([^/]+)\\.rs$"
       }
     ],
-    "run": "cargo test {{file_without_ext}}"
   },
 ]
 ```
 
-The `vars` block allows us to define new variables. Here we define one with the
-name `file_without_ext`. The `source` field describes where the value for the
-new variable comes from, in this case from of the existing variable `file`. The
+The `vars` block defines new variables. In this case a variable with the name
+`file_without_ext`. The `source` field describes where the content for the new
+variable comes from. In this case from of the existing variable `file`. The
 `filter` field contains a regex that captures the part of the source value that
-will be used as the value for the new variable. In this case, we take the last
-part of the filename (before the extension `.rs`) that isn't a forward slash,
-i.e. the basename of the path without the extension.
+will be used as the value for the new variable. In this case, we take anything
+after the last forward slash until extension (`.rs`), i.e. the equivalent of
+running `basename {{file}} .rs`.
 
 Now, when the client sends the command `test-file` with `src/parser/lexer.rs`,
 Contest executes `cargo test lexer`.
 
-### extracting parts of the source code file content
+### extracting parts of the source code file
 
 To run a single Rust unit test, we need to execute `cargo test {{test name}}`
 where `<test name>` is the name of the test function to execute. Contest doesn't
