@@ -40,8 +40,9 @@ on their type.
 
 Imagine a project that includes both Go and JavaScript code. In Go, test files
 end with `_test.go` and are run with `go test <file path>`. In JavaScript, test
-files end with `.test.js` and are run with: `mocha <file path>` Here is how that
-configuration might look:
+files end with `.test.js` and are run with: `mocha <file path>`.
+
+Here is how that configuration might look:
 
 ```json
 {
