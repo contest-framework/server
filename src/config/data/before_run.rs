@@ -3,7 +3,7 @@ use crate::config::file::FileBeforeRun;
 #[derive(Debug, Default, Eq, PartialEq)]
 pub struct BeforeRun {
   pub clear_screen: bool,
-  pub newlines: u8,
+  pub newlines: usize,
 }
 
 impl From<FileBeforeRun> for BeforeRun {
