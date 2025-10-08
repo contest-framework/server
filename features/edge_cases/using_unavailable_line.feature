@@ -1,7 +1,7 @@
 Feature: using unavailable line
 
   Scenario: in a "test-all" command
-    Given file ".contest.json" with content
+    Given file "contest.json" with content
       """
       {
         "actions": [
@@ -28,7 +28,7 @@ Feature: using unavailable line
       """
 
   Scenario: in a "test-file" command
-    Given file ".contest.json" with content
+    Given file "contest.json" with content
       """
       {
         "actions": [

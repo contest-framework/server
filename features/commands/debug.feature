@@ -1,7 +1,7 @@
 Feature: run in debug mode
 
   Background:
-    Given file ".contest.json" with content
+    Given file "contest.json" with content
       """
       {
         "actions": [

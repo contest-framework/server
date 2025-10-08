@@ -2,8 +2,8 @@
 
 Run <code type="subcommand">contest init</code> in the root of your codebase to
 create Contest's configuration file,
-<code type="repo/existing-file">.contest.json</code>. This file tells the
-Contest server what to do when it receives messages from a Contest client.
+<code type="repo/existing-file">contest.json</code>. This file tells the Contest
+server what to do when it receives messages from a Contest client.
 
 The configuration file has two main sections:
 
