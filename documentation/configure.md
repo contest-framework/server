@@ -122,29 +122,40 @@ Now, to run a single test, you add `{ only: true }` to a test, trigger the
 
 ## Custom variables
 
----
+If the built-in variables like `file` and `line` don't work, you can create your
+own variables.
 
-Here is an example **.contest.json** file:
+For example, to run only the unit tests located in a Rust file, we would need to
+execute `cargo test {{module}}`. `module` is the name of the Rust module, which
+is the same as the filename without extension. Contest doesn't provide a
+variable containing the filename without extension. Let's create one ourselves
+and call it `file_without_ext`:
 
 ```json
-{
-  "actions": [
-    {
-      "comment": "run all tests",
-      "type": "test-all",
-      "run": "make test"
-    },
-    {
-      "comment": "JavaScript unit tests",
-      "type": "test-file",
-      "filename": "**/*.test.js",
-      "line": "*",
-      "run": "mocha {{filename}}"
-    }
-  ]
-}
+actions: [
+  {
+    "comment": "Rust unit tests",
+    "type": "test-file",
+    "files": "**/*.rs",
+    "vars": [
+      {
+        "name": "file_without_ext",
+        "source": "file",
+        "filter": "([^/]+)\\.rs$"
+      }
+    ],
+    "run": "cargo test {{file_without_ext}}"
+  },
+]
 ```
 
-You can use the `comment` field for human-readable comments to organize your
-tests. Contest also allows JavaScript comments (starting with `//`) in the JSON
-file.
+The `vars` block allows us to define new variables. Here we define one with the
+name `file_without_ext`. The `source` field describes where the value for the
+new variable comes from, in this case from of the existing variable `file`. The
+`filter` field contains a regex that captures the part of the source value that
+will be used as the value for the new variable. In this case, we take the last
+part of the filename (before the extension `.rs`) that isn't a forward slash,
+i.e. the basename of the path without the extension.
+
+Now, when the client sends the command `test-file` with `src/parser/lexer.rs`,
+Contest executes `cargo test lexer`.
