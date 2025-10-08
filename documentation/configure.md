@@ -122,16 +122,14 @@ Now, when you add `{ only: true}` to a test and trigger
 
 ## Custom variables
 
-If the built-in variables like `file` and `line` are not enough, you can create
-your own variables.
+If the built-in variables like `{{file}}` and `{{line}}` aren't enough, you can
+define your own.
 
 ### Refining existing variables
 
-To run all unit tests in a Rust file, we would need to execute
-`cargo test <module name>` where `<module name>` is the name of the Rust module,
-which is the filename without extension. Contest doesn't provide a variable
-containing the filename without extension, so let's create one ourselves and
-call it `file_without_ext`:
+Running all unit tests in a Rust file is done via `cargo test <module name>`
+where `<module name>` is the filename without extension. Since Contest doesn't
+provide this, we create it ourselves:
 
 ```json
 actions: [
@@ -151,16 +149,16 @@ actions: [
 ]
 ```
 
-The `vars` block defines new variables. In this case a variable with the name
-`file_without_ext`. The `source` field describes where the content for the new
-variable comes from. In this case from of the existing variable `file`. The
-`filter` field contains a regex that captures the part of the source value that
-will be used as the value for the new variable. In this case, we take anything
-after the last forward slash until extension (`.rs`), i.e. the equivalent of
-running `basename {{file}} .rs`.
+Here is what happens:
 
-Now, when the client sends the command `test-file` with `src/parser/lexer.rs`,
-Contest executes `cargo test lexer`.
+- the `vars` block defines a new variable `file_without_ext`
+- `source` tells Contest where the value comes from, in this case from the
+  existing `{{file}}` variable
+- `filter` is a regex that extracts part of the source value, here everything
+  after the last `/` and before `.rs`
+
+So, if the client sends `test-file` with `src/parser/lexer.rs`, Contest runs
+`cargo test lexer`.
 
 ### extracting parts of the source code file
 
