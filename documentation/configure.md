@@ -167,10 +167,11 @@ Contest executes `cargo test lexer`.
 
 ### extracting parts of the source code file
 
-To run a single Rust unit test, we need to execute `cargo test {{test name}}`
-where `<test name>` is the name of the test function to execute. Contest doesn't
-provide the name of the current Rust function as a variable, so let's create one
-ourselves and call it `fn_name`:
+To run a single Rust unit test, we need to execute
+`cargo test <test function name>` where `<test function name>` is the name of
+the Rust function that implements the test. Contest doesn't provide the name of
+the current Rust function as a variable, so let's create one ourselves and call
+it `fn_name`:
 
 ```json
 {
@@ -190,11 +191,12 @@ ourselves and call it `fn_name`:
 The `vars` block defines a new variable with name `fn_name`. As always, the
 `source` field describes where the value for the new variable comes from. In
 this case it says `currentOrAboveLineContent`, which means Contest will extract
-the value from the given source code file! Contest follows these steps:
+the value from the given source code file. Contest follows these steps:
 
-1. apply the regular expression from the `filter` field to the current line
-2. If that captures something, it uses that capture as the variable content.
-3. If it captures nothing, move to the line above and go to step 1
+1. read the text of the line `{{line}}` in file `{{file}}`
+1. apply the regular expression from the `filter` field to that text line
+1. If the regex captures something, use that capture as the variable content. If
+   it captures nothing, move to the line above and go to step 1.
 
 Assume our Rust source code looks like this:
 
@@ -205,4 +207,6 @@ fn with_flux() {
 }
 ```
 
-Contest woulnd execute `cargo test with_flux`.
+If in our editor the cursor is somewhere inside that function body, and we
+trigger `Contest: test this line in this file`, Contest will execute
+`cargo test with_flux`.
