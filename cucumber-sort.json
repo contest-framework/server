@@ -1,0 +1,17 @@
+{
+  "include": [],
+  "exclude": [],
+  "record": true,
+  "fail-fast": true,
+  "steps": [
+    "^file \".*\" with content$",
+    "^receiving the command ",
+    "^Contest is running$",
+    "^I run \".*\"$",
+    "^it prints$",
+    "^it creates file \".*\" with content$",
+    "^it exits with this output$",
+    "^it fails with this output$",
+    "^the server stops running$"
+  ]
+}
