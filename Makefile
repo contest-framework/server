@@ -1,5 +1,5 @@
 # dev tooling and versions
-RUN_THAT_APP_VERSION = 0.20.0
+RUN_THAT_APP_VERSION = 0.23.0
 
 build:  # performs a test build
 	cargo check
@@ -60,7 +60,7 @@ update: tools/rta@${RUN_THAT_APP_VERSION}  # updates the dependencies
 
 tools/rta@${RUN_THAT_APP_VERSION}:
 	@rm -f tools/rta* tools/rta
-	@(cd tools && curl https://raw.githubusercontent.com/kevgo/run-that-app/main/download.sh | sh)
+	@(cd tools && curl https://raw.githubusercontent.com/kevgo/run-that-app/main/download.sh | sh -s ${RUN_THAT_APP_VERSION})
 	@mv tools/rta tools/rta@${RUN_THAT_APP_VERSION}
 	@ln -s rta@${RUN_THAT_APP_VERSION} tools/rta
 
