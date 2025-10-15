@@ -1,0 +1,19 @@
+{
+  "include": ["features/**/*.feature"],
+  "exclude": [],
+  "record": true,
+  "fail-fast": true,
+  "steps": [
+    "^file \".*\" with content$",
+    "^Contest is running$",
+    "^I run \".*\"$",
+    [
+      "^receiving the command ",
+      "^it prints$"
+    ],
+    "^it exits with this output$",
+    "^it fails with this output$",
+    "^it creates file \".*\" with content$",
+    "^the server stops running$"
+  ]
+}
