@@ -1,5 +1,5 @@
 {
-  "include": [],
+  "include": ["features/**/*.feature"],
   "exclude": [],
   "record": true,
   "fail-fast": true,
