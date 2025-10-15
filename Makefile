@@ -1,5 +1,5 @@
 # dev tooling and versions
-RUN_THAT_APP_VERSION = 0.20.0
+RUN_THAT_APP_VERSION = 0.23.0
 
 build:  # performs a test build
 	cargo check
