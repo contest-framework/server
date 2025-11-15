@@ -183,11 +183,11 @@ mod tests {
 
     #[test]
     fn repeat_test() {
-      let give = S(r#"{ "command": "repeatTest" }"#);
+      let give = S(r#"{ "command": "repeat-test" }"#);
       let have = FifoTrigger::parse(give.clone()).unwrap();
       let want = FifoTrigger {
         data: FifoTriggerData {
-          command: S("repeatTest"),
+          command: S("repeat-test"),
           ..FifoTriggerData::default()
         },
         original_line: give,
