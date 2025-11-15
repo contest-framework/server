@@ -42,7 +42,22 @@ impl Var {
 
 impl PartialEq for Var {
   fn eq(&self, other: &Self) -> bool {
-    self.name == other.name && self.source == other.source && self.filter.to_string() == other.filter.to_string()
+    self.name == other.name && self.source == other.source && self.filter.as_str() == other.filter.as_str()
+  }
+}
+
+impl Eq for Var {}
+
+impl Clone for Var {
+  fn clone(&self) -> Self {
+    // SAFETY: We know the regex is valid because it was validated during construction
+    #[allow(clippy::unwrap_used)]
+    let filter = Regex::new(self.filter.as_str()).unwrap();
+    Var {
+      name: self.name.clone(),
+      source: self.source.clone(),
+      filter,
+    }
   }
 }
 

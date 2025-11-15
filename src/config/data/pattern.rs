@@ -2,7 +2,7 @@ use crate::client::Trigger;
 use std::fmt::Display;
 
 /// a pattern defined in the config file, describes conditions that match actions
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Pattern {
   TestAll,
   TestFile { files: glob::Pattern },

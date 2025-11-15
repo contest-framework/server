@@ -1,7 +1,8 @@
 //! commands received from the client (through the FIFO)
 
 use super::fifo_data::FifoTrigger;
-use crate::UserError;
+use crate::config::Configuration;
+use crate::{Result, UserError};
 use std::fmt::Display;
 
 #[derive(Debug, Eq, PartialEq)]
@@ -14,23 +15,8 @@ pub enum Trigger {
   Quit,
 }
 
-impl Display for Trigger {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    match self {
-      Trigger::TestAll => f.write_str("test-all"),
-      Trigger::TestFile { file } => write!(f, "test-file {file}"),
-      Trigger::TestFileLine { file, line } => write!(f, "test-file-line {file}:{line}"),
-      Trigger::CustomCommand { run } => write!(f, "custom-command {run}"),
-      Trigger::RepeatLastTest => f.write_str("repeat-test"),
-      Trigger::Quit => f.write_str("quit"),
-    }
-  }
-}
-
-impl TryFrom<FifoTrigger> for Trigger {
-  type Error = UserError;
-
-  fn try_from(fifo: FifoTrigger) -> std::result::Result<Self, Self::Error> {
+impl Trigger {
+  fn try_from_fifo(fifo: FifoTrigger, config: &Configuration) -> Result<Trigger> {
     match fifo.data.command.to_ascii_lowercase().as_str() {
       "test-all" => Ok(Trigger::TestAll),
       "repeat-test" => Ok(Trigger::RepeatLastTest),
@@ -49,16 +35,29 @@ impl TryFrom<FifoTrigger> for Trigger {
         (None, None) => Err(UserError::MissingFileAndLineInTrigger { original: fifo.original_line }),
       },
       "quit" => Ok(Trigger::Quit),
-      _ => Err(UserError::UnknownTrigger { source: fifo.data.command }),
+      _ => Err(UserError::UnknownTrigger {
+        source: fifo.data.command,
+        config: config.clone(),
+      }),
     }
+  }
+
+  pub fn try_from_string(value: String, config: &Configuration) -> Result<Trigger> {
+    let fifo = FifoTrigger::parse(value)?;
+    Trigger::try_from_fifo(fifo, config)
   }
 }
 
-impl TryFrom<String> for Trigger {
-  type Error = UserError;
-
-  fn try_from(value: String) -> std::result::Result<Self, Self::Error> {
-    Trigger::try_from(FifoTrigger::parse(value)?)
+impl Display for Trigger {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    match self {
+      Trigger::TestAll => f.write_str("test-all"),
+      Trigger::TestFile { file } => write!(f, "test-file {file}"),
+      Trigger::TestFileLine { file, line } => write!(f, "test-file-line {file}:{line}"),
+      Trigger::CustomCommand { run } => write!(f, "custom-command {run}"),
+      Trigger::RepeatLastTest => f.write_str("repeat-test"),
+      Trigger::Quit => f.write_str("quit"),
+    }
   }
 }
 
@@ -68,6 +67,7 @@ mod tests {
   mod into_trigger {
     use crate::client::fifo_data::FifoTriggerData;
     use crate::client::{FifoTrigger, Trigger};
+    use crate::config::Configuration;
     use big_s::S;
 
     #[test]
@@ -79,7 +79,8 @@ mod tests {
         },
         ..FifoTrigger::default()
       };
-      let have = Trigger::try_from(fifo_trigger).unwrap();
+      let config = Configuration::default();
+      let have = Trigger::try_from_fifo(fifo_trigger, &config).unwrap();
       let want = Trigger::TestAll;
       assert_eq!(have, want);
     }
@@ -93,7 +94,8 @@ mod tests {
         },
         ..FifoTrigger::default()
       };
-      let have = Trigger::try_from(fifo_data).unwrap();
+      let config = Configuration::default();
+      let have = Trigger::try_from_fifo(fifo_data, &config).unwrap();
       let want = Trigger::RepeatLastTest;
       assert_eq!(have, want);
     }
@@ -101,6 +103,7 @@ mod tests {
     mod custom_command {
       use crate::client::fifo_data::FifoTriggerData;
       use crate::client::{FifoTrigger, Trigger};
+      use crate::config::Configuration;
       use big_s::S;
 
       #[test]
@@ -113,7 +116,8 @@ mod tests {
           },
           ..FifoTrigger::default()
         };
-        let have = Trigger::try_from(fifo_data).unwrap();
+        let config = Configuration::default();
+        let have = Trigger::try_from_fifo(fifo_data, &config).unwrap();
         let want = Trigger::CustomCommand { run: S("echo hello") };
         assert_eq!(have, want);
       }
@@ -128,7 +132,8 @@ mod tests {
           },
           ..FifoTrigger::default()
         };
-        let have = Trigger::try_from(fifo_data);
+        let config = Configuration::default();
+        let have = Trigger::try_from_fifo(fifo_data, &config);
         assert!(have.is_err());
       }
     }
@@ -136,6 +141,7 @@ mod tests {
     mod test_file {
       use crate::client::fifo_data::FifoTriggerData;
       use crate::client::{FifoTrigger, Trigger};
+      use crate::config::Configuration;
       use big_s::S;
 
       #[test]
@@ -148,7 +154,8 @@ mod tests {
           },
           ..FifoTrigger::default()
         };
-        let have = Trigger::try_from(fifo_data).unwrap();
+        let config = Configuration::default();
+        let have = Trigger::try_from_fifo(fifo_data, &config).unwrap();
         let want = Trigger::TestFile { file: S("file.rs") };
         assert_eq!(have, want);
       }
@@ -163,7 +170,8 @@ mod tests {
           },
           ..FifoTrigger::default()
         };
-        let have = Trigger::try_from(fifo_data);
+        let config = Configuration::default();
+        let have = Trigger::try_from_fifo(fifo_data, &config);
         assert!(have.is_err());
       }
     }
@@ -171,6 +179,7 @@ mod tests {
     mod test_function {
       use crate::client::fifo_data::FifoTriggerData;
       use crate::client::{FifoTrigger, Trigger};
+      use crate::config::Configuration;
       use big_s::S;
 
       #[test]
@@ -184,7 +193,8 @@ mod tests {
           },
           ..FifoTrigger::default()
         };
-        let have = Trigger::try_from(fifo_data).unwrap();
+        let config = Configuration::default();
+        let have = Trigger::try_from_fifo(fifo_data, &config).unwrap();
         let want = Trigger::TestFileLine { file: S("file.rs"), line: 2 };
         assert_eq!(have, want);
       }
@@ -200,7 +210,8 @@ mod tests {
           },
           ..FifoTrigger::default()
         };
-        let have = Trigger::try_from(fifo_data);
+        let config = Configuration::default();
+        let have = Trigger::try_from_fifo(fifo_data, &config);
         assert!(have.is_err());
       }
 
@@ -215,7 +226,8 @@ mod tests {
           },
           ..FifoTrigger::default()
         };
-        let have = Trigger::try_from(fifo_data);
+        let config = Configuration::default();
+        let have = Trigger::try_from_fifo(fifo_data, &config);
         assert!(have.is_err());
       }
     }

@@ -1,6 +1,6 @@
 //! error types used in this app
 
-use crate::config;
+use crate::config::Configuration;
 use crate::config::file::ActionType;
 use big_s::S;
 
@@ -37,7 +37,7 @@ pub enum UserError {
   TriggerTooManyCaptures { count: usize, regex: String, line: String },
   TriggerRegexNotFound { regex: String, filename: String, line: usize },
   UnknownActionType { action_type: ActionType },
-  UnknownTrigger { source: String },
+  UnknownTrigger { source: String, config: Configuration },
 }
 
 impl UserError {
@@ -102,9 +102,12 @@ impl UserError {
         format!("unknown action type: {action_type}"),
         Some(S(r#"Valid types are "test-all", "test-file", and "test-file-line"."#)),
       ),
-      UserError::UnknownTrigger { source } => (
+      UserError::UnknownTrigger { source, config } => (
         format!("cannot determine command for trigger: {source}"),
-        Some(format!("Please make sure that this action is listed in {}", config::JSON_PATH)),
+        Some(format!(
+          "Please make sure that this action is listed in {}.\n\nThe current configuration is:\n\n{config}",
+          crate::config::JSON_PATH
+        )),
       ),
     }
   }
