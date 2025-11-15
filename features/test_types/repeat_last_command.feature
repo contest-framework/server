@@ -22,14 +22,14 @@ Feature: repeat the last command
       running all tests
       SUCCESS
       """
-    When receiving the command '{ "command": "repeatTest" }'
+    When receiving the command '{ "command": "repeat-test" }'
     Then it prints
       """
       executing: echo running all tests
       running all tests
       SUCCESS
       """
-    When receiving the command '{ "command": "repeatTest" }'
+    When receiving the command '{ "command": "repeat-test" }'
     Then it prints
       """
       executing: echo running all tests
