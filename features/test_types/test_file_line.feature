@@ -28,7 +28,7 @@ Feature: test only a specific function
     Then it fails with this output
       """
       Error: invalid trigger received: { "command": "test-file-line", "file": "foo.ts" }
-      
+
       missing "line" field
       """
 
