@@ -33,9 +33,9 @@ impl Pattern {
 impl Display for Pattern {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
-      Pattern::TestAll => f.write_str("TestAll"),
-      Pattern::TestFile { files } => write!(f, "TestFile {files}"),
-      Pattern::TestFileLine { files } => write!(f, "TestFileLine {files}"),
+      Pattern::TestAll => f.write_str("test-all"),
+      Pattern::TestFile { files } => write!(f, "test-file {files}"),
+      Pattern::TestFileLine { files } => write!(f, "test-file-line {files}"),
     }
   }
 }
