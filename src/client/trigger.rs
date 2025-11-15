@@ -19,7 +19,7 @@ impl Trigger {
   fn try_from_fifo(fifo: FifoTrigger, config: &Configuration) -> Result<Trigger> {
     match fifo.data.command.to_ascii_lowercase().as_str() {
       "test-all" => Ok(Trigger::TestAll),
-      "repeattest" => Ok(Trigger::RepeatLastTest),
+      "repeat-test" => Ok(Trigger::RepeatLastTest),
       "custom-command" => match fifo.data.run {
         Some(run) => Ok(Trigger::CustomCommand { run }),
         None => Err(UserError::MissingRunInTrigger { original: fifo.original_line }),
@@ -55,7 +55,7 @@ impl Display for Trigger {
       Trigger::TestFile { file } => write!(f, "test-file {file}"),
       Trigger::TestFileLine { file, line } => write!(f, "test-file-line {file}:{line}"),
       Trigger::CustomCommand { run } => write!(f, "custom-command {run}"),
-      Trigger::RepeatLastTest => f.write_str("repeatTest"),
+      Trigger::RepeatLastTest => f.write_str("repeat-test"),
       Trigger::Quit => f.write_str("quit"),
     }
   }
@@ -89,7 +89,7 @@ mod tests {
     fn repeat_test() {
       let fifo_data = FifoTrigger {
         data: FifoTriggerData {
-          command: S("repeatTest"),
+          command: S("repeat-test"),
           ..FifoTriggerData::default()
         },
         ..FifoTrigger::default()

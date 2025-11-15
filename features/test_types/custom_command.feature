@@ -9,7 +9,7 @@ Feature: run a custom command sent by the client
       custom command
       SUCCESS
       """
-    When receiving the command '{ "command": "repeatTest" }'
+    When receiving the command '{ "command": "repeat-test" }'
     Then it prints
       """
       executing: echo custom command
