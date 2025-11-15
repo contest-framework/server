@@ -55,7 +55,7 @@ pub fn run_with_decoration(text: String, config: &config::Configuration, debug: 
   if config.options.before_run.clear_screen {
     print!("{esc}[2J{esc}[1;1H{esc}c", esc = 27 as char);
   }
-  let trigger = Trigger::try_from(text)?;
+  let trigger = Trigger::try_from_string(text, config)?;
   if trigger == Trigger::Quit {
     return Ok(RunOutcome::Quit);
   }

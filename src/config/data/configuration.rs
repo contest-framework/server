@@ -71,7 +71,10 @@ impl Configuration {
         return format_run(action, trigger);
       }
     }
-    Err(UserError::UnknownTrigger { source: trigger.to_string() })
+    Err(UserError::UnknownTrigger {
+      source: trigger.to_string(),
+      config: self.to_owned(),
+    })
   }
 
   pub fn read() -> Result<Configuration> {
