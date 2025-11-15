@@ -36,7 +36,7 @@ Feature: define a custom variable with a part of the filename
     Then it prints
       """
       Error: cannot determine command for trigger: test-file my_file.go
-      Please make sure that this action is listed in your configuration file
+      Please make sure that this action is listed in contest.json
       """
     # ensure the server is still running and functional
     When receiving the command '{ "command": "test-file", "file": "my_file.ts" }'

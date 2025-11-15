@@ -47,11 +47,11 @@ impl UserError {
     match self {
       UserError::CannotCreateConfigFile { err } => (format!("cannot create configuration file: {err}"), None),
       UserError::CannotDetermineCurrentDirectory { err } => (format!("cannot determine the current directory: {err}"), None),
-      UserError::CannotReadFile { path, err } => (format!("cannot read file {path}"), Some(err.to_string())),
-      UserError::CannotSplitShellString { source, err } => (format!("cannot split this shell string: {source}"), Some(err.to_string())),
+      UserError::CannotReadFile { path, err } => (format!("cannot read file {path}"), Some(err.clone())),
+      UserError::CannotSplitShellString { source, err } => (format!("cannot split this shell string: {source}"), Some(err.clone())),
       UserError::ConfigFileInvalidContent { err } => (format!("Cannot parse configuration file: {err}"), None),
       UserError::ConfigFileError { err } => (format!("Cannot open configuration file: {err}"), None),
-      UserError::ConfigInvalidGlob { pattern, err } => (format!("Invalid glob pattern: {pattern}"), Some(err.to_string())),
+      UserError::ConfigInvalidGlob { pattern, err } => (format!("Invalid glob pattern: {pattern}"), Some(err.clone())),
       UserError::FifoAlreadyExists { path } => (
         format!("A fifo pipe \"{path}\" already exists."),
         Some(S(
@@ -69,8 +69,8 @@ impl UserError {
         )),
       ),
       UserError::FilesIsEmpty => (S(r#"The "files" field in your config file is empty"#), None),
-      UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), Some(err.to_string())),
-      UserError::InvalidTrigger { source: line, err } => (format!("cannot parse command received from client: {line}"), Some(err.to_string())),
+      UserError::InvalidRegex { regex, err } => (format!("invalid regex: {regex}"), Some(err.clone())),
+      UserError::InvalidTrigger { source: line, err } => (format!("cannot parse command received from client: {line}"), Some(err.clone())),
       UserError::LineIsNotANumber { line } => (format!("the provided line ({line})is not a number"), None),
       UserError::LineNotAvailable => (
         S("Line not available"),
