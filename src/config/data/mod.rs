@@ -10,7 +10,7 @@ mod var_source;
 pub use action::Action;
 pub use after_run::AfterRun;
 pub use before_run::BeforeRun;
-pub use configuration::Configuration;
+pub use configuration::{Configuration, JSON_PATH};
 pub use options::Options;
 pub use pattern::Pattern;
 pub use var::Var;
