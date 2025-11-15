@@ -55,7 +55,7 @@ impl UserError {
       UserError::FifoAlreadyExists { path } => (
         format!("A fifo pipe \"{path}\" already exists."),
         Some(S(
-          "This could mean a Contest instance could already be running.\nIf you are sure no other instance is running, please delete this file and start Contest again.",
+          "This could mean a Contest instance could already be running.\nIf you are sure no other instance is running, please start Contest again.",
         )),
       ),
       UserError::FifoCannotCreate { err, path } => (format!("Cannot create pipe at {path}: {err}"), None),
