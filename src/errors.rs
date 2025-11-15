@@ -104,7 +104,7 @@ impl UserError {
       ),
       UserError::UnknownTrigger { source } => (
         format!("cannot determine command for trigger: {source}"),
-        Some(format!("Please make sure that this action is listed in {}", config::JSON_PATH)),
+        Some(format!("Please make sure that this action is listed in {}", crate::config::JSON_PATH)),
       ),
     }
   }
