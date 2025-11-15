@@ -7,4 +7,4 @@ mod print_error;
 
 pub use command::Command;
 pub use exit::exit;
-pub(crate) use print_error::{error_color, print_error};
+pub use print_error::{error_color, print_error};

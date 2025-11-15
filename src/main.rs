@@ -1,4 +1,4 @@
-use contest::cli::Command;
+use contest::cli::{self, Command};
 use contest::client::fifo;
 use contest::config::Configuration;
 use contest::{Result, listen, run_with_decoration};
@@ -8,10 +8,7 @@ use std::process::ExitCode;
 fn main() -> ExitCode {
   let mut exit_code = ExitCode::SUCCESS;
   if let Err(err) = main_with_result() {
-    match err.messages() {
-      (msg, Some(guidance)) => println!("\nError: {msg}\n\n{guidance}"),
-      (msg, None) => println!("\nError: {msg}"),
-    }
+    cli::print_error(err);
     exit_code = ExitCode::FAILURE;
   }
   let _ = fs::remove_file(fifo::FILE_NAME);
