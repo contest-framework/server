@@ -1,5 +1,6 @@
 //! error types used in this app
 
+use crate::config;
 use crate::config::file::ActionType;
 use big_s::S;
 
@@ -97,7 +98,7 @@ impl UserError {
       ),
       UserError::UnknownTrigger { source } => (
         format!("cannot determine command for trigger: {source}"),
-        Some("Please make sure that this action is listed in your configuration file"),
+        Some(&format!("Please make sure that this action is listed in {}", config::data::JSON_PATH)),
       ),
     }
   }
