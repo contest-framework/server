@@ -9,7 +9,7 @@ use std::fmt::{self, Display};
 use std::{fs, io};
 
 /// filename of the Contest config file
-const JSON_PATH: &str = "contest.json";
+pub const JSON_PATH: &str = "contest.json";
 
 #[derive(Debug, Default, Eq, PartialEq)]
 pub struct Configuration {

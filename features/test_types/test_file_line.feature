@@ -37,7 +37,7 @@ Feature: test only a specific function
     Then it prints
       """
       Error: cannot determine command for trigger: test-file-line foo.go:23
-      Please make sure that this action is listed in your configuration file
+      Please make sure that this action is listed in contest.json
       """
     # ensure the server is still running and functional
     When receiving the command '{ "command": "test-file-line", "file": "foo.ts", "line": 23 }'

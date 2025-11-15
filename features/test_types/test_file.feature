@@ -28,7 +28,7 @@ Feature: run all tests in a file
     Then it prints
       """
       Error: cannot determine command for trigger: test-file foo.go
-      Please make sure that this action is listed in your configuration file
+      Please make sure that this action is listed in contest.json
       """
     # ensure the server is still running and functional
     When receiving the command '{ "command": "test-file", "file": "test/chars.test.ts" }'

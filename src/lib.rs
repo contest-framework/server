@@ -80,17 +80,17 @@ fn run_command(trigger: &Trigger, configuration: &config::Configuration, last_co
     Err(err) => match err {
       UserError::NoCommandToRepeat => {
         // repeat non-existing command --> don't stop, just print an error message and keep going
-        cli::print_error(&err);
+        cli::print_error(err);
         return Ok(subshell::Outcome::TestFail);
       }
       UserError::TriggerRegexNotFound { regex: _, filename: _, line: _ } => {
         // user triggered a command in a place where it doesn't match all regexes --> let them know and go to the correct location
-        cli::print_error(&err);
+        cli::print_error(err);
         return Ok(subshell::Outcome::TestFail);
       }
       UserError::UnknownTrigger { source: _, config: _ } => {
         // user sent a trigger from the wrong file --> let them know and send one from the correct file
-        cli::print_error(&err);
+        cli::print_error(err);
         return Ok(subshell::Outcome::TestFail);
       }
       _ => return Err(err),
