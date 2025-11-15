@@ -16,8 +16,8 @@ Feature: run in debug mode
     Then it prints
       """
       using this configuration:
-      TRIGGER | RUN
-      TestAll | echo running all tests
+      TRIGGER  | RUN
+      test-all | echo running all tests
       Options:
       - beforeRun.clearScreen: false
       """
