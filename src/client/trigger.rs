@@ -1,9 +1,8 @@
 //! commands received from the client (through the FIFO)
 
 use super::fifo_data::FifoTrigger;
-use crate::Result;
-use crate::UserError;
 use crate::config::Configuration;
+use crate::{Result, UserError};
 use std::fmt::Display;
 
 #[derive(Debug, Eq, PartialEq)]

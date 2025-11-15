@@ -32,6 +32,7 @@ Feature: test only a specific function
       missing "line" field
       """
 
+  @this
   Scenario: receiving a mismatching file
     When receiving the command '{ "command": "test-file-line", "file": "foo.go", "line": 23 }'
     Then it prints
