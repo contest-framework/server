@@ -50,11 +50,13 @@ impl Eq for Var {}
 
 impl Clone for Var {
   fn clone(&self) -> Self {
+    // SAFETY: We know the regex is valid because it was validated during construction
+    #[allow(clippy::unwrap_used)]
+    let filter = Regex::new(self.filter.as_str()).unwrap();
     Var {
       name: self.name.clone(),
       source: self.source.clone(),
-      // SAFETY: We know the regex is valid because it was validated during construction
-      filter: Regex::new(self.filter.as_str()).unwrap(),
+      filter,
     }
   }
 }
