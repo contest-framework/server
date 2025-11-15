@@ -28,17 +28,21 @@ Feature: test only a specific function
     Then it fails with this output
       """
       Error: invalid trigger received: { "command": "test-file-line", "file": "foo.ts" }
-
+      
       missing "line" field
       """
 
-  @this
   Scenario: receiving a mismatching file
     When receiving the command '{ "command": "test-file-line", "file": "foo.go", "line": 23 }'
     Then it prints
       """
+      TRIGGER                | RUN
+      test-file-line **/*.ts | echo testing file {{file}}:{{line}}
       Error: cannot determine command for trigger: test-file-line foo.go:23
       Please make sure that this action is listed in contest.json
+      The current configuration is:
+      Options:
+      - beforeRun.clearScreen: false
       """
     # ensure the server is still running and functional
     When receiving the command '{ "command": "test-file-line", "file": "foo.ts", "line": 23 }'
