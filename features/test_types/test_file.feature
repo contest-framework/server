@@ -23,13 +23,12 @@ Feature: run all tests in a file
       testing file test/chars.test.ts
       """
 
-  @this
   Scenario: receiving a file that doesn't match an existing rule
     When receiving the command '{ "command": "test-file", "file": "foo.go" }'
     Then it prints
       """
-      TRIGGER               | RUN
-      TestFile **/*.test.ts | echo testing file {{file}}
+      TRIGGER                | RUN
+      test-file **/*.test.ts | echo testing file {{file}}
       Error: cannot determine command for trigger: test-file foo.go
       Please make sure that this action is listed in contest.json
       The current configuration is:
