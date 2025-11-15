@@ -2,9 +2,9 @@ use crate::{UserError, subshell};
 
 pub fn print_error(err: UserError) {
   let (msg, guidance) = err.messages();
-  println!("Error: {msg}");
+  println!("\nError: {msg}");
   if let Some(guidance) = guidance {
-    println!("{guidance}");
+    println!("\n{guidance}");
   }
 }
 
