@@ -8,9 +8,10 @@ use std::process::ExitCode;
 fn main() -> ExitCode {
   let mut exit_code = ExitCode::SUCCESS;
   if let Err(err) = main_with_result() {
-    match err.messages() {
-      (msg, Some(guidance)) => println!("\nError: {msg}\n\n{guidance}"),
-      (msg, None) => println!("\nError: {msg}"),
+    let (msg, guidance) = err.messages();
+    println!("\nError: {msg}");
+    if let Some(guidance) = guidance {
+      println!("\n{guidance}");
     }
     exit_code = ExitCode::FAILURE;
   }
