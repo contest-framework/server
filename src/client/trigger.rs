@@ -38,7 +38,7 @@ impl Trigger {
       "quit" => Ok(Trigger::Quit),
       _ => Err(UserError::UnknownTrigger {
         source: fifo.data.command,
-        config: config.to_owned(),
+        config: config.clone(),
       }),
     }
   }
