@@ -11,7 +11,7 @@ use std::{fs, io};
 /// filename of the Contest config file
 const JSON_PATH: &str = "contest.json";
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Default, Eq, PartialEq)]
 pub struct Configuration {
   pub actions: Vec<Action>,
   pub options: Options,

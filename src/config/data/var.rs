@@ -42,9 +42,11 @@ impl Var {
 
 impl PartialEq for Var {
   fn eq(&self, other: &Self) -> bool {
-    self.name == other.name && self.source == other.source && self.filter.to_string() == other.filter.to_string()
+    self.name == other.name && self.source == other.source && self.filter.as_str() == other.filter.as_str()
   }
 }
+
+impl Eq for Var {}
 
 impl TryFrom<FileVar> for Var {
   type Error = UserError;

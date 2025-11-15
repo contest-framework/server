@@ -1,5 +1,6 @@
 //! error types used in this app
 
+use crate::config::Configuration;
 use crate::config::file::ActionType;
 use big_s::S;
 
@@ -36,7 +37,7 @@ pub enum UserError {
   TriggerTooManyCaptures { count: usize, regex: String, line: String },
   TriggerRegexNotFound { regex: String, filename: String, line: usize },
   UnknownActionType { action_type: ActionType },
-  UnknownTrigger { source: String },
+  UnknownTrigger { source: String, config: Configuration },
 }
 
 impl UserError {

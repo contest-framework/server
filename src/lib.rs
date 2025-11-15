@@ -88,7 +88,7 @@ fn run_command(trigger: &Trigger, configuration: &config::Configuration, last_co
         cli::print_error(&err);
         return Ok(subshell::Outcome::TestFail);
       }
-      UserError::UnknownTrigger { source: _ } => {
+      UserError::UnknownTrigger { source: _, config: _ } => {
         // user sent a trigger from the wrong file --> let them know and send one from the correct file
         cli::print_error(&err);
         return Ok(subshell::Outcome::TestFail);
