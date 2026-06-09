@@ -11,7 +11,7 @@ use std::{fs, io};
 /// filename of the Contest config file
 pub const JSON_PATH: &str = "contest.json";
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Configuration {
   pub actions: Vec<Action>,
   pub options: Options,
@@ -71,7 +71,10 @@ impl Configuration {
         return format_run(action, trigger);
       }
     }
-    Err(UserError::UnknownTrigger { source: trigger.to_string() })
+    Err(UserError::UnknownTrigger {
+      source: trigger.to_string(),
+      config: self.clone(),
+    })
   }
 
   pub fn read() -> Result<Configuration> {

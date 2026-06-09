@@ -35,8 +35,13 @@ Feature: define a custom variable with a part of the filename
     When receiving the command '{ "command": "test-file", "file": "my_file.go" }'
     Then it prints
       """
+      TRIGGER           | RUN
+      test-file **/*.ts | echo testing {{file_without_ext}}.test.ts
       Error: cannot determine command for trigger: test-file my_file.go
       Please make sure that this action is listed in contest.json
+      The current configuration is:
+      Options:
+      - beforeRun.clearScreen: false
       """
     # ensure the server is still running and functional
     When receiving the command '{ "command": "test-file", "file": "my_file.ts" }'

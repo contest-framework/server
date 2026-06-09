@@ -1,7 +1,7 @@
 use super::{AfterRun, BeforeRun};
 use crate::config::file::FileOptions;
 
-#[derive(Debug, Default, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Options {
   pub before_run: BeforeRun,
   pub after_run: AfterRun,

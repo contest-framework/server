@@ -2,7 +2,7 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use std::fmt::{self, Display};
 
-#[derive(Debug, Deserialize, Eq, JsonSchema, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum VarSource {
   File,
