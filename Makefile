@@ -39,6 +39,9 @@ install:  # compiles and installs the binary on this computer
 
 lint: ${RTA}  # runs all linters
 	cargo clippy --all-targets --all-features
+	cargo clippy --test=cucumber --all-features -- --deny=warnings \
+	  --allow=clippy::expect-used \
+		--allow=clippy::unwrap-used
 	$(ACTIONLINT)
 	$(CUCUMBER_SORT) check
 
