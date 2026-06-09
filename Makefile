@@ -31,6 +31,7 @@ install:  # compiles and installs the binary on this computer
 
 lint: tools/rta@${RUN_THAT_APP_VERSION}  # runs all linters
 	cargo clippy --all-targets --all-features
+	cargo clippy --test=cucumber --all-features -- --deny=warnings
 	tools/rta actionlint
 	tools/rta cucumber-sort check
 
