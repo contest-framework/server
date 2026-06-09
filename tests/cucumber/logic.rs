@@ -8,9 +8,9 @@ use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};
 use tokio::process::Command;
 
 pub async fn create_file<AS: AsRef<str>>(path: &Path, content: AS) {
-  let mut file = File::create(path).await.unwrap();
+  let mut file = File::create(path).await.expect("cannot create file {path}");
   file.write_all(content.as_ref().as_bytes()).await.unwrap();
-  file.flush().await.unwrap()
+  file.flush().await.unwrap();
 }
 
 pub fn fifo_path(workspace: &Path) -> PathBuf {
