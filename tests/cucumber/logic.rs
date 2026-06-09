@@ -7,7 +7,7 @@ use tokio::fs::{self, File, OpenOptions};
 use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};
 use tokio::process::Command;
 
-pub async fn create_file(path: &Path, content: impl AsRef<str>) {
+pub async fn create_file<AS: AsRef<str>>(path: &Path, content: AS) {
   let mut file = File::create(path).await.unwrap();
   file.write_all(content.as_ref().as_bytes()).await.unwrap();
   file.flush().await.unwrap()
