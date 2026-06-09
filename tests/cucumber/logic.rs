@@ -7,10 +7,10 @@ use tokio::fs::{self, File, OpenOptions};
 use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};
 use tokio::process::Command;
 
-pub async fn create_file(path: &Path, content: impl AsRef<str>) {
-  let mut file = File::create(path).await.unwrap();
+pub async fn create_file<AS: AsRef<str>>(path: &Path, content: AS) {
+  let mut file = File::create(path).await.expect("cannot create file {path}");
   file.write_all(content.as_ref().as_bytes()).await.unwrap();
-  file.flush().await.unwrap()
+  file.flush().await.unwrap();
 }
 
 pub fn fifo_path(workspace: &Path) -> PathBuf {
@@ -29,7 +29,7 @@ pub async fn send_command(command: String, workspace: &Path) {
   fifo.write_all(command.as_bytes()).await.unwrap();
 }
 
-pub async fn start_contest(world: &mut ContestWorld, args: &[String]) {
+pub fn start_contest(world: &mut ContestWorld, args: &[String]) {
   let cwd = std::env::current_dir().unwrap();
   let contest_path = cwd.join("target").join("debug").join("contest");
   let mut cmd = Command::new(contest_path)
