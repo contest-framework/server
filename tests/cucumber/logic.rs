@@ -29,7 +29,7 @@ pub async fn send_command(command: String, workspace: &Path) {
   fifo.write_all(command.as_bytes()).await.unwrap();
 }
 
-pub async fn start_contest(world: &mut ContestWorld, args: &[String]) {
+pub fn start_contest(world: &mut ContestWorld, args: &[String]) {
   let cwd = std::env::current_dir().unwrap();
   let contest_path = cwd.join("target").join("debug").join("contest");
   let mut cmd = Command::new(contest_path)

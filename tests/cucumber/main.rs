@@ -15,7 +15,7 @@ async fn start_contest(world: &mut ContestWorld, command: String) {
   let words = shellwords::split(&command).unwrap();
   let (cmd, args) = words.split_at(1);
   assert!(cmd == ["contest"], "can only execute contest");
-  logic::start_contest(world, args).await;
+  logic::start_contest(world, args);
 }
 
 #[then("it prints")]
@@ -62,7 +62,7 @@ async fn server_no_longer_running(world: &mut ContestWorld) {
 
 #[given(expr = "Contest is running")]
 async fn contest_is_running(world: &mut ContestWorld) {
-  logic::start_contest(world, &[]).await;
+  logic::start_contest(world, &[]);
   logic::verify_prints_lines(world, "Contest is online, Ctrl-C to exit").await;
 }
 
