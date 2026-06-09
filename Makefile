@@ -42,7 +42,7 @@ lint: ${RTA}  # runs all linters
 	$(ACTIONLINT)
 	$(CUCUMBER_SORT) check
 
-setup:  # prepares this codebase for development
+setup: ${RTA}  # prepares this codebase for development
 	rustup component add clippy
 	rustup toolchain add nightly
 	rustup component add rustfmt --toolchain nightly
