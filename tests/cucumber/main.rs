@@ -62,7 +62,7 @@ async fn server_no_longer_running(world: &mut ContestWorld) {
 
 #[given(expr = "Contest is running")]
 async fn contest_is_running(world: &mut ContestWorld) {
-  logic::start_contest(world, &vec![]).await;
+  logic::start_contest(world, &[]).await;
   logic::verify_prints_lines(world, "Contest is online, Ctrl-C to exit").await;
 }
 
