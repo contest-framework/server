@@ -11,6 +11,7 @@ async fn file_with_content(world: &mut ContestWorld, step: &Step, filename: Stri
 }
 
 #[when(expr = "I run {string}")]
+#[allow(clippy::needless_pass_by_value)]
 fn start_contest(world: &mut ContestWorld, command: String) {
   let words = shellwords::split(&command).unwrap();
   let (cmd, args) = words.split_at(1);
